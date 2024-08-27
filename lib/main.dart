@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_blog_app/users/screens/home_screen.dart';
+import 'package:flutter_blog_app/users/screens/signup_screen.dart';
 import 'package:flutter_blog_app/utils.dart';
 
 void main()  {
@@ -28,7 +30,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 141, 107, 198)),
         useMaterial3: true,
       ),
-      // home: ,
+      home: const SignupScreen(),
     );
   }
 }
