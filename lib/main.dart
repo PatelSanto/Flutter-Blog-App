@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
             seedColor: const Color.fromARGB(255, 141, 107, 198)),
         useMaterial3: true,
       ),
-      home: const HomeScreen(),
+      home: const SignupScreen(),
     );
   }
 }
