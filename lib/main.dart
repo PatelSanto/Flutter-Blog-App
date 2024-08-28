@@ -3,8 +3,8 @@ import 'package:flutter_blog_app/users/screens/home_screen.dart';
 import 'package:flutter_blog_app/users/screens/signup_screen.dart';
 import 'package:flutter_blog_app/utils.dart';
 
-void main()  {
-   setup().then((_) {
+void main() {
+  setup().then((_) {
     runApp(MyApp());
   });
 }
@@ -27,10 +27,11 @@ class MyApp extends StatelessWidget {
       routes: routes,
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 141, 107, 198)),
+        colorScheme: ColorScheme.fromSeed(
+            seedColor: const Color.fromARGB(255, 141, 107, 198)),
         useMaterial3: true,
       ),
-      home: const SignupScreen(),
+      home: const HomeScreen(),
     );
   }
 }

@@ -11,24 +11,32 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        leadingWidth: 80,
+        toolbarHeight: 100,
+        leading: IconButton(
+          onPressed: () {},
+          icon: Icon(Icons.notes_sharp, color: Colors.black, size: 50),
+        ),
+        actions: <Widget>[
+          CircleAvatar(
+            backgroundImage: AssetImage('assets/images/profile.png'),
+            radius: 35,
+          ),
+        ],
+        backgroundColor: Color(0xFFFAFAFA),
+      ),
       body: _body(),
     );
   }
 
   Widget _body() {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Text('Welcome to Flutter App'),
-          const SizedBox(height: 20),
-          ElevatedButton(
-            onPressed: () {
-            },
-            child: const Text('Go to Second Screen'),
-          ),
-        ],
+    return Container(
+      padding: EdgeInsets.only(left: 25, top: 20),
+      child: Text(
+        'Blogs',
+        style: TextStyle(
+            color: Colors.black, fontSize: 40, fontWeight: FontWeight.bold),
       ),
     );
   }
