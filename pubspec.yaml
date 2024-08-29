@@ -47,6 +47,8 @@ dependencies:
   image_picker: ^1.1.2
   path: ^1.9.0
   http: ^1.2.2
+  auth_buttons: ^3.0.3
+  delightful_toast: ^1.1.0
 
 dev_dependencies:
   flutter_test:

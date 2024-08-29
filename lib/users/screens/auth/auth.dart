@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_blog_app/users/screens/auth/signup.dart';
+import 'package:flutter_blog_app/constants/constants.dart';
 import 'package:flutter_blog_app/users/widgets/auth_widgets.dart';
+import 'package:auth_buttons/auth_buttons.dart';
+import 'package:flutter_blog_app/users/widgets/snackbar.dart';
 
 class Auth extends StatelessWidget {
   const Auth({super.key});
@@ -8,7 +10,8 @@ class Auth extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      backgroundColor: Constants.backgroundColor,
+      // appBar: AppBar(),
       body: _body(context),
     );
   }
@@ -19,11 +22,23 @@ class Auth extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          const SizedBox(height: 20),
+          _authImage(),
+          const SizedBox(height: 20),
           _signupText(),
           const SizedBox(height: 30),
           _authButtons(context),
+          const SizedBox(height: 30),
+          _googleButton(context),
         ],
       ),
+    );
+  }
+
+  Widget _authImage() {
+    return Image.asset(
+      'assets/images/login.jpg',
+      fit: BoxFit.contain,
     );
   }
 
@@ -47,8 +62,8 @@ class Auth extends StatelessWidget {
     );
   }
 
-  Widget _authButtons(BuildContext context){
-    return  Row(
+  Widget _authButtons(BuildContext context) {
+    return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         Expanded(
@@ -60,7 +75,9 @@ class Auth extends StatelessWidget {
             buttonName: "Sign Up",
           ),
         ),
-        const SizedBox(width: 20,),
+        const SizedBox(
+          width: 20,
+        ),
         Expanded(
           child: authButton(
             ontap: () {
@@ -69,6 +86,24 @@ class Auth extends StatelessWidget {
             },
             buttonName: "Log in",
           ),
+        ),
+      ],
+    );
+  }
+
+  Widget _googleButton(BuildContext context) {
+    print("googleButton pressed");
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        GoogleAuthButton(
+          onPressed: () {
+            snackbarToast(context: context, title: "This function is still in development!", icon: Icons.error);
+          },
+          style: const AuthButtonStyle(
+            shadowColor: Colors.blue,
+          ),
+          themeMode: ThemeMode.light,
         ),
       ],
     );

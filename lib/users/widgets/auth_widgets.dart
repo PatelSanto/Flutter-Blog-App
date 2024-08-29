@@ -5,7 +5,8 @@ Widget authButton(
   return Container(
     decoration: BoxDecoration(
       borderRadius: BorderRadius.circular(20),
-      border: Border.all(),
+      border: Border.all(color: Colors.blue,width: 2),
+      color: Colors.blue[100],
     ),
     child: ElevatedButton(
       onPressed: ontap,
@@ -17,10 +18,10 @@ Widget authButton(
         buttonName,
         style: const TextStyle(
           fontWeight: FontWeight.bold,
+          color: Color.fromARGB(255, 46, 75, 150),
           fontSize: 17,
         ),
       ),
     ),
   );
 }
-

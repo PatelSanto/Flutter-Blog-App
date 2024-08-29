@@ -1,5 +1,9 @@
+import 'package:flutter/material.dart';
+
 class Constants {
-   static RegExp emailValidationRegex =
+  static Color backgroundColor = Colors.white;
+
+  static RegExp emailValidationRegex =
       RegExp(r"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$");
 
   static RegExp passwordValidationRegex =
