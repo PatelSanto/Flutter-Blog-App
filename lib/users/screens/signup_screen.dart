@@ -23,10 +23,10 @@ class _SignupScreenState extends State<SignupScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _signupText(),
-          _signupForm(),
-          _signupButton(),
-          _forgotPassword(),
-          _loginButton(),
+          // _signupForm(),
+          // _signupButton(),
+          // _forgotPassword(),
+          // _loginButton(),
         ],
       ),
     );
