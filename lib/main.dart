@@ -20,7 +20,7 @@ Future<void> setup() async {
 class MyApp extends StatelessWidget {
   MyApp({super.key});
 
-  final AuthService _authService = GetIt.instance.get<AuthService>();
+  // final AuthService _authService = GetIt.instance.get<AuthService>();
 
   final Map<String, WidgetBuilder> routes = {
     '/home': (context) => const HomeScreen(),
@@ -39,8 +39,8 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         textTheme: GoogleFonts.poppinsTextTheme(),
       ),
-      // home: const SignupScreen(),
-      home: _authService.checkLogin(),
+      home: const SignupScreen(),
+      // home: _authService.checkLogin(),
     );
   }
 }
