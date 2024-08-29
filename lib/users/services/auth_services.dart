@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blog_app/models/user_profile.dart';
-import 'package:flutter_blog_app/users/screens/home_screen.dart';
-import 'package:flutter_blog_app/users/screens/signup_screen.dart';
+import 'package:flutter_blog_app/users/screens/auth/auth.dart';
+import 'package:flutter_blog_app/users/screens/home/home_screen.dart';
 import 'package:flutter_blog_app/users/services/database_services.dart';
 import 'package:flutter_blog_app/users/services/storage_services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -13,7 +13,7 @@ class AuthService {
   final GoogleSignIn _googleSignIn = GoogleSignIn();
 
   User? user;
-  bool isLoggedIn = false;
+  // bool isLoggedIn = false;
 
   Widget checkLogin() {
     print("checkingLogin function called");
@@ -28,20 +28,21 @@ class AuthService {
         } else {
           // User is not signed in
           print("User is not signed in: to signup screen");
-          return const SignupScreen();
+          return const Auth();
         }
       },
     );
   }
 
   Future<bool> login(String email, String password) async {
-    print("login function");
+    print("login function called");
     try {
       final credential = await _firebaseAuth.signInWithEmailAndPassword(
           email: email, password: password);
       final sp = await SharedPreferences.getInstance();
       if (credential.user != null) {
         await sp.setBool("GoogleLogin", false);
+
         user = credential.user;
         // go to home screen
         // snackbar will show
@@ -96,9 +97,8 @@ class AuthService {
 
       if (user != null) {
         if (await sp.setBool("GoogleLogin", true)) {
-          print(
-              "google login : ${sp.getBool("GoogleLogin")}"); //--------------------
-          print(sp.getKeys()); //--------------------
+          print("google login : ${sp.getBool("GoogleLogin")}");
+          print(sp.getKeys());
 
           print("--------------Download Url: $pfpicUrl :--------------");
           if (pfpicUrl != null) {
