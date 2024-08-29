@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_blog_app/users/screens/home_screen.dart';
-import 'package:flutter_blog_app/users/screens/login_signup_screen.dart';
+import 'package:flutter_blog_app/users/screens/auth/auth.dart';
+import 'package:flutter_blog_app/users/screens/auth/login.dart';
+import 'package:flutter_blog_app/users/screens/home/home_screen.dart';
+import 'package:flutter_blog_app/users/screens/auth/signup.dart';
 import 'package:flutter_blog_app/users/services/auth_services.dart';
 import 'package:flutter_blog_app/utils.dart';
 import 'package:get_it/get_it.dart';
@@ -24,7 +26,8 @@ class MyApp extends StatelessWidget {
 
   final Map<String, WidgetBuilder> routes = {
     '/home': (context) => const HomeScreen(),
-    '/login_signup': (context) => const LoginSignupScreen(),
+    '/login': (context) => const LoginScreen(),
+    '/signup': (context) => const SignupScreen(),
   };
 
   @override
@@ -38,7 +41,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         textTheme: GoogleFonts.poppinsTextTheme(),
       ),
-      home: const LoginSignupScreen(),
+      home: const Auth(),
       // home: _authService.checkLogin(),
     );
   }
