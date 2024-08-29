@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_blog_app/users/screens/home_screen.dart';
-import 'package:flutter_blog_app/users/screens/signup_screen.dart';
+import 'package:flutter_blog_app/users/screens/auth/auth.dart';
+import 'package:flutter_blog_app/users/screens/auth/login.dart';
+import 'package:flutter_blog_app/users/screens/home/home_screen.dart';
+import 'package:flutter_blog_app/users/screens/auth/signup.dart';
 import 'package:flutter_blog_app/users/services/auth_services.dart';
 import 'package:flutter_blog_app/utils.dart';
 import 'package:get_it/get_it.dart';
@@ -20,11 +22,11 @@ Future<void> setup() async {
 class MyApp extends StatelessWidget {
   MyApp({super.key});
 
-  final AuthService _authService = GetIt.instance.get<AuthService>();
+  // final AuthService _authService = GetIt.instance.get<AuthService>();
 
   final Map<String, WidgetBuilder> routes = {
     '/home': (context) => const HomeScreen(),
-    // '/login': (context) => const LoginScreen(),
+    '/login': (context) => const LoginScreen(),
     '/signup': (context) => const SignupScreen(),
   };
 
@@ -39,8 +41,8 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         textTheme: GoogleFonts.poppinsTextTheme(),
       ),
-      // home: const SignupScreen(),
-      home: _authService.checkLogin(),
+      home: const Auth(),
+      // home: _authService.checkLogin(),
     );
   }
 }
