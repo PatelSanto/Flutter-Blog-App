@@ -1,4 +1,3 @@
-// blog_list_screen.dart
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'create_blog_screen.dart';
@@ -21,27 +20,27 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Blogs'),
+        title: const Text(
+          'Blogs',
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
+        ),
+        centerTitle: true,
         leading: IconButton(
+          iconSize: 30,
           icon: const Icon(Icons.menu),
           onPressed: () {
-            // Implement the menu functionality (e.g., open a drawer or show a menu)
+            //* open a drawer or show a menu
           },
         ),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.filter_list),
-            onPressed: () {
-              // Implement filter action if needed
-            },
-          ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            padding: const EdgeInsets.symmetric(horizontal: 18),
             child: GestureDetector(
               onTap: () {
-                // Implement profile action (e.g., open profile screen)
+                //* open profile screen
               },
               child: CircleAvatar(
+                radius: 25,
                 backgroundImage: const NetworkImage(
                   'https://via.placeholder.com/150', // Replace with the user's profile image URL
                 ),
@@ -53,9 +52,10 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: Column(
         children: [
-          // Search Bar
+          //* Search Bar
           Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding:
+                const EdgeInsets.only(left: 35, right: 35, top: 20, bottom: 20),
             child: TextField(
               controller: _searchController,
               onChanged: (value) {
@@ -67,7 +67,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 prefixIcon: const Icon(Icons.search),
                 hintText: 'Search Blogs',
                 suffixIcon: IconButton(
-                  icon: const Icon(Icons.filter_alt_outlined),
+                  icon: const Icon(Icons.tune_sharp),
                   onPressed: () {
                     // Implement filter functionality
                   },
@@ -105,6 +105,16 @@ class _HomeScreenState extends State<HomeScreen> {
                   itemCount: filteredBlogs.length,
                   itemBuilder: (context, index) {
                     final blog = filteredBlogs[index];
+
+                    // Extract the color from Firestore data
+                    // final colorData = blog['titleColor'];
+                    // final Color titleColor = Color.fromARGB(
+                    //   colorData['alpha'],
+                    //   colorData['red'],
+                    //   colorData['green'],
+                    //   colorData['blue'],
+                    // );
+
                     return Card(
                       margin: const EdgeInsets.symmetric(
                           horizontal: 16, vertical: 8),
@@ -112,20 +122,28 @@ class _HomeScreenState extends State<HomeScreen> {
                         leading: blog['imageUrl'] != null &&
                                 blog['imageUrl'].isNotEmpty
                             ? Image.network(blog['imageUrl'],
-                                width: 50, height: 50, fit: BoxFit.cover)
+                                width: 60, height: 100, fit: BoxFit.cover)
                             : const Icon(Icons.image,
                                 size: 50, color: Colors.grey),
-                        title: Text(blog['title'] ?? 'No Title'),
+                        title: Text(
+                          blog['title'] ?? 'No Title',
+                          style: const TextStyle(
+                              // color: titleColor,
+                              fontWeight: FontWeight
+                                  .bold), // Use random color for title
+                        ),
                         subtitle: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text('By ${blog['author'] ?? 'Unknown Author'}'),
-                            Text('${blog['readingTime']} Mins Read'),
+                            Text('${blog['readingTime']} Min Read'),
                           ],
                         ),
                         trailing: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text('${blog['views']} Views'),
+                            // SizedBox(height: 20),
                             Text('${blog['comments']} Comments'),
                           ],
                         ),

@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
   // final AuthService _authService = GetIt.instance.get<AuthService>();
 
   final Map<String, WidgetBuilder> routes = {
-    '/home': (context) => const HomeScreen(),
+    '/home': (context) => HomeScreen(),
     '/login': (context) => const LoginScreen(),
     '/signup': (context) => const SignupScreen(),
   };
@@ -33,18 +33,17 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      routes: routes,
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-            seedColor: const Color.fromARGB(255, 141, 107, 198)),
-        useMaterial3: true,
-        textTheme: GoogleFonts.poppinsTextTheme(),
-      ),
-      home:
-          //const HomeScreen()
-          const Auth(),
-      // home: _authService.checkLogin(),
-    );
+        routes: routes,
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(
+              seedColor: const Color.fromARGB(255, 141, 107, 198)),
+          useMaterial3: true,
+          textTheme: GoogleFonts.poppinsTextTheme(),
+        ),
+        home: HomeScreen()
+        //  const Auth(),
+        // home: _authService.checkLogin(),
+        );
   }
 }

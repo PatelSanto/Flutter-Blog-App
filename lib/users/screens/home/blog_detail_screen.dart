@@ -44,11 +44,16 @@ class BlogDetailScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(blogData['title'] ?? '',
-                          style: Theme.of(context).textTheme.headlineSmall),
+                          style: Theme.of(context).textTheme.headlineLarge),
                       const SizedBox(height: 8),
                       Text('By ${blogData['author'] ?? ''}'),
                       const SizedBox(height: 16),
-                      Text(blogData['content'] ?? ''),
+                      Text(
+                        blogData['content'] ?? '',
+                        style: const TextStyle(
+                          fontSize: 15,
+                        ),
+                      ),
                     ],
                   ),
                 ),
