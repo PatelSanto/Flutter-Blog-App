@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 Widget authButton(
     {required String buttonName, required void Function()? ontap}) {
   return Container(
+    width: double.infinity,
     decoration: BoxDecoration(
       borderRadius: BorderRadius.circular(20),
       border: Border.all(color: Colors.blue,width: 2),

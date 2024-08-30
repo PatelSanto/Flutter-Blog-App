@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_blog_app/models/user_profile.dart';
+import 'package:flutter_blog_app/models/user.dart';
 import 'package:flutter_blog_app/users/screens/auth/auth.dart';
 import 'package:flutter_blog_app/users/screens/home/home_screen.dart';
 import 'package:flutter_blog_app/users/services/database_services.dart';
@@ -19,15 +19,16 @@ class AuthService {
     print("checkingLogin function called");
     return StreamBuilder<User?>(
       stream: _firebaseAuth.authStateChanges(),
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
+      builder: (BuildContext context, AsyncSnapshot<User?> snapshot) {
         if (snapshot.hasData) {
           // User is signed in
           print("User is signed in: to home screen");
           user = snapshot.data;
-          return HomeScreen();
+          print(user!.email);
+          return const HomeScreen();
         } else {
           // User is not signed in
-          print("User is not signed in: to signup screen");
+          print("User is not signed in: to auth screen");
           return const Auth();
         }
       },
@@ -111,16 +112,11 @@ class AuthService {
           }
 
           // Handle signed-in user (e.g., navigate to a new screen)
-          // Get.off(() => const HomeScreen());
           this.user = userCredential?.user;
           // go to HomeScreen
           print('Signed in as: ${user.displayName}');
-          // snackbar(
-          //     "Welcome ${user.displayName}", "Successfully Signed in.");
           return true;
         } else {
-          // snackbar("Error",
-          // "Google Authentication Passed but error in shared preferences");
           return false;
         }
       } else {

@@ -5,7 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class BlogDetailScreen extends StatelessWidget {
   final String blogId;
 
-  BlogDetailScreen({required this.blogId});
+  const BlogDetailScreen({super.key, required this.blogId});
 
   @override
   Widget build(BuildContext context) {

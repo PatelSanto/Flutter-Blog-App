@@ -11,6 +11,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+
   final CollectionReference _blogs =
       FirebaseFirestore.instance.collection('blogs');
   final TextEditingController _searchController = TextEditingController();
@@ -38,12 +39,11 @@ class _HomeScreenState extends State<HomeScreen> {
             child: GestureDetector(
               onTap: () {
                 //* open profile screen
+                Navigator.pushNamed(context, "/profile");
               },
               child: CircleAvatar(
                 radius: 25,
-                backgroundImage: const NetworkImage(
-                  'https://via.placeholder.com/150', // Replace with the user's profile image URL
-                ),
+                backgroundImage: const AssetImage("assets/images/profile.jpg"),
                 backgroundColor: Colors.grey[200],
               ),
             ),

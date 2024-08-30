@@ -1,9 +1,14 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_blog_app/constants/constants.dart';
+import 'package:flutter_blog_app/models/user.dart';
 import 'package:flutter_blog_app/users/services/auth_services.dart';
-// import 'package:flutter_blog_app/users/services/database_services.dart';
-// import 'package:flutter_blog_app/users/services/media_services.dart';
-// import 'package:flutter_blog_app/users/services/storage_services.dart';
+import 'package:flutter_blog_app/users/services/database_services.dart';
+import 'package:flutter_blog_app/users/services/media_services.dart';
+import 'package:flutter_blog_app/users/services/storage_services.dart';
+import 'package:flutter_blog_app/users/widgets/auth_widgets.dart';
+import 'package:flutter_blog_app/users/widgets/snackbar.dart';
 import 'package:get_it/get_it.dart';
 
 class SignupScreen extends StatefulWidget {
@@ -15,9 +20,9 @@ class SignupScreen extends StatefulWidget {
 
 class _SignupScreenState extends State<SignupScreen> {
   late AuthService _authService;
-  // late MediaServices _mediaServices;
-  // late StorageService _storageServices;
-  // late DatabaseService _databaseServices;
+  late MediaServices _mediaServices;
+  late StorageService _storageServices;
+  late DatabaseService _databaseServices;
 
   final name = TextEditingController();
   final email = TextEditingController();
@@ -27,19 +32,19 @@ class _SignupScreenState extends State<SignupScreen> {
 
   bool isLoginPage = false;
   bool formvalidation = false;
+  File? selectedImage;
 
-  bool isLoadingCheckLogin = false;
-  // bool isLoadingLogin = false;
-  // bool isLoadingSignup = false;
+  // bool isLoadingCheckLogin = false;
+  bool isLoadingLogin = false;
+  bool isLoadingSignup = false;
   // bool isLoadingGoogle = false;
 
   @override
   void initState() {
-    // _authService = Get.find<AuthService>();
     _authService = GetIt.instance.get<AuthService>();
-    // _mediaServices = GetIt.instance.get<MediaServices>();
-    // _storageServices = GetIt.instance.get<StorageService>();
-    // _databaseServices = GetIt.instance.get<DatabaseService>();
+    _mediaServices = GetIt.instance.get<MediaServices>();
+    _storageServices = GetIt.instance.get<StorageService>();
+    _databaseServices = GetIt.instance.get<DatabaseService>();
 
     super.initState();
   }
@@ -65,63 +70,72 @@ class _SignupScreenState extends State<SignupScreen> {
     return Scaffold(
       appBar: AppBar(),
       body: _body(),
-      resizeToAvoidBottomInset: false,
+      // resizeToAvoidBottomInset: false,
     );
   }
 
   Widget _body() {
     return Padding(
       padding: const EdgeInsets.all(16.0),
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _SignupForm(),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _SignupForm() {
+    return Form(
+      key: _formKey,
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          (isLoadingCheckLogin)
-              ? const CircularProgressIndicator.adaptive()
-              : _loginSignupForm(),
+          // image picker
+          _signupPageImagePicker(),
+          // name field
+          const SizedBox(height: 30),
+          _nameField(),
+          //email field
+          _emailField(),
+          //password field
+          _passwordField(),
+          //confirm password field
+          _confirmPasswordField(),
+          //submit button
+          _signupButton(),
+          //already have an account?
+          //sign up with google button
         ],
       ),
     );
   }
 
-  // Widget _signupText() {
-  //   return const Text.rich(
-  //     TextSpan(
-  //       children: [
-  //         TextSpan(
-  //           text: "Get Started...\n\n",
-  //           style: TextStyle(fontSize: 18),
-  //         ),
-  //         TextSpan(
-  //           text: "Publish Your Passion in you own way...",
-  //           style: TextStyle(
-  //             fontSize: 30,
-  //             fontWeight: FontWeight.bold,
-  //           ),
-  //         ),
-  //       ],
-  //     ),
-  //   );
-  // }
-
-  Widget _loginSignupForm() {
-    return Form(
-      key: _formKey,
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            // name field
-            const SizedBox(height: 30),
-            _nameField(),
-            //email field
-            _emailField(),
-            //password field
-            _passwordField(),
-            //confirm password field
-            _confirmPasswordField(),
-            //submit button
-            //already have an account?
-            //sign up with google button
-          ],
+  Widget _signupPageImagePicker() {
+    return GestureDetector(
+      onTap: () async {
+        File? file = await _mediaServices.getImageFromGallery();
+        if (file != null) {
+          setState(() {
+            selectedImage = file;
+          });
+        }
+      },
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 10),
+        // decoration: BoxDecoration(border: Border.all()),
+        child: CircleAvatar(
+          backgroundColor: Colors.white,
+          radius: MediaQuery.of(context).size.width * 0.17,
+          child: CircleAvatar(
+            radius: MediaQuery.of(context).size.width * 0.16,
+            backgroundImage: (selectedImage != null)
+                ? FileImage(selectedImage!)
+                : (const AssetImage("assets/images/profile.jpg")
+                    as ImageProvider),
+          ),
         ),
       ),
     );
@@ -230,5 +244,83 @@ class _SignupScreenState extends State<SignupScreen> {
         },
       ),
     );
+  }
+
+  Widget _signupButton() {
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 10),
+      child: (isLoadingSignup)
+          ? const CircularProgressIndicator.adaptive()
+          : authButton(
+              buttonName: "Sign up",
+              ontap: () {
+                _signupOnPressed();
+              },
+            ),
+    );
+  }
+
+  Future<void> _signupOnPressed() async {
+    print("signup button clicked");
+
+    if (_formKey.currentState!.validate()) {
+      setState(() {
+        isLoadingSignup = true;
+      });
+
+      try {
+        bool result = await _authService.signup(email.text, password.text);
+        if (result) {
+          String? pfpicUrl = "";
+          if (selectedImage != null) {
+            pfpicUrl = await _storageServices.uploadUserPfpic(
+              file: selectedImage!,
+              uid: _authService.user!.uid,
+            );
+            print("--------------Download Url: $pfpicUrl :--------------");
+          }
+          await _databaseServices
+              .createUserProfile(
+            userProfile: UserProfile(
+              uid: _authService.user!.uid,
+              name: name.text,
+              pfpURL: pfpicUrl,
+              email: email.text,
+            ),
+          )
+              .then((value) {
+            snackbarToast(
+              context: context,
+              title: "Login successfully",
+              icon: Icons.login,
+            );
+            Navigator.pop(context);
+            Navigator.pushReplacementNamed(context, "/home");
+          }).catchError((error) {
+            snackbarToast(
+              context: context,
+              title: "Failed to Signup",
+              icon: Icons.error,
+            );
+          });
+        }
+        setState(() {
+          isLoadingSignup = result;
+        });
+      } catch (e) {
+        snackbarToast(
+          context: context,
+          title: "Unable to Register User!",
+          icon: Icons.error_outline,
+        );
+        print("Error ai: $e");
+      }
+    } else {
+      snackbarToast(
+        context: context,
+        title: "Please enter valid details...",
+        icon: Icons.error_outline,
+      );
+    }
   }
 }
