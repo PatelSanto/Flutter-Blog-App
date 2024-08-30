@@ -41,7 +41,9 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         textTheme: GoogleFonts.poppinsTextTheme(),
       ),
-      home: const Auth(),
+      home:
+          //const HomeScreen()
+          const Auth(),
       // home: _authService.checkLogin(),
     );
   }
