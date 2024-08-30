@@ -24,7 +24,7 @@ class AuthService {
           // User is signed in
           print("User is signed in: to home screen");
           user = snapshot.data;
-          return const HomeScreen();
+          return HomeScreen();
         } else {
           // User is not signed in
           print("User is not signed in: to signup screen");
