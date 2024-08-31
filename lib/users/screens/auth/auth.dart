@@ -92,7 +92,6 @@ class Auth extends StatelessWidget {
   }
 
   Widget _googleButton(BuildContext context) {
-    print("googleButton pressed");
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
