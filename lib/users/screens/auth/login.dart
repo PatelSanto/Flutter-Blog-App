@@ -29,7 +29,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   void dispose() {
-    // Clean up the controller when the widget is disposed.
     email.dispose();
     password.dispose();
     super.dispose();
@@ -46,7 +45,6 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       appBar: AppBar(),
       body: _body(context),
-      // resizeToAvoidBottomInset: false,
     );
   }
 
@@ -69,13 +67,9 @@ class _LoginScreenState extends State<LoginScreen> {
       key: _formKey,
       child: Column(
         children: [
-          // login image
           _loginImage(),
-          //email field
           _emailField(),
-          //password field
           _passwordField(),
-          //submit button
           _loginButton(context),
         ],
       ),
@@ -171,8 +165,11 @@ class _LoginScreenState extends State<LoginScreen> {
             title: "Login successfully",
             icon: Icons.login,
           );
-          Navigator.pop(context);
-          Navigator.pushReplacementNamed(context, "/home");
+          Navigator.pushNamedAndRemoveUntil(
+                  context,
+                  "/home",
+                  (Route<dynamic> route) => false, // This removes all the previous routes
+                ); 
         } else {
           snackbarToast(
             context: context,

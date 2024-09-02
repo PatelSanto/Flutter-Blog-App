@@ -153,8 +153,6 @@ class AuthService {
     print("logout function called");
     try {
       await _firebaseAuth.signOut();
-      // Get.offAllNamed("loginSignupPage");
-      // go to signupPage
       user = null;
       return true;
     } catch (e) {

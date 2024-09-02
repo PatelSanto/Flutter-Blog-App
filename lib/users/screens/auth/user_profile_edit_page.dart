@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_blog_app/users/widgets/snackbar.dart';
 
 class ProfileEditPage extends StatefulWidget {
   const ProfileEditPage({super.key});
@@ -10,49 +11,41 @@ class ProfileEditPage extends StatefulWidget {
 
 class _ProfileEditPageState extends State<ProfileEditPage> {
   File? image;
+
   @override
   Widget build(BuildContext context) {
     Size s = MediaQuery.sizeOf(context);
     return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        title: const Text(
+          "Edit Profile",
+          style: TextStyle(
+            color: Color.fromARGB(255, 46, 75, 150),
+            fontSize: 30,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        centerTitle: true,
+      ),
       resizeToAvoidBottomInset: false,
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            SizedBox(
-              height: s.height * 0.08,
-            ), // text
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const Icon(
-                  Icons.arrow_back_ios_new,
-                  size: 30,
-                ),
-                SizedBox(
-                  width: s.width * 0.2,
-                ),
-                const Text(
-                  "Edit Profile",
-                  style: TextStyle(
-                    color: Color.fromARGB(255, 46, 75, 150),
-                    fontSize: 30,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: s.height * 0.06,
-            ),
             // image
             Container(
               height: s.height * 0.15,
               alignment: const Alignment(0.3, 0.9),
               decoration: BoxDecoration(
                 image: const DecorationImage(
-                  image: NetworkImage(
-                    "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png",
+                  image: AssetImage(
+                    "assets/images/blank-profile-picture.webp",
                   ),
                 ),
                 shape: BoxShape.circle,
@@ -66,7 +59,10 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                   FloatingActionButton.small(
                     onPressed: () {},
                     child: IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        snackbarToast(
+                    context: context, title: "This Function is in Development!", icon: Icons.error_outline);
+                      },
                       icon: const Icon(Icons.camera_alt_outlined),
                     ),
                   ),
@@ -81,14 +77,6 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
               style: TextStyle(
                 color: Color.fromARGB(255, 46, 75, 150),
                 fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const Text(
-              "User Name",
-              style: TextStyle(
-                color: Color.fromARGB(255, 46, 75, 150),
-                fontSize: 14,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -173,21 +161,27 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
               ),
             ),
             const Spacer(),
-            Container(
-              height: s.height * 0.06,
-              width: s.width * 0.8,
-              decoration: BoxDecoration(
-                color: const Color.fromARGB(255, 46, 75, 150),
-                borderRadius: BorderRadius.circular(
-                  10,
+            GestureDetector(
+              onTap: () {
+                snackbarToast(
+                    context: context, title: "This Function is in Development!", icon: Icons.error_outline);
+              },
+              child: Container(
+                height: s.height * 0.06,
+                width: s.width * 0.8,
+                decoration: BoxDecoration(
+                  color: const Color.fromARGB(255, 46, 75, 150),
+                  borderRadius: BorderRadius.circular(
+                    10,
+                  ),
                 ),
-              ),
-              child: const Center(
-                child: Text(
-                  'Save',
-                  style: TextStyle(
-                    fontSize: 18,
-                    color: Colors.white,
+                child: const Center(
+                  child: Text(
+                    'Save',
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
               ),
