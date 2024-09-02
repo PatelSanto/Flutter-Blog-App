@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_blog_app/constants/constants.dart';
 import 'package:flutter_blog_app/users/services/auth_services.dart';
-import 'package:flutter_blog_app/users/services/media_services.dart';
 import 'package:flutter_blog_app/users/widgets/auth_widgets.dart';
 import 'package:flutter_blog_app/users/widgets/snackbar.dart';
 import 'package:get_it/get_it.dart';
@@ -58,14 +57,14 @@ class _LoginScreenState extends State<LoginScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _loginForm(),
+            _loginForm(context),
           ],
         ),
       ),
     );
   }
 
-  Widget _loginForm() {
+  Widget _loginForm(BuildContext context) {
     return Form(
       key: _formKey,
       child: Column(
@@ -77,7 +76,7 @@ class _LoginScreenState extends State<LoginScreen> {
           //password field
           _passwordField(),
           //submit button
-          _loginButton(),
+          _loginButton(context),
         ],
       ),
     );
@@ -140,7 +139,7 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Widget _loginButton() {
+  Widget _loginButton(BuildContext context) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 10),
       child: (isLoadingLogin)
@@ -148,13 +147,13 @@ class _LoginScreenState extends State<LoginScreen> {
           : authButton(
               buttonName: "Login",
               ontap: () {
-                _loginOnPressed();
+                _loginOnPressed(context);
               },
             ),
     );
   }
 
-  Future<void> _loginOnPressed() async {
+  Future<void> _loginOnPressed(BuildContext context) async {
     print("login button clicked");
     if (_formKey.currentState!.validate()) {
       setState(() {
