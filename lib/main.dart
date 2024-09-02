@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_blog_app/users/screens/auth/auth.dart';
 import 'package:flutter_blog_app/users/screens/auth/login.dart';
 import 'package:flutter_blog_app/users/screens/auth/user_profile.dart';
+import 'package:flutter_blog_app/users/screens/auth/user_profile_edit_page.dart';
 import 'package:flutter_blog_app/users/screens/home/home_screen.dart';
 import 'package:flutter_blog_app/users/screens/auth/signup.dart';
 import 'package:flutter_blog_app/users/services/auth_services.dart';
@@ -30,22 +31,23 @@ class MyApp extends StatelessWidget {
     '/auth': (context) => const Auth(),
     '/login': (context) => const LoginScreen(),
     '/signup': (context) => const SignupScreen(),
-    '/profile': (context) => const  UserProfileScreen(),
+    '/profile': (context) => const UserProfileScreen(),
+    '/profile_edit_page': (context) => const ProfileEditPage(),
   };
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        routes: routes,
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(
-              seedColor: const Color.fromARGB(255, 141, 107, 198)),
-          useMaterial3: true,
-          textTheme: GoogleFonts.poppinsTextTheme(),
-        ),
-        // home: const HomeScreen(),
-        home: _authService.checkLogin(),
-        );
+      routes: routes,
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(
+            seedColor: const Color.fromARGB(255, 141, 107, 198)),
+        useMaterial3: true,
+        textTheme: GoogleFonts.poppinsTextTheme(),
+      ),
+      // home: const HomeScreen(),
+      home: _authService.checkLogin(),
+    );
   }
 }
