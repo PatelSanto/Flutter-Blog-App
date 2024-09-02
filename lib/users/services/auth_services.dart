@@ -13,7 +13,6 @@ class AuthService {
   final GoogleSignIn _googleSignIn = GoogleSignIn();
 
   User? user;
-  // bool isLoggedIn = false;
 
   Widget checkLogin() {
     print("checkingLogin function called");
@@ -46,8 +45,7 @@ class AuthService {
 
         user = credential.user;
         // go to home screen
-        // snackbar will show
-
+        
         return true;
       }
     } catch (e) {
@@ -155,8 +153,6 @@ class AuthService {
     print("logout function called");
     try {
       await _firebaseAuth.signOut();
-      // Get.offAllNamed("loginSignupPage");
-      // go to signupPage
       user = null;
       return true;
     } catch (e) {

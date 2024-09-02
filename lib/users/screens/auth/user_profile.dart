@@ -23,40 +23,35 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   Widget build(BuildContext context) {
     Size s = MediaQuery.sizeOf(context);
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        title: const Text(
+          'Profile',
+          style: TextStyle(
+            fontSize: 30,
+            color: Color.fromARGB(255, 46, 75, 150),
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        centerTitle: true,
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            SizedBox(
-              height: s.height * 0.08,
-            ),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const Icon(Icons.arrow_back_ios, size: 30),
-                SizedBox(width: s.width * 0.25),
-                const Text(
-                  'Profile',
-                  style: TextStyle(
-                    fontSize: 30,
-                    color: Color.fromARGB(255, 46, 75, 150),
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: s.height * 0.06,
-            ),
             Center(
               child: Container(
                 height: s.height * 0.15,
                 alignment: const Alignment(0.3, 0.9),
                 decoration: BoxDecoration(
                   image: const DecorationImage(
-                    image: NetworkImage(
-                      "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png",
+                    image: AssetImage(
+                      "assets/images/blank-profile-picture.webp",
                     ),
                   ),
                   shape: BoxShape.circle,
@@ -79,7 +74,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               ),
             ),
             const Text(
-              'Username',
+              '@Username',
               style: TextStyle(
                 fontSize: 14,
                 color: Colors.grey,
@@ -90,7 +85,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             ),
             GestureDetector(
               onTap: () {
-                Navigator.pushNamed(context, 'profile_edit_page');
+                Navigator.pushNamed(context, '/profile_edit_page');
               },
               child: Container(
                 height: s.height * 0.05,
@@ -194,10 +189,12 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             ),
             ListTile(
               onTap: () {
-                print("Logout clicked");
                 _authService.logout();
-                Navigator.pop(context);
-                Navigator.pushReplacementNamed(context, '/auth');
+                Navigator.pushNamedAndRemoveUntil(
+                  context,
+                  "/auth",
+                  (Route<dynamic> route) => false, // This removes all the previous routes
+                ); 
               },
               title: const Text(
                 'Logout',

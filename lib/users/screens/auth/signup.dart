@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_blog_app/constants/constants.dart';
 import 'package:flutter_blog_app/models/user.dart';
@@ -34,7 +33,6 @@ class _SignupScreenState extends State<SignupScreen> {
   bool formvalidation = false;
   File? selectedImage;
 
-  // bool isLoadingCheckLogin = false;
   bool isLoadingLogin = false;
   bool isLoadingSignup = false;
   // bool isLoadingGoogle = false;
@@ -81,14 +79,14 @@ class _SignupScreenState extends State<SignupScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _SignupForm(),
+            _signupForm(),
           ],
         ),
       ),
     );
   }
 
-  Widget _SignupForm() {
+  Widget _signupForm() {
     return Form(
       key: _formKey,
       child: Column(
@@ -294,8 +292,11 @@ class _SignupScreenState extends State<SignupScreen> {
               title: "Login successfully",
               icon: Icons.login,
             );
-            Navigator.pop(context);
-            Navigator.pushReplacementNamed(context, "/home");
+            Navigator.pushNamedAndRemoveUntil(
+                  context,
+                  "/home",
+                  (Route<dynamic> route) => false, // This removes all the previous routes
+                ); 
           }).catchError((error) {
             snackbarToast(
               context: context,
