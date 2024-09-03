@@ -3,7 +3,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
-//import 'dart:math';
 
 class CreateBlogScreen extends StatefulWidget {
   const CreateBlogScreen({super.key});
@@ -31,17 +30,6 @@ class _CreateBlogScreenState extends State<CreateBlogScreen> {
     }
   }
 
-  // Function to generate a random color
-  // Color _generateRandomColor() {
-  //   Random random = Random();
-  //   return Color.fromARGB(
-  //     255,
-  //     random.nextInt(256),
-  //     random.nextInt(256),
-  //     random.nextInt(256),
-  //   );
-  // }
-
   Future<void> _uploadBlog() async {
     if (_titleController.text.isEmpty ||
         _contentController.text.isEmpty ||
@@ -66,9 +54,6 @@ class _CreateBlogScreenState extends State<CreateBlogScreen> {
       TaskSnapshot taskSnapshot = await uploadTask;
       String downloadUrl = await taskSnapshot.ref.getDownloadURL();
 
-      // Generate a random color
-      // Color randomColor = _generateRandomColor();
-
       // Save blog details to Firestore
       await FirebaseFirestore.instance.collection('blogs').add({
         'title': _titleController.text,
@@ -79,12 +64,6 @@ class _CreateBlogScreenState extends State<CreateBlogScreen> {
         'views': 0,
         'comments': 0,
         'createdAt': Timestamp.now(),
-        // 'titleColor': {
-        //   'red': randomColor.red,
-        //   'green': randomColor.green,
-        //   'blue': randomColor.blue,
-        //   'alpha': randomColor.alpha,
-        // }, // Save the random color
       });
 
       // Show success message and navigate back

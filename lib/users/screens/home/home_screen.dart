@@ -11,7 +11,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-
   final CollectionReference _blogs =
       FirebaseFirestore.instance.collection('blogs');
   final TextEditingController _searchController = TextEditingController();
@@ -105,15 +104,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   itemCount: filteredBlogs.length,
                   itemBuilder: (context, index) {
                     final blog = filteredBlogs[index];
-
-                    // Extract the color from Firestore data
-                    // final colorData = blog['titleColor'];
-                    // final Color titleColor = Color.fromARGB(
-                    //   colorData['alpha'],
-                    //   colorData['red'],
-                    //   colorData['green'],
-                    //   colorData['blue'],
-                    // );
 
                     return Card(
                       margin: const EdgeInsets.symmetric(
