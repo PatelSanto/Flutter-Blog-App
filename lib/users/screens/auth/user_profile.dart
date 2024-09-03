@@ -189,12 +189,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             ),
             ListTile(
               onTap: () {
-                _authService.logout();
-                Navigator.pushNamedAndRemoveUntil(
-                  context,
-                  "/auth",
-                  (Route<dynamic> route) => false, // This removes all the previous routes
-                ); 
+                _authService.logoutDilog(context);
               },
               title: const Text(
                 'Logout',

@@ -42,15 +42,11 @@ class AuthService {
       final sp = await SharedPreferences.getInstance();
       if (credential.user != null) {
         await sp.setBool("GoogleLogin", false);
-
         user = credential.user;
-        // go to home screen
-        
         return true;
       }
     } catch (e) {
       print("Error: $e");
-      // snackbar("Login Failed.", "Please Enter valid Credentials.");
       print("login failed");
 
       return false;
@@ -68,14 +64,11 @@ class AuthService {
         await sp.setBool("GoogleLogin", false);
         user = credential.user;
         // go to HomeScreen
-        // snackbar("Welcome $email", "Successfully Signed in.");
         return true;
       } else {
-        // snackbar("Error", "Signin Failed.");
         return false;
       }
     } catch (e) {
-      // snackbar("Error", "Signin Failed.");
       print("Error: $e");
     }
     return false;
@@ -109,7 +102,6 @@ class AuthService {
             throw Exception("Unable to Upload user profile picture");
           }
 
-          // Handle signed-in user (e.g., navigate to a new screen)
           this.user = userCredential?.user;
           // go to HomeScreen
           print('Signed in as: ${user.displayName}');
@@ -118,7 +110,6 @@ class AuthService {
           return false;
         }
       } else {
-        // snackbar("Error", "Google Signin Failed.");
         print("Gooogle signin failed");
         return false;
       }
@@ -161,28 +152,35 @@ class AuthService {
     return false;
   }
 
-  // void logoutDilog() {
-  //   print("logoutDilog function called");
-  //   Get.defaultDialog(
-  //     title: "Login out",
-  //     middleText: "Are sure you want to Logout?",
-  //     confirm: OutlinedButton(
-  //         onPressed: () async {
-  //           final sp = await SharedPreferences.getInstance();
-  //           if (sp.getBool("GoogleLogin") == true) {
-  //             googleSignOut();
-  //           } else {
-  //             logout();
-  //           }
-  //         },
-  //         child: const Text("Yes")),
-  //     cancel: OutlinedButton(
-  //         onPressed: () {
-  //           Get.back();
-  //         },
-  //         child: const Text("No")),
-  //   );
-  // }
+  void logoutDilog(BuildContext context) {
+    print("logoutDilog function called");
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog.adaptive(
+            title: const Text('Logout'),
+            content: const Text('Are you sure you want to logout?'),
+            actions: [
+              ElevatedButton(
+                  onPressed: () {
+                    logout();
+                    Navigator.pushNamedAndRemoveUntil(
+                      context,
+                      "/auth",
+                      (Route<dynamic> route) =>
+                          false, // This removes all the previous routes
+                    );
+                  },
+                  child: const Text("Yes")),
+              ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text("No")),
+            ],
+          );
+        });
+  }
 
   Future<void> googleSignOut() async {
     print("googleSignOut function called");
@@ -192,9 +190,6 @@ class AuthService {
       await _googleSignIn.signOut();
       await _firebaseAuth.signOut();
       await sp.setBool("GoogleLogin", false);
-      // Get.offAll(() => const LoginSignupScreen());
-      // Get.offAllNamed("loginSignupPage");
-      // go to signupPage
       print("Signed out of Google");
     } catch (e) {
       print("Error: $e");
