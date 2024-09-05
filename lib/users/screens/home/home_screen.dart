@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'create_blog_screen.dart';
 import 'blog_detail_screen.dart';
+import 'package:flutter_blog_app/models/blog.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -16,6 +17,15 @@ class _HomeScreenState extends State<HomeScreen> {
   final TextEditingController _searchController = TextEditingController();
   String _searchQuery = '';
 
+  Stream<List<Blog>> getBlogs() {
+    return FirebaseFirestore.instance
+        .collection('blogs')
+        .snapshots()
+        .map((snapshot) {
+      return snapshot.docs.map((doc) => Blog.fromDocument(doc)).toList();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,7 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
           iconSize: 30,
           icon: const Icon(Icons.menu),
           onPressed: () {
-            //* open a drawer or show a menu
+            // Implement the menu functionality
           },
         ),
         actions: [
@@ -37,7 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 18),
             child: GestureDetector(
               onTap: () {
-                //* open profile screen
+                // Open profile screen
                 Navigator.pushNamed(context, "/profile");
               },
               child: CircleAvatar(
@@ -51,7 +61,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: Column(
         children: [
-          //* Search Bar
+          // Search Bar
           Padding(
             padding:
                 const EdgeInsets.only(left: 35, right: 35, top: 20, bottom: 20),
@@ -95,10 +105,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 final blogs = snapshot.data?.docs ?? [];
 
                 // Filter blogs based on search query
-                final filteredBlogs = blogs.where((blog) {
-                  final title = blog['title']?.toString().toLowerCase() ?? '';
-                  return title.contains(_searchQuery.toLowerCase());
-                }).toList();
+                final filteredBlogs = blogs
+                    .where((doc) {
+                      final title =
+                          doc['title']?.toString().toLowerCase() ?? '';
+                      return title.contains(_searchQuery.toLowerCase());
+                    })
+                    .map((doc) => Blog.fromDocument(doc))
+                    .toList();
 
                 return ListView.builder(
                   itemCount: filteredBlogs.length,
@@ -109,32 +123,27 @@ class _HomeScreenState extends State<HomeScreen> {
                       margin: const EdgeInsets.symmetric(
                           horizontal: 16, vertical: 8),
                       child: ListTile(
-                        leading: blog['imageUrl'] != null &&
-                                blog['imageUrl'].isNotEmpty
-                            ? Image.network(blog['imageUrl'],
+                        leading: blog.imageUrl.isNotEmpty
+                            ? Image.network(blog.imageUrl,
                                 width: 60, height: 100, fit: BoxFit.cover)
                             : const Icon(Icons.image,
                                 size: 50, color: Colors.grey),
                         title: Text(
-                          blog['title'] ?? 'No Title',
-                          style: const TextStyle(
-                              // color: titleColor,
-                              fontWeight: FontWeight
-                                  .bold), // Use random color for title
+                          blog.title,
+                          style: const TextStyle(fontWeight: FontWeight.bold),
                         ),
                         subtitle: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('By ${blog['author'] ?? 'Unknown Author'}'),
-                            Text('${blog['readingTime']} Min Read'),
+                            Text('By ${blog.author}'),
+                            Text('${blog.readingTime} Min Read'),
                           ],
                         ),
                         trailing: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text('${blog['views']} Views'),
-                            // SizedBox(height: 20),
-                            Text('${blog['comments']} Comments'),
+                            Text('${blog.views} Views'),
+                            Text('${blog.comments} Comments'),
                           ],
                         ),
                         onTap: () {
@@ -142,7 +151,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             context,
                             MaterialPageRoute(
                               builder: (context) =>
-                                  BlogDetailScreen(blogId: blog.id),
+                                  BlogDetailScreen(blog: blog),
                             ),
                           );
                         },

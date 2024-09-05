@@ -5,7 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 class CommentSection extends StatefulWidget {
   final String blogId;
 
-  const CommentSection({Key? key, required this.blogId}) : super(key: key);
+  const CommentSection({super.key, required this.blogId});
 
   @override
   _CommentSectionState createState() => _CommentSectionState();
@@ -13,26 +13,49 @@ class CommentSection extends StatefulWidget {
 
 class _CommentSectionState extends State<CommentSection> {
   final TextEditingController _commentController = TextEditingController();
-  final CollectionReference _commentsCollection =
-      FirebaseFirestore.instance.collection('comments');
 
+  // Function to add a comment and then update the comment count
   Future<void> _addComment(String commentText) async {
     if (commentText.isEmpty) return;
 
     try {
-      await _commentsCollection.add({
-        'blogId': widget.blogId,
+      // Add comment to the 'comments' sub-collection inside the blog document
+      await FirebaseFirestore.instance
+          .collection('blogs')
+          .doc(widget.blogId)
+          .collection('comments')
+          .add({
         'comment': commentText,
         'userId': FirebaseAuth.instance.currentUser?.uid,
         'timestamp': FieldValue.serverTimestamp(),
       });
 
+      // Clear the comment input field
       _commentController.clear();
+
+      // Call the parent widget to update the comment count
+      await _updateCommentCount();
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Failed to post comment: $e')),
       );
     }
+  }
+
+  // Function to update the comment count in the main blog document
+  Future<void> _updateCommentCount() async {
+    final blogRef =
+        FirebaseFirestore.instance.collection('blogs').doc(widget.blogId);
+
+    // Count the number of documents in the 'comments' sub-collection inside the specific blog
+    final commentsSnapshot = await blogRef.collection('comments').get();
+
+    final int commentCount = commentsSnapshot.size;
+
+    // Update the 'comments' field in the main blog document
+    await blogRef.update({
+      'comments': commentCount,
+    });
   }
 
   @override
@@ -66,8 +89,10 @@ class _CommentSectionState extends State<CommentSection> {
 
         // Display comments
         StreamBuilder<QuerySnapshot>(
-          stream: _commentsCollection
-              .where('blogId', isEqualTo: widget.blogId)
+          stream: FirebaseFirestore.instance
+              .collection('blogs')
+              .doc(widget.blogId)
+              .collection('comments')
               .orderBy('timestamp', descending: true)
               .snapshots(),
           builder: (context, snapshot) {
@@ -91,7 +116,6 @@ class _CommentSectionState extends State<CommentSection> {
                 return Padding(
                   padding: const EdgeInsets.only(bottom: 8),
                   child: ListTile(
-                    // tileColor: Colors.blue[100],
                     title: Text(data['comment'] ?? ''),
                     subtitle:
                         Text('Posted by ${data['userId'] ?? 'Anonymous'}'),
