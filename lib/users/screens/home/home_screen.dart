@@ -5,6 +5,7 @@ import 'package:flutter_blog_app/constants/constants.dart';
 import 'package:flutter_blog_app/users/screens/home/drawer_screen.dart';
 import 'create_blog_screen.dart';
 import 'blog_detail_screen.dart';
+import 'package:flutter_blog_app/models/blog.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -18,6 +19,15 @@ class _HomeScreenState extends State<HomeScreen> {
       FirebaseFirestore.instance.collection('blogs');
   final TextEditingController _searchController = TextEditingController();
   String _searchQuery = '';
+
+  Stream<List<Blog>> getBlogs() {
+    return FirebaseFirestore.instance
+        .collection('blogs')
+        .snapshots()
+        .map((snapshot) {
+      return snapshot.docs.map((doc) => Blog.fromDocument(doc)).toList();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 18),
             child: GestureDetector(
               onTap: () {
-                //* open profile screen
+                // Open profile screen
                 Navigator.pushNamed(context, "/profile");
               },
               child: CircleAvatar(
@@ -54,122 +64,107 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
-      body: SafeArea(
-        child: Column(
-          children: [
-            //* Search Bar
-            Padding(
-              padding: const EdgeInsets.only(
-                  left: 35, right: 35, top: 20, bottom: 20),
-              child: TextField(
-                controller: _searchController,
-                onChanged: (value) {
-                  setState(() {
-                    _searchQuery = value;
-                  });
-                },
-                decoration: InputDecoration(
-                  prefixIcon: const Icon(Icons.search),
-                  hintText: 'Search Blogs',
-                  suffixIcon: IconButton(
-                    icon: const Icon(Icons.tune_sharp),
-                    onPressed: () {
-                      // Implement filter functionality
-                    },
-                  ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(30),
-                    borderSide: BorderSide.none,
-                  ),
-                  filled: true,
-                  fillColor: Colors.grey[200],
+      body: Column(
+        children: [
+          // Search Bar
+          Padding(
+            padding:
+                const EdgeInsets.only(left: 35, right: 35, top: 20, bottom: 20),
+            child: TextField(
+              controller: _searchController,
+              onChanged: (value) {
+                setState(() {
+                  _searchQuery = value;
+                });
+              },
+              decoration: InputDecoration(
+                prefixIcon: const Icon(Icons.search),
+                hintText: 'Search Blogs',
+                suffixIcon: IconButton(
+                  icon: const Icon(Icons.tune_sharp),
+                  onPressed: () {
+                    // Implement filter functionality
+                  },
                 ),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(30),
+                  borderSide: BorderSide.none,
+                ),
+                filled: true,
+                fillColor: Colors.grey[200],
               ),
             ),
-            Expanded(
-              child: StreamBuilder(
-                stream: _blogs.snapshots(),
-                builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(child: CircularProgressIndicator());
-                  }
+          ),
+          Expanded(
+            child: StreamBuilder(
+              stream: _blogs.snapshots(),
+              builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                }
 
-                  if (snapshot.hasError) {
-                    return Center(child: Text('Error: ${snapshot.error}'));
-                  }
+                if (snapshot.hasError) {
+                  return Center(child: Text('Error: ${snapshot.error}'));
+                }
 
-                  final blogs = snapshot.data?.docs ?? [];
+                final blogs = snapshot.data?.docs ?? [];
 
-                  // Filter blogs based on search query
-                  final filteredBlogs = blogs.where((blog) {
-                    final title = blog['title']?.toString().toLowerCase() ?? '';
-                    return title.contains(_searchQuery.toLowerCase());
-                  }).toList();
+                // Filter blogs based on search query
+                final filteredBlogs = blogs.where((blog) {
+                  final title = blog['title']?.toString().toLowerCase() ?? '';
+                  return title.contains(_searchQuery.toLowerCase());
+                }).toList();
 
-                  return ListView.builder(
-                    itemCount: filteredBlogs.length,
-                    itemBuilder: (context, index) {
-                      final blog = filteredBlogs[index];
+                return ListView.builder(
+                  itemCount: filteredBlogs.length,
+                  itemBuilder: (context, index) {
+                    final blog = filteredBlogs[index];
 
-                      // Extract the color from Firestore data
-                      // final colorData = blog['titleColor'];
-                      // final Color titleColor = Color.fromARGB(
-                      //   colorData['alpha'],
-                      //   colorData['red'],
-                      //   colorData['green'],
-                      //   colorData['blue'],
-                      // );
-
-                      return Card(
-                        margin: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 8),
-                        child: ListTile(
-                          leading: blog['imageUrl'] != null &&
-                                  blog['imageUrl'].isNotEmpty
-                              ? Image.network(blog['imageUrl'],
-                                  width: 60, height: 100, fit: BoxFit.cover)
-                              : const Icon(Icons.image,
-                                  size: 50, color: Colors.grey),
-                          title: Text(
-                            blog['title'] ?? 'No Title',
-                            style: const TextStyle(
-                                // color: titleColor,
-                                fontWeight: FontWeight
-                                    .bold), // Use random color for title
-                          ),
-                          subtitle: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text('By ${blog['author'] ?? 'Unknown Author'}'),
-                              Text('${blog['readingTime']} Min Read'),
-                            ],
-                          ),
-                          trailing: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text('${blog['views']} Views'),
-                              // SizedBox(height: 20),
-                              Text('${blog['comments']} Comments'),
-                            ],
-                          ),
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    BlogDetailScreen(blogId: blog.id),
-                              ),
-                            );
-                          },
+                    return Card(
+                      margin: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 8),
+                      child: ListTile(
+                        leading: blog['imageUrl'] != null &&
+                                blog['imageUrl'].isNotEmpty
+                            ? Image.network(blog['imageUrl'],
+                                width: 60, height: 100, fit: BoxFit.cover)
+                            : const Icon(Icons.image,
+                                size: 50, color: Colors.grey),
+                        title: Text(
+                          blog['title'] ?? 'No Title',
+                          style: const TextStyle(fontWeight: FontWeight.bold),
                         ),
-                      );
-                    },
-                  );
-                },
-              ),
+                        subtitle: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('By ${blog['author'] ?? 'Unknown Author'}'),
+                            Text('${blog['readingTime']} Min Read'),
+                          ],
+                        ),
+                        trailing: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text('${blog['views']} Views'),
+                            Text('${blog['comments']} Comments'),
+                          ],
+                        ),
+                        onTap: () {
+                          /*Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  BlogDetailScreen(blog: blog.id),
+                            ),
+                          );*/
+                        },
+                      ),
+                    );
+                  },
+                );
+              },
             ),
-          ],
-        ),
+          ),
+        ],
       ),
       drawer: DrawerScreen(selectedIndex: 0),
       floatingActionButton: FloatingActionButton(

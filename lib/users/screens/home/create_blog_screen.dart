@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
-//import 'dart:math';
+import 'package:flutter_blog_app/models/blog.dart';
 
 class CreateBlogScreen extends StatefulWidget {
   const CreateBlogScreen({super.key});
@@ -31,24 +31,12 @@ class _CreateBlogScreenState extends State<CreateBlogScreen> {
     }
   }
 
-  // Function to generate a random color
-  // Color _generateRandomColor() {
-  //   Random random = Random();
-  //   return Color.fromARGB(
-  //     255,
-  //     random.nextInt(256),
-  //     random.nextInt(256),
-  //     random.nextInt(256),
-  //   );
-  // }
-
   Future<void> _uploadBlog() async {
     if (_titleController.text.isEmpty ||
         _contentController.text.isEmpty ||
         _readingTimeController.text.isEmpty ||
         _authorController.text.isEmpty ||
         _selectedImage == null) {
-      // Show an error if fields are empty or image is not selected
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
             content: Text('Please fill all fields and select an image')),
@@ -57,7 +45,6 @@ class _CreateBlogScreenState extends State<CreateBlogScreen> {
     }
 
     try {
-      // Upload image to Firebase Storage
       String fileName = DateTime.now().millisecondsSinceEpoch.toString();
       Reference storageRef =
           FirebaseStorage.instance.ref().child('blog_images/$fileName');
@@ -66,28 +53,21 @@ class _CreateBlogScreenState extends State<CreateBlogScreen> {
       TaskSnapshot taskSnapshot = await uploadTask;
       String downloadUrl = await taskSnapshot.ref.getDownloadURL();
 
-      // Generate a random color
-      // Color randomColor = _generateRandomColor();
+      // Create Blog object
+      Blog newBlog = Blog(
+        id: '',
+        title: _titleController.text,
+        content: _contentController.text,
+        author: _authorController.text,
+        imageUrl: downloadUrl,
+        views: 0,
+        comments: 0,
+        readingTime: int.parse(_readingTimeController.text),
+      );
 
       // Save blog details to Firestore
-      await FirebaseFirestore.instance.collection('blogs').add({
-        'title': _titleController.text,
-        'content': _contentController.text,
-        'readingTime': int.parse(_readingTimeController.text),
-        'author': _authorController.text,
-        'imageUrl': downloadUrl,
-        'views': 0,
-        'comments': 0,
-        'createdAt': Timestamp.now(),
-        // 'titleColor': {
-        //   'red': randomColor.red,
-        //   'green': randomColor.green,
-        //   'blue': randomColor.blue,
-        //   'alpha': randomColor.alpha,
-        // }, // Save the random color
-      });
+      await FirebaseFirestore.instance.collection('blogs').add(newBlog.toMap());
 
-      // Show success message and navigate back
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Blog created successfully!')),
       );

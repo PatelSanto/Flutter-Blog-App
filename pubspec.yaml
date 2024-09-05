@@ -49,6 +49,10 @@ dependencies:
   http: ^1.2.2
   auth_buttons: ^3.0.3
   delightful_toast: ^1.1.0
+  path_provider: ^2.1.4
+  permission_handler: ^11.3.1
+  pdf: ^3.11.1
+  printing: ^5.13.1
 
 dev_dependencies:
   flutter_test:
@@ -75,6 +79,8 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/images/
+    - assets/fonts/Roboto-Regular.ttf
+    - assets/fonts/Roboto-Bold.ttf
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
