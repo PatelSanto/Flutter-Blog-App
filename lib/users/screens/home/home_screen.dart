@@ -1,5 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_blog_app/constants/constants.dart';
+import 'package:flutter_blog_app/users/screens/home/drawer_screen.dart';
 import 'create_blog_screen.dart';
 import 'blog_detail_screen.dart';
 import 'package:flutter_blog_app/models/blog.dart';
@@ -35,13 +38,15 @@ class _HomeScreenState extends State<HomeScreen> {
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
         ),
         centerTitle: true,
-        leading: IconButton(
-          iconSize: 30,
-          icon: const Icon(Icons.menu),
-          onPressed: () {
-            // Implement the menu functionality
-          },
-        ),
+        leading: Builder(builder: (context) {
+          return IconButton(
+            iconSize: 30,
+            icon: const Icon(Icons.menu),
+            onPressed: () {
+              Scaffold.of(context).openDrawer();
+            },
+          );
+        }),
         actions: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 18),
@@ -105,14 +110,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 final blogs = snapshot.data?.docs ?? [];
 
                 // Filter blogs based on search query
-                final filteredBlogs = blogs
-                    .where((doc) {
-                      final title =
-                          doc['title']?.toString().toLowerCase() ?? '';
-                      return title.contains(_searchQuery.toLowerCase());
-                    })
-                    .map((doc) => Blog.fromDocument(doc))
-                    .toList();
+                final filteredBlogs = blogs.where((blog) {
+                  final title = blog['title']?.toString().toLowerCase() ?? '';
+                  return title.contains(_searchQuery.toLowerCase());
+                }).toList();
 
                 return ListView.builder(
                   itemCount: filteredBlogs.length,
@@ -123,37 +124,38 @@ class _HomeScreenState extends State<HomeScreen> {
                       margin: const EdgeInsets.symmetric(
                           horizontal: 16, vertical: 8),
                       child: ListTile(
-                        leading: blog.imageUrl.isNotEmpty
-                            ? Image.network(blog.imageUrl,
+                        leading: blog['imageUrl'] != null &&
+                                blog['imageUrl'].isNotEmpty
+                            ? Image.network(blog['imageUrl'],
                                 width: 60, height: 100, fit: BoxFit.cover)
                             : const Icon(Icons.image,
                                 size: 50, color: Colors.grey),
                         title: Text(
-                          blog.title,
+                          blog['title'] ?? 'No Title',
                           style: const TextStyle(fontWeight: FontWeight.bold),
                         ),
                         subtitle: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('By ${blog.author}'),
-                            Text('${blog.readingTime} Min Read'),
+                            Text('By ${blog['author'] ?? 'Unknown Author'}'),
+                            Text('${blog['readingTime']} Min Read'),
                           ],
                         ),
                         trailing: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text('${blog.views} Views'),
-                            Text('${blog.comments} Comments'),
+                            Text('${blog['views']} Views'),
+                            Text('${blog['comments']} Comments'),
                           ],
                         ),
                         onTap: () {
-                          Navigator.push(
+                          /*Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (context) =>
-                                  BlogDetailScreen(blog: blog),
+                                  BlogDetailScreen(blog: blog.id),
                             ),
-                          );
+                          );*/
                         },
                       ),
                     );
@@ -164,6 +166,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
+      drawer: DrawerScreen(selectedIndex: 0),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(
@@ -172,6 +175,27 @@ class _HomeScreenState extends State<HomeScreen> {
           );
         },
         child: const Icon(Icons.add),
+      ),
+    );
+  }
+
+  Widget _listTile({required String title, required IconData icon}) {
+    return Container(
+      margin: const EdgeInsets.only(left: 20, bottom: 10),
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.horizontal(left: Radius.circular(50)),
+      ),
+      child: ListTile(
+        title: Text(
+          title,
+          style: TextStyle(
+              fontWeight: FontWeight.bold, color: AppColors.drawerBackground),
+        ),
+        leading: Icon(
+          icon,
+          color: AppColors.drawerBackground,
+        ),
       ),
     );
   }
