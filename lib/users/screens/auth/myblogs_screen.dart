@@ -1,61 +1,113 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_blog_app/models/blog.dart';
+import 'package:flutter_blog_app/models/user_provider.dart';
+import 'package:flutter_blog_app/users/screens/home/blog_detail_screen.dart';
 import 'package:flutter_blog_app/users/screens/home/drawer_screen.dart';
+import 'package:flutter_blog_app/users/widgets/appbar_widget.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class MyBlogsScreen extends StatefulWidget {
+class MyBlogsScreen extends ConsumerStatefulWidget {
   const MyBlogsScreen({super.key});
 
   @override
-  State<MyBlogsScreen> createState() => _MyBlogsScreenState();
+  ConsumerState<MyBlogsScreen> createState() => _MyBlogsScreenState();
 }
 
-class _MyBlogsScreenState extends State<MyBlogsScreen> {
+class _MyBlogsScreenState extends ConsumerState<MyBlogsScreen> {
+  Stream<List<Blog>> getUserBlogs(String? uid) {
+    CollectionReference blogsRef =
+        FirebaseFirestore.instance.collection('blogs');
+    return blogsRef
+        .where('authorUid', isEqualTo: uid)
+        .snapshots()
+        .map((snapshot) {
+      return snapshot.docs.map((doc) {
+        return Blog.fromDocument(doc);
+      }).toList();
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final userData = ref.watch(userDataNotifierProvider);
+    // getUserBlogs(userData.uid);
     return Scaffold(
       drawer: const DrawerScreen(selectedIndex: 1),
-      appBar: _appBar(context),
+      appBar: appBarWidget(context, userData, "My Blogs"),
       body: _body(),
     );
   }
 
-  PreferredSizeWidget _appBar(BuildContext context) {
-    return AppBar(
-      title: const Text(
-        'Blogs',
-        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
-      ),
-      centerTitle: true,
-      leading: Builder(builder: (context) {
-        return IconButton(
-          iconSize: 30,
-          icon: const Icon(Icons.menu),
-          onPressed: () {
-            Scaffold.of(context).openDrawer();
+  Widget _body() {
+    final userData = ref.watch(userDataNotifierProvider);
+    return StreamBuilder(
+      stream: getUserBlogs(userData.uid),
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(
+              child: CircularProgressIndicator
+                  .adaptive()); // Show a loading indicator
+        }
+
+        if (snapshot.hasError) {
+          return const Center(child: Text("Error loading blogs."));
+        }
+
+        if (!snapshot.hasData || snapshot.data!.isEmpty) {
+          return const Center(child: Text("No blogs found."));
+        }
+
+        // If data is available, display the list of blogs
+        final blogs = snapshot.data;
+
+        return ListView.builder(
+          itemCount: blogs.length,
+          itemBuilder: (BuildContext context, int index) {
+            final blog = blogs[index];
+            return Card(
+              margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              child: ListTile(
+                leading: blog.imageUrl.isNotEmpty
+                    ? Image.network(blog.imageUrl,
+                        width: 60, height: 100, fit: BoxFit.cover)
+                    : const Icon(Icons.image, size: 50, color: Colors.grey),
+                title: Text(
+                  blog.title,
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+                subtitle: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('By ${blog.author}'),
+                    Text('${blog.readingTime} Min Read'),
+                  ],
+                ),
+                trailing: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text('${blog.views} Views'),
+                    Text('${blog.comments} Comments'),
+                  ],
+                ),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => BlogDetailScreen(blog: blog),
+                    ),
+                  );
+                },
+              ),
+            );
           },
         );
-      }),
-      actions: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 18),
-          child: GestureDetector(
-            onTap: () {
-              // Open profile screen
-              Navigator.pushNamed(context, "/profile");
-            },
-            child: CircleAvatar(
-              radius: 25,
-              backgroundImage: const AssetImage("assets/images/profile.jpg"),
-              backgroundColor: Colors.grey[200],
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _body() {
-    return const Center(
-      child: Text("My Blogs"),
+      },
     );
   }
 }

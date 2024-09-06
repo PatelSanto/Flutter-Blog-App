@@ -1,56 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_blog_app/models/user_provider.dart';
 import 'package:flutter_blog_app/users/screens/home/drawer_screen.dart';
+import 'package:flutter_blog_app/users/widgets/appbar_widget.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class SettingsScreen extends StatelessWidget {
+class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final userData = ref.watch(userDataNotifierProvider);
     return Scaffold(
-      drawer: const DrawerScreen(selectedIndex: 3),
-      appBar: _appBar(context),
+      drawer: const DrawerScreen(selectedIndex: 2),
+      appBar: appBarWidget(context, userData, "Settings"),
       body: _body(),
     );
   }
 
-  PreferredSizeWidget _appBar(BuildContext context) {
-    return AppBar(
-      title: const Text(
-        'Blogs',
-        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
-      ),
-      centerTitle: true,
-      leading: Builder(builder: (context) {
-        return IconButton(
-          iconSize: 30,
-          icon: const Icon(Icons.menu),
-          onPressed: () {
-            Scaffold.of(context).openDrawer();
-          },
-        );
-      }),
-      actions: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 18),
-          child: GestureDetector(
-            onTap: () {
-              // Open profile screen
-              Navigator.pushNamed(context, "/profile");
-            },
-            child: CircleAvatar(
-              radius: 25,
-              backgroundImage: const AssetImage("assets/images/profile.jpg"),
-              backgroundColor: Colors.grey[200],
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
   Widget _body() {
-    return const Center(
-      child: Text("Settings"),
+    return const Column(
+      children: [
+        Center(
+          child: Text(
+            "Settings Screen",
+            style: TextStyle(fontSize: 24),
+          ),
+        )
+      ],
     );
   }
 }

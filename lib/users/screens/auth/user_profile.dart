@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_blog_app/models/user_provider.dart';
 import 'package:flutter_blog_app/users/services/auth_services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 
-class UserProfileScreen extends StatefulWidget {
+class UserProfileScreen extends ConsumerStatefulWidget {
   const UserProfileScreen({super.key});
 
   @override
-  State<UserProfileScreen> createState() => _UserProfileScreenState();
+  ConsumerState<UserProfileScreen> createState() => _UserProfileScreenState();
 }
 
-class _UserProfileScreenState extends State<UserProfileScreen> {
+class _UserProfileScreenState extends ConsumerState<UserProfileScreen> {
   late AuthService _authService;
 
   @override
@@ -22,6 +24,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   @override
   Widget build(BuildContext context) {
     Size s = MediaQuery.sizeOf(context);
+    final userData = ref.watch(userDataNotifierProvider);
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -45,29 +49,47 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
         child: Column(
           children: [
             Center(
-              child: Container(
-                height: s.height * 0.15,
-                alignment: const Alignment(0.3, 0.9),
-                decoration: BoxDecoration(
-                  image: const DecorationImage(
-                    image: AssetImage(
-                      "assets/images/blank-profile-picture.webp",
-                    ),
-                  ),
-                  shape: BoxShape.circle,
-                  border: Border.all(
-                    color: Colors.black,
-                    width: 2.0,
-                  ),
+              // child: Container(
+              //   height: s.height * 0.15,
+              //   alignment: const Alignment(0.3, 0.9),
+              //   decoration: BoxDecoration(
+              //     image: DecorationImage(
+              //       image: NetworkImage(
+              //         "${userData.pfpURL}",
+              //       ),fit: BoxFit.cover,
+              //     ),
+              //     shape: BoxShape.circle,
+              //     border: Border.all(
+              //       color: Colors.black,
+              //       width: 2.0,
+              //     ),
+              //   ),
+              // ),
+              child: ClipOval(
+                child: Image.network(
+                  "${userData.pfpURL}",
+                  height: 120,
+                  width: 120,
+                  fit: BoxFit.cover,
+                  loadingBuilder: (context, child, loadingProgress) {
+                    if (loadingProgress != null) {
+                      return const CircularProgressIndicator.adaptive();
+                    } else {
+                      return child;
+                    }
+                  },
+                  errorBuilder: (context, error, stackTrace) {
+                    return const Icon(Icons.person, color: Colors.black12,);
+                  },
                 ),
               ),
             ),
             SizedBox(
               height: s.height * 0.02,
             ),
-            const Text(
-              'Full Name',
-              style: TextStyle(
+             Text(
+              "${userData.name}",
+              style: const TextStyle(
                 fontSize: 18,
                 color: Color.fromARGB(255, 46, 75, 150),
                 fontWeight: FontWeight.bold,

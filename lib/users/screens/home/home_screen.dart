@@ -4,10 +4,9 @@ import 'package:flutter_blog_app/constants/constants.dart';
 import 'package:flutter_blog_app/models/user_provider.dart';
 import 'package:flutter_blog_app/users/screens/home/drawer_screen.dart';
 import 'package:flutter_blog_app/users/services/auth_services.dart';
+import 'package:flutter_blog_app/users/widgets/appbar_widget.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
-import 'package:path/path.dart';
-import 'package:printing/printing.dart';
 import 'create_blog_screen.dart';
 import 'blog_detail_screen.dart';
 import 'package:flutter_blog_app/models/blog.dart';
@@ -40,6 +39,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   void initState() {
     super.initState();
     _authService = GetIt.instance.get<AuthService>();
+
     ref
         .read(userDataNotifierProvider.notifier)
         .fetchUserData(_authService.user?.uid);
@@ -48,45 +48,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final userData = ref.watch(userDataNotifierProvider);
-
     print("profile pic url: ${userData.pfpURL}");
+
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Blogs',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
-        ),
-        centerTitle: true,
-        leading: Builder(builder: (context) {
-          return IconButton(
-            iconSize: 30,
-            icon: const Icon(Icons.menu),
-            onPressed: () {
-              Scaffold.of(context).openDrawer();
-            },
-          );
-        }),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 18),
-            child: GestureDetector(
-              onTap: () {
-                // Open profile screen
-                Navigator.pushNamed(context, "/profile");
-              },
-              child: CircleAvatar(
-                radius: 25, // Adjust the radius as needed
-                backgroundImage: NetworkImage("${userData.pfpURL}"),
-                onBackgroundImageError: (error, stackTrace) {
-                  // Optionally handle image load errors
-                  print('Error loading image: $error');
-                },
-              ),
-              // child: ClipOval(child: Image.network("${userData.pfpURL}",),),
-            ),
-          ),
-        ],
-      ),
+      appBar: appBarWidget(context, userData, "Blogs"),
       body: Column(
         children: [
           // Search Bar
@@ -142,51 +107,71 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     .map((doc) => Blog.fromDocument(doc))
                     .toList();
 
-                return ListView.builder(
-                  itemCount: filteredBlogs.length,
-                  itemBuilder: (context, index) {
-                    final blog = filteredBlogs[index];
+                if (filteredBlogs.isNotEmpty) {
+                  return ListView.builder(
+                    itemCount: filteredBlogs.length,
+                    itemBuilder: (context, index) {
+                      final blog = filteredBlogs[index];
 
-                    return Card(
-                      margin: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 8),
-                      child: ListTile(
-                        leading: blog.imageUrl.isNotEmpty
-                            ? Image.network(blog.imageUrl,
-                                width: 60, height: 100, fit: BoxFit.cover)
-                            : const Icon(Icons.image,
-                                size: 50, color: Colors.grey),
-                        title: Text(
-                          blog.title,
-                          style: const TextStyle(fontWeight: FontWeight.bold),
+                      return Card(
+                        margin: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 8),
+                        child: ListTile(
+                          leading: blog.imageUrl.isNotEmpty
+                              ? Image.network(blog.imageUrl,
+                                  width: 60, height: 100, fit: BoxFit.cover)
+                              : const Icon(Icons.image,
+                                  size: 50, color: Colors.grey),
+                          title: Text(
+                            blog.title,
+                            style: const TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          subtitle: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('By ${blog.author}'),
+                              Text('${blog.readingTime} Min Read'),
+                            ],
+                          ),
+                          trailing: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text('${blog.views} Views'),
+                              Text('${blog.comments} Comments'),
+                            ],
+                          ),
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    BlogDetailScreen(blog: blog),
+                              ),
+                            );
+                          },
                         ),
-                        subtitle: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text('By ${blog.author}'),
-                            Text('${blog.readingTime} Min Read'),
-                          ],
-                        ),
-                        trailing: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text('${blog.views} Views'),
-                            Text('${blog.comments} Comments'),
-                          ],
-                        ),
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  BlogDetailScreen(blog: blog),
-                            ),
-                          );
-                        },
+                      );
+                    },
+                  );
+                } else {
+                  return Opacity(
+                    opacity: 0.4,
+                    child: Center(
+                      child: Column(
+                        children: [
+                          const SizedBox(height: 50,),
+                          Image.asset(
+                            "assets/images/3d-casual-life-question-mark-icon-1.png",
+                            width: 200,
+                            // color: ,
+                          ),
+                          const SizedBox(height: 50,),
+                          const Text('No blogs found'),
+                        ],
                       ),
-                    );
-                  },
-                );
+                    ),
+                  );
+                }
               },
             ),
           ),
