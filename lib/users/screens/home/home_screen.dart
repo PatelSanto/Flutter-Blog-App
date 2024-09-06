@@ -155,7 +155,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   );
                 } else {
                   return Opacity(
-                    opacity: 0.4,
+                    opacity: 0.6,
                     child: Center(
                       child: Column(
                         children: [

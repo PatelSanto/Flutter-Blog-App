@@ -60,12 +60,31 @@ class _MyBlogsScreenState extends ConsumerState<MyBlogsScreen> {
         }
 
         if (!snapshot.hasData || snapshot.data!.isEmpty) {
-          return const Center(child: Text("No blogs found."));
+          return Opacity(
+            opacity: 0.6,
+            child: Center(
+              child: Column(
+                children: [
+                  const SizedBox(
+                    height: 50,
+                  ),
+                  Image.asset(
+                    "assets/images/3d-casual-life-question-mark-icon-1.png",
+                    width: 200,
+                    // color: ,
+                  ),
+                  const SizedBox(
+                    height: 50,
+                  ),
+                  const Text('No blogs found'),
+                ],
+              ),
+            ),
+          );
         }
 
         // If data is available, display the list of blogs
         final blogs = snapshot.data;
-
         return ListView.builder(
           itemCount: blogs.length,
           itemBuilder: (BuildContext context, int index) {
