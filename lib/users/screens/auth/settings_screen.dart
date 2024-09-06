@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_blog_app/users/screens/home/drawer_screen.dart';
 
-class CategoryScreen extends StatelessWidget {
-  const CategoryScreen({super.key});
+class SettingsScreen extends StatelessWidget {
+  const SettingsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: const DrawerScreen(selectedIndex: 2),
+      drawer: const DrawerScreen(selectedIndex: 3),
       appBar: _appBar(context),
       body: _body(),
     );
@@ -34,7 +34,7 @@ class CategoryScreen extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 18),
           child: GestureDetector(
             onTap: () {
-              //* open profile screen
+              // Open profile screen
               Navigator.pushNamed(context, "/profile");
             },
             child: CircleAvatar(
@@ -49,15 +49,8 @@ class CategoryScreen extends StatelessWidget {
   }
 
   Widget _body() {
-    return const Column(
-      children: [
-        Center(
-          child: Text(
-            "Category Screen",
-            style: TextStyle(fontSize: 24),
-          ),
-        )
-      ],
+    return const Center(
+      child: Text("Settings"),
     );
   }
 }

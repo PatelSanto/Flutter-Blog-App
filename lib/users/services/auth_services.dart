@@ -16,6 +16,7 @@ class AuthService {
 
   Widget checkLogin() {
     print("checkingLogin function called");
+
     return StreamBuilder<User?>(
       stream: _firebaseAuth.authStateChanges(),
       builder: (BuildContext context, AsyncSnapshot<User?> snapshot) {
@@ -23,7 +24,7 @@ class AuthService {
           // User is signed in
           print("User is signed in: to home screen");
           user = snapshot.data;
-          print(user!.email);
+        print('User Firebase: $user');
           return const HomeScreen();
         } else {
           // User is not signed in
@@ -95,7 +96,7 @@ class AuthService {
           print("--------------Download Url: $pfpicUrl :--------------");
           if (pfpicUrl != null) {
             await databaseServices.createUserProfile(
-              userProfile: UserProfile(
+              userProfile: UserData(
                   uid: uid, name: name, pfpURL: pfpicUrl, email: email),
             );
           } else {

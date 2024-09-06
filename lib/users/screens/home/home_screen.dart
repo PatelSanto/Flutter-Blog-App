@@ -1,20 +1,27 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_blog_app/constants/constants.dart';
+import 'package:flutter_blog_app/models/user_provider.dart';
 import 'package:flutter_blog_app/users/screens/home/drawer_screen.dart';
+import 'package:flutter_blog_app/users/services/auth_services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:get_it/get_it.dart';
+import 'package:path/path.dart';
+import 'package:printing/printing.dart';
 import 'create_blog_screen.dart';
 import 'blog_detail_screen.dart';
 import 'package:flutter_blog_app/models/blog.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends ConsumerState<HomeScreen> {
+  late AuthService _authService;
+
   final CollectionReference _blogs =
       FirebaseFirestore.instance.collection('blogs');
   final TextEditingController _searchController = TextEditingController();
@@ -30,7 +37,19 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    _authService = GetIt.instance.get<AuthService>();
+    ref
+        .read(userDataNotifierProvider.notifier)
+        .fetchUserData(_authService.user?.uid);
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final userData = ref.watch(userDataNotifierProvider);
+
+    print("profile pic url: ${userData.pfpURL}");
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -56,10 +75,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 Navigator.pushNamed(context, "/profile");
               },
               child: CircleAvatar(
-                radius: 25,
-                backgroundImage: const AssetImage("assets/images/profile.jpg"),
-                backgroundColor: Colors.grey[200],
+                radius: 25, // Adjust the radius as needed
+                backgroundImage: NetworkImage("${userData.pfpURL}"),
+                onBackgroundImageError: (error, stackTrace) {
+                  // Optionally handle image load errors
+                  print('Error loading image: $error');
+                },
               ),
+              // child: ClipOval(child: Image.network("${userData.pfpURL}",),),
             ),
           ),
         ],
@@ -110,10 +133,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 final blogs = snapshot.data?.docs ?? [];
 
                 // Filter blogs based on search query
-                final filteredBlogs = blogs.where((blog) {
-                  final title = blog['title']?.toString().toLowerCase() ?? '';
-                  return title.contains(_searchQuery.toLowerCase());
-                }).toList();
+                final filteredBlogs = blogs
+                    .where((blog) {
+                      final title =
+                          blog['title']?.toString().toLowerCase().trim() ?? '';
+                      return title.contains(_searchQuery.toLowerCase());
+                    })
+                    .map((doc) => Blog.fromDocument(doc))
+                    .toList();
 
                 return ListView.builder(
                   itemCount: filteredBlogs.length,
@@ -124,38 +151,37 @@ class _HomeScreenState extends State<HomeScreen> {
                       margin: const EdgeInsets.symmetric(
                           horizontal: 16, vertical: 8),
                       child: ListTile(
-                        leading: blog['imageUrl'] != null &&
-                                blog['imageUrl'].isNotEmpty
-                            ? Image.network(blog['imageUrl'],
+                        leading: blog.imageUrl.isNotEmpty
+                            ? Image.network(blog.imageUrl,
                                 width: 60, height: 100, fit: BoxFit.cover)
                             : const Icon(Icons.image,
                                 size: 50, color: Colors.grey),
                         title: Text(
-                          blog['title'] ?? 'No Title',
+                          blog.title,
                           style: const TextStyle(fontWeight: FontWeight.bold),
                         ),
                         subtitle: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('By ${blog['author'] ?? 'Unknown Author'}'),
-                            Text('${blog['readingTime']} Min Read'),
+                            Text('By ${blog.author}'),
+                            Text('${blog.readingTime} Min Read'),
                           ],
                         ),
                         trailing: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text('${blog['views']} Views'),
-                            Text('${blog['comments']} Comments'),
+                            Text('${blog.views} Views'),
+                            Text('${blog.comments} Comments'),
                           ],
                         ),
                         onTap: () {
-                          /*Navigator.push(
+                          Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (context) =>
-                                  BlogDetailScreen(blog: blog.id),
+                                  BlogDetailScreen(blog: blog),
                             ),
-                          );*/
+                          );
                         },
                       ),
                     );
@@ -166,7 +192,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
-      drawer: DrawerScreen(selectedIndex: 0),
+      drawer: const DrawerScreen(selectedIndex: 0),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(
@@ -179,7 +205,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _listTile({required String title, required IconData icon}) {
+  Widget listTile({required String title, required IconData icon}) {
     return Container(
       margin: const EdgeInsets.only(left: 20, bottom: 10),
       decoration: const BoxDecoration(
@@ -190,11 +216,11 @@ class _HomeScreenState extends State<HomeScreen> {
         title: Text(
           title,
           style: TextStyle(
-              fontWeight: FontWeight.bold, color: AppColors.drawerBackground),
+              fontWeight: FontWeight.bold, color: Constants.drawerBackground),
         ),
         leading: Icon(
           icon,
-          color: AppColors.drawerBackground,
+          color: Constants.drawerBackground,
         ),
       ),
     );

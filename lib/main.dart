@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_blog_app/constants/constants.dart';
 import 'package:flutter_blog_app/users/screens/auth/auth.dart';
 import 'package:flutter_blog_app/users/screens/auth/login.dart';
 import 'package:flutter_blog_app/users/screens/auth/user_profile.dart';
@@ -7,12 +8,13 @@ import 'package:flutter_blog_app/users/screens/home/home_screen.dart';
 import 'package:flutter_blog_app/users/screens/auth/signup.dart';
 import 'package:flutter_blog_app/users/services/auth_services.dart';
 import 'package:flutter_blog_app/utils.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 void main() {
   setup().then((_) {
-    runApp(MyApp());
+    runApp(ProviderScope(child: MyApp()));
   });
 }
 
@@ -45,7 +47,8 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
-            seedColor: const Color.fromARGB(255, 141, 107, 198)),
+          seedColor: Constants.backgroundColor,
+        ),
         useMaterial3: true,
         textTheme: GoogleFonts.poppinsTextTheme(),
       ),

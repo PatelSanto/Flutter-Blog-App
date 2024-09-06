@@ -125,7 +125,7 @@ class _SignupScreenState extends State<SignupScreen> {
         margin: const EdgeInsets.symmetric(vertical: 10),
         // decoration: BoxDecoration(border: Border.all()),
         child: CircleAvatar(
-          backgroundColor: Colors.white,
+          backgroundColor: Colors.blue[200],
           radius: MediaQuery.of(context).size.width * 0.17,
           child: CircleAvatar(
             radius: MediaQuery.of(context).size.width * 0.16,
@@ -133,6 +133,14 @@ class _SignupScreenState extends State<SignupScreen> {
                 ? FileImage(selectedImage!)
                 : (const AssetImage("assets/images/profile.jpg")
                     as ImageProvider),
+            child: Align(
+              alignment: Alignment.bottomRight,
+              child: FloatingActionButton.small(
+                backgroundColor: Colors.blue[200],
+                onPressed: () {},
+                child: const Icon(Icons.camera_alt),
+              ),
+            ),
           ),
         ),
       ),
@@ -279,7 +287,7 @@ class _SignupScreenState extends State<SignupScreen> {
           }
           await _databaseServices
               .createUserProfile(
-            userProfile: UserProfile(
+            userProfile: UserData(
               uid: _authService.user!.uid,
               name: name.text,
               pfpURL: pfpicUrl,
@@ -293,10 +301,11 @@ class _SignupScreenState extends State<SignupScreen> {
               icon: Icons.login,
             );
             Navigator.pushNamedAndRemoveUntil(
-                  context,
-                  "/home",
-                  (Route<dynamic> route) => false, // This removes all the previous routes
-                ); 
+              context,
+              "/home",
+              (Route<dynamic> route) =>
+                  false, // This removes all the previous routes
+            );
           }).catchError((error) {
             snackbarToast(
               context: context,

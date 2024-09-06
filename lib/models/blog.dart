@@ -6,6 +6,7 @@ class Blog {
   final String content;
   final String author;
   final String imageUrl;
+  List<String> categories;
   int views;
   int comments;
   final int readingTime;
@@ -17,6 +18,7 @@ class Blog {
     required this.content,
     required this.author,
     required this.imageUrl,
+    this.categories = const [] ,
     this.views = 0,
     this.comments = 0,
     required this.readingTime,

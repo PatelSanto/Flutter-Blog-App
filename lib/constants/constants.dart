@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class Constants {
-  static Color backgroundColor = Colors.white;
+  static Color backgroundColor = const Color.fromARGB(255, 144, 202, 249);
+  static Color primaryColor = const Color.fromARGB(255, 141, 107, 198);
 
   static RegExp emailValidationRegex =
       RegExp(r"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$");
@@ -11,11 +12,6 @@ class Constants {
 
   static RegExp nameValidationRegex = RegExp(r"\b([A-ZÀ-ÿ][-,a-z. ']+[ ]*)+");
 
-  static String profilePicPlaceHolder =
-      "https://t3.ftcdn.net/jpg/05/16/27/58/360_F_516275801_f3Fsp17x6HQK0xQgDQEELoTuERO4SsWV.jpg";
-}
-
-class AppColors {
   static Color drawerTilesColor = const Color(0xFF414755);
-  static Color drawerBackground = const Color(0xFF207368);
+  static Color drawerBackground = const Color.fromARGB(255, 144, 202, 249);
 }
