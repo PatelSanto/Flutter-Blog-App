@@ -3,7 +3,7 @@ import 'package:flutter_blog_app/models/user.dart';
 
 class DatabaseService {
   final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
-  late CollectionReference<UserProfile> _userCollection;
+  late CollectionReference<UserData> _userCollection;
   // late AuthService _authService;
 
   // Singleton pattern to ensure a single instance
@@ -11,16 +11,15 @@ class DatabaseService {
   factory DatabaseService() => _instance;
 
   DatabaseService._internal() {
-    // _authService = GetIt.instance.get<AuthService>();
     _userCollection =
-        _firebaseFirestore.collection('users').withConverter<UserProfile>(
+        _firebaseFirestore.collection('users').withConverter<UserData>(
               fromFirestore: (snapshots, _) =>
-                  UserProfile.fromJson(snapshots.data()!),
+                  UserData.fromJson(snapshots.data()!),
               toFirestore: (userProfile, _) => userProfile.toJson(),
             );
   }
 
-  Future<void> createUserProfile({required UserProfile userProfile}) async {
+  Future<void> createUserProfile({required UserData userProfile}) async {
     try {
       await _userCollection.doc(userProfile.uid).set(userProfile);
     } catch (e) {
@@ -28,14 +27,14 @@ class DatabaseService {
     }
   }
 
-  Future<UserProfile?> fetchUserProfile(String uid) async {
+  Future<UserData?> fetchUserProfile(String uid) async {
   try {
     DocumentSnapshot<Map<String, dynamic>> userProfileSnapshot =
         await _firebaseFirestore.collection('users').doc(uid).get();
 
     if (userProfileSnapshot.exists) {
       // Convert the document data to a UserProfile instance
-      return UserProfile.fromJson(userProfileSnapshot.data()!);
+      return UserData.fromJson(userProfileSnapshot.data()!);
     } else {
       // Handle case where the user profile document doesn't exist
       return null;

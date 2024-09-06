@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_blog_app/users/screens/auth/myblogs_screen.dart';
+import 'package:flutter_blog_app/users/screens/auth/settings_screen.dart';
 import 'package:flutter_blog_app/users/screens/home/category_screen.dart';
 import 'package:flutter_blog_app/users/screens/home/home_screen.dart';
 
@@ -26,7 +28,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      backgroundColor: AppColors.drawerBackground,
+      backgroundColor: Constants.drawerBackground,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
           topRight: Radius.circular(50),
@@ -36,12 +38,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
       child: SafeArea(
         child: ListView(
           children: [
-            const Center(
-              child: Text(
-                'Blogs',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-              ),
-            ),
+            Image.asset("assets/images/techny-blog-article-on-the-tablet.png",height: 200,),
             const SizedBox(height: 20),
             drawerTile(
               title: 'Home',
@@ -56,7 +53,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
               icon: CupertinoIcons.news,
               isSelected: _selectedIndex == 1, // Highlight if selected
               onTap: () {
-                _navigateToPage(context, 1, const HomeScreen());
+                _navigateToPage(context, 1, const MyBlogsScreen());
               },
             ),
             drawerTile(
@@ -72,7 +69,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
               icon: CupertinoIcons.settings,
               isSelected: _selectedIndex == 3, // Highlight if selected
               onTap: () {
-                _navigateToPage(context, 3, const CategoryScreen());
+                _navigateToPage(context, 3, const SettingsScreen());
               },
             ),
             drawerTile(
@@ -80,7 +77,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
               icon: Icons.help_outline,
               isSelected: _selectedIndex == 4, // Highlight if selected
               onTap: () {
-                _navigateToPage(context, 4, const CategoryScreen());
+                _navigateToPage(context, 4, const SettingsScreen());
               },
             ),
           ],
@@ -125,7 +122,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
         leading: Icon(
           icon,
           color: isSelected
-              ? AppColors.drawerBackground
+              ? Constants.primaryColor
               : Colors.white, // Change icon color based on selection
           size: 24,
         ),
@@ -133,7 +130,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
           title,
           style: TextStyle(
             color: isSelected
-                ? AppColors.drawerBackground
+                ? Constants.primaryColor
                 : Colors.white, // Change text color based on selection
             fontWeight: FontWeight.w600,
             fontSize: 18,

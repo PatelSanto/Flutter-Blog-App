@@ -5,7 +5,9 @@ class Blog {
   final String title;
   final String content;
   final String author;
+  final String authorUid;
   final String imageUrl;
+  List<String> categories;
   int views;
   int comments;
   final int readingTime;
@@ -16,7 +18,9 @@ class Blog {
     required this.title,
     required this.content,
     required this.author,
+    required this.authorUid,
     required this.imageUrl,
+    this.categories = const [],
     this.views = 0,
     this.comments = 0,
     required this.readingTime,
@@ -30,7 +34,9 @@ class Blog {
       title: doc['title'] ?? 'Untitled',
       content: doc['content'] ?? 'No content available',
       author: doc['author'] ?? 'Unknown author',
+      authorUid: doc['authorUid'] ?? "Unknown author",
       imageUrl: doc['imageUrl'] ?? '',
+      categories: List<String>.from(doc['categories'] ?? const []),
       views: doc['views'] ?? 0,
       comments: doc['comments'] ?? 0,
       readingTime: doc['readingTime'] ?? 5,
@@ -45,7 +51,9 @@ class Blog {
       'title': title,
       'content': content,
       'author': author,
+      'authorUid': authorUid,
       'imageUrl': imageUrl,
+      'categories': categories,
       'views': views,
       'comments': comments,
       'readingTime': readingTime,

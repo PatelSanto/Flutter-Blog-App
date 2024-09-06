@@ -22,19 +22,4 @@ class StorageService {
       return null;
     });
   }
-
-  Future<String?> uploadImageToChat( // for blog images
-      {required File file, required String chatId}) async {
-        
-    Reference fileRef = firebaseStorage.ref('chats/$chatId').child(
-        '${DateTime.now().toIso8601String()}${path.extension(file.path)}');
-    UploadTask uploadTask = fileRef.putFile(file);
-
-    return uploadTask.then((p) {
-      if (p.state == TaskState.success) {
-        return fileRef.getDownloadURL();
-      }
-      return null;
-    });
-  }
 }

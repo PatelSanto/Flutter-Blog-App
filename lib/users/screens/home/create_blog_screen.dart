@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter_blog_app/models/user_provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:flutter_blog_app/models/blog.dart';
 
-class CreateBlogScreen extends StatefulWidget {
+class CreateBlogScreen extends ConsumerStatefulWidget {
   const CreateBlogScreen({super.key});
 
   @override
   _CreateBlogScreenState createState() => _CreateBlogScreenState();
 }
 
-class _CreateBlogScreenState extends State<CreateBlogScreen> {
+class _CreateBlogScreenState extends ConsumerState<CreateBlogScreen> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _contentController = TextEditingController();
   final TextEditingController _readingTimeController = TextEditingController();
@@ -52,6 +54,7 @@ class _CreateBlogScreenState extends State<CreateBlogScreen> {
 
       TaskSnapshot taskSnapshot = await uploadTask;
       String downloadUrl = await taskSnapshot.ref.getDownloadURL();
+      final userData = ref.watch(userDataNotifierProvider);
 
       // Create Blog object
       Blog newBlog = Blog(
@@ -59,6 +62,7 @@ class _CreateBlogScreenState extends State<CreateBlogScreen> {
         title: _titleController.text,
         content: _contentController.text,
         author: _authorController.text,
+        authorUid: userData.uid.toString(),
         imageUrl: downloadUrl,
         views: 0,
         comments: 0,

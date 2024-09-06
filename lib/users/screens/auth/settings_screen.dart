@@ -4,15 +4,15 @@ import 'package:flutter_blog_app/users/screens/home/drawer_screen.dart';
 import 'package:flutter_blog_app/users/widgets/appbar_widget.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class CategoryScreen extends ConsumerWidget {
-  const CategoryScreen({super.key});
+class SettingsScreen extends ConsumerWidget {
+  const SettingsScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final userData = ref.watch(userDataNotifierProvider);
     return Scaffold(
       drawer: const DrawerScreen(selectedIndex: 2),
-      appBar: appBarWidget(context, userData, "All Categories"),
+      appBar: appBarWidget(context, userData, "Settings"),
       body: _body(),
     );
   }
@@ -22,7 +22,7 @@ class CategoryScreen extends ConsumerWidget {
       children: [
         Center(
           child: Text(
-            "Category Screen",
+            "Settings Screen",
             style: TextStyle(fontSize: 24),
           ),
         )

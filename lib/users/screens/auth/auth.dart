@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_blog_app/constants/constants.dart';
 import 'package:flutter_blog_app/users/widgets/auth_widgets.dart';
 import 'package:auth_buttons/auth_buttons.dart';
 import 'package:flutter_blog_app/users/widgets/snackbar.dart';
@@ -10,7 +9,7 @@ class Auth extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Constants.backgroundColor,
+      backgroundColor: Colors.white,
       // appBar: AppBar(),
       body: _body(context),
     );

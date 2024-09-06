@@ -1,6 +1,5 @@
 
-
-class UserProfile {
+class UserData {
   String? uid;
   String? name;
   String? pfpURL;
@@ -11,7 +10,7 @@ class UserProfile {
   int noOfBlogs;
   List<String> blogIds;
 
-  UserProfile({
+  UserData({
     required this.uid,
     required this.name,
     this.pfpURL = "",
@@ -23,8 +22,8 @@ class UserProfile {
     this.blogIds = const [],
   });
 
-  factory UserProfile.fromJson(Map<String, dynamic> json) {
-    return UserProfile(
+  factory UserData.fromJson(Map<String, dynamic> json) {
+    return UserData(
       uid: json['uid'] as String,
       name: json['name'] as String,
       pfpURL: json['pfpURL'] as String? ?? "",
@@ -33,10 +32,8 @@ class UserProfile {
       totalComments: json['totalComments'] as int? ?? 0,
       totalLikes: json['totalLikes'] as int? ?? 0,
       noOfBlogs: json['noOfBlogs'] as int? ?? 0,
-      blogIds: (json['blogIds'] as List<dynamic>?)
-              ?.map((id) => id as String)
-              .toList() ??
-          [],
+      blogIds: List<String>.from(json['blogIds'] ?? [])
+          ,
     );
   }
 
