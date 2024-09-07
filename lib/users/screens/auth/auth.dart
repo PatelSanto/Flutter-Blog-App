@@ -10,7 +10,6 @@ class Auth extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      // appBar: AppBar(),
       body: _body(context),
     );
   }
@@ -18,18 +17,20 @@ class Auth extends StatelessWidget {
   Widget _body(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(height: 20),
-          _authImage(),
-          const SizedBox(height: 20),
-          _signupText(),
-          const SizedBox(height: 30),
-          _authButtons(context),
-          const SizedBox(height: 30),
-          _googleButton(context),
-        ],
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 20),
+            _authImage(),
+            const SizedBox(height: 20),
+            _signupText(),
+            const SizedBox(height: 30),
+            _authButtons(context),
+            const SizedBox(height: 30),
+            _googleButton(context),
+          ],
+        ),
       ),
     );
   }
@@ -96,7 +97,10 @@ class Auth extends StatelessWidget {
       children: [
         GoogleAuthButton(
           onPressed: () {
-            snackbarToast(context: context, title: "This function is still in development!", icon: Icons.error);
+            snackbarToast(
+                context: context,
+                title: "This function is still in development!",
+                icon: Icons.error);
           },
           style: const AuthButtonStyle(
             shadowColor: Colors.blue,

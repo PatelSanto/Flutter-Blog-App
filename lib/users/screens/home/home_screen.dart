@@ -118,8 +118,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             horizontal: 16, vertical: 8),
                         child: ListTile(
                           leading: blog.imageUrl.isNotEmpty
-                              ? Image.network(blog.imageUrl,
-                                  width: 60, height: 100, fit: BoxFit.cover)
+                              ? ClipRRect(
+                                borderRadius: BorderRadius.circular(10),
+                                child: Image.network(blog.imageUrl,
+                                    width: 60, height: 100, fit: BoxFit.cover),
+                              )
                               : const Icon(Icons.image,
                                   size: 50, color: Colors.grey),
                           title: Text(

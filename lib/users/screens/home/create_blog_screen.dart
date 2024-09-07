@@ -70,7 +70,15 @@ class _CreateBlogScreenState extends ConsumerState<CreateBlogScreen> {
       );
 
       // Save blog details to Firestore
-      await FirebaseFirestore.instance.collection('blogs').add(newBlog.toMap());
+      DocumentReference docRef = await FirebaseFirestore.instance
+          .collection('blogs')
+          .add(newBlog.toMap());
+      await docRef.update({'id': docRef.id});
+
+      ref.read(userDataNotifierProvider.notifier).updateUserData(
+            noOfBlogs: userData.noOfBlogs + 1,
+            blogIds: [...userData.blogIds, docRef.id],
+          );
 
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Blog created successfully!')),
