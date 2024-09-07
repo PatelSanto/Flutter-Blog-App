@@ -7,7 +7,6 @@ import 'package:flutter_blog_app/users/widgets/snackbar.dart';
 class DatabaseService {
   final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
   late CollectionReference<UserData> _userCollection;
-  // late AuthService _authService;
 
   // Singleton pattern to ensure a single instance
   static final DatabaseService _instance = DatabaseService._internal();
@@ -41,6 +40,29 @@ Stream<List<Blog>> getUserBlogs(String? uid) {
       return Blog.fromDocument(doc);
     }).toList();
   });
+}
+
+Future<UserData> getUserDetailsFromUid(String uid) async {
+  try {
+    final FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+    CollectionReference<UserData> userCollection = firebaseFirestore
+        .collection('users')
+        .withConverter<UserData>(
+          fromFirestore: (snapshots, _) => UserData.fromJson(snapshots.data()!),
+          toFirestore: (userData, _) => userData.toJson(),
+        );
+
+    final docSnapshot = await userCollection.doc(uid).get();
+
+    if (docSnapshot.exists) {
+      UserData userDetails = docSnapshot.data()!;
+      return userDetails;
+    } else {
+      return Future.error("User not found");
+    }
+  } catch (e) {
+    return Future.error("Failed to fetch user data : $e");
+  }
 }
 
 Future<bool> deleteBlog(BuildContext context, String id) async {
