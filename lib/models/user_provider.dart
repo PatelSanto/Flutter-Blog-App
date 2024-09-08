@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_blog_app/models/blog.dart';
 import 'package:flutter_blog_app/models/user.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'user_provider.g.dart';
@@ -39,22 +38,42 @@ class UserDataNotifier extends _$UserDataNotifier {
     String? email,
     String? profilePicUrl,
     int? totalViews,
-    int? totalComents,
+    int? totalComments,
     int? totalLikes,
     int? noOfBlogs,
     List<String>? blogIds,
-  }) {
+  }) async {
+    final userRef =
+        FirebaseFirestore.instance.collection('users').doc(state.uid);
+
+    Map<String, dynamic> updatedData = {
+      'name': name ?? state.name,
+      'email': email ?? state.email,
+      'pfpURL': profilePicUrl ?? state.pfpURL,
+      'totalViews': totalViews ?? state.totalViews,
+      'totalComments': totalComments ?? state.totalComments,
+      'totalLikes': totalLikes ?? state.totalLikes,
+      'noOfBlogs': noOfBlogs ?? state.noOfBlogs,
+      'blogIds': blogIds ?? state.blogIds,
+    };
+
+    try {
+      await userRef.update(updatedData);
+      print('Document updated successfully!');
+    } catch (e) {
+      print('Error updating document: $e');
+    }
+
     state = UserData(
-      uid: state.uid, // Keep the existing UID
+      uid: state.uid,
       name: name ?? state.name,
       email: email ?? state.email,
       pfpURL: profilePicUrl ?? state.pfpURL,
       totalViews: totalViews ?? state.totalViews,
-      totalComments: totalComents ?? state.totalComments,
+      totalComments: totalComments ?? state.totalComments,
       totalLikes: totalLikes ?? state.totalLikes,
       noOfBlogs: noOfBlogs ?? state.noOfBlogs,
       blogIds: blogIds ?? state.blogIds,
     );
   }
 }
-

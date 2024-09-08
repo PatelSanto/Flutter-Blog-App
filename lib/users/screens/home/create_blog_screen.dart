@@ -70,7 +70,15 @@ class _CreateBlogScreenState extends ConsumerState<CreateBlogScreen> {
       );
 
       // Save blog details to Firestore
-      await FirebaseFirestore.instance.collection('blogs').add(newBlog.toMap());
+      DocumentReference docRef = await FirebaseFirestore.instance
+          .collection('blogs')
+          .add(newBlog.toMap());
+      await docRef.update({'id': docRef.id});
+
+      ref.read(userDataNotifierProvider.notifier).updateUserData(
+        noOfBlogs: userData.noOfBlogs + 1,
+        blogIds: [...userData.blogIds, docRef.id],
+      );
 
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Blog created successfully!')),
@@ -85,6 +93,7 @@ class _CreateBlogScreenState extends ConsumerState<CreateBlogScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final userData = ref.watch(userDataNotifierProvider);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Create New Blog'),
@@ -102,7 +111,16 @@ class _CreateBlogScreenState extends ConsumerState<CreateBlogScreen> {
               const SizedBox(height: 10),
               TextField(
                 controller: _authorController,
-                decoration: const InputDecoration(labelText: 'Author'),
+                decoration: InputDecoration(
+                    labelText: 'Author',
+                    suffix: OutlinedButton(
+                      onPressed: () {
+                        setState(() {
+                          _authorController.text = userData.name.toString();
+                        });
+                      },
+                      child: const Text("Me"),
+                    )),
               ),
               const SizedBox(height: 10),
               TextField(
