@@ -1,10 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_blog_app/models/user.dart';
-import 'package:flutter_blog_app/users/screens/auth/auth.dart';
-import 'package:flutter_blog_app/users/screens/home/home_screen.dart';
-import 'package:flutter_blog_app/users/services/database_services.dart';
-import 'package:flutter_blog_app/users/services/storage_services.dart';
+import 'package:blog_app/models/user.dart';
+import 'package:blog_app/users/screens/auth/auth.dart';
+import 'package:blog_app/users/screens/home/home_screen.dart';
+import 'package:blog_app/users/services/database_services.dart';
+import 'package:blog_app/users/services/storage_services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

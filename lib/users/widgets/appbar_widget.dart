@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_blog_app/models/user.dart';
+import 'package:blog_app/models/user.dart';
 
 PreferredSizeWidget appBarWidget(BuildContext context, UserData userData, String screenName) {
   return AppBar(

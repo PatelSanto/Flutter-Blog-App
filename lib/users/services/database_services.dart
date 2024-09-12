@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_blog_app/models/blog.dart';
-import 'package:flutter_blog_app/models/user.dart';
-import 'package:flutter_blog_app/users/widgets/snackbar.dart';
+import 'package:blog_app/models/blog.dart';
+import 'package:blog_app/models/user.dart';
+import 'package:blog_app/users/widgets/snackbar.dart';
 
 class DatabaseService {
   final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;

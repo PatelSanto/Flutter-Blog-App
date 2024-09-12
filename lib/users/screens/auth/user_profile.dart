@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_blog_app/models/user_provider.dart';
-import 'package:flutter_blog_app/users/services/auth_services.dart';
+import 'package:blog_app/models/user_provider.dart';
+import 'package:blog_app/users/services/auth_services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 

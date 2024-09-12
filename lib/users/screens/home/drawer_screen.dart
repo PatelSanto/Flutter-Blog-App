@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_blog_app/users/screens/auth/myblogs_screen.dart';
-import 'package:flutter_blog_app/users/screens/auth/settings_screen.dart';
-import 'package:flutter_blog_app/users/screens/home/category_screen.dart';
-import 'package:flutter_blog_app/users/screens/home/home_screen.dart';
+import 'package:blog_app/users/screens/auth/myblogs_screen.dart';
+import 'package:blog_app/users/screens/auth/settings_screen.dart';
+import 'package:blog_app/users/screens/home/category_screen.dart';
+import 'package:blog_app/users/screens/home/home_screen.dart';
 
 import '../../../constants/constants.dart';
 

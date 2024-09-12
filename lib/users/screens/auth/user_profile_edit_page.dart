@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:flutter_blog_app/users/widgets/snackbar.dart';
+import 'package:blog_app/users/widgets/snackbar.dart';
 
 class ProfileEditPage extends StatefulWidget {
   const ProfileEditPage({super.key});

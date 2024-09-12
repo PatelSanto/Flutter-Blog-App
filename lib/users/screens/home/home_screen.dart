@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_blog_app/constants/constants.dart';
-import 'package:flutter_blog_app/models/user_provider.dart';
-import 'package:flutter_blog_app/users/screens/home/drawer_screen.dart';
-import 'package:flutter_blog_app/users/services/auth_services.dart';
-import 'package:flutter_blog_app/users/widgets/appbar_widget.dart';
+import 'package:blog_app/constants/constants.dart';
+import 'package:blog_app/models/user_provider.dart';
+import 'package:blog_app/users/screens/home/drawer_screen.dart';
+import 'package:blog_app/users/services/auth_services.dart';
+import 'package:blog_app/users/widgets/appbar_widget.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 import 'create_blog_screen.dart';
 import 'blog_detail_screen.dart';
-import 'package:flutter_blog_app/models/blog.dart';
+import 'package:blog_app/models/blog.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});

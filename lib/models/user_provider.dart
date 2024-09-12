@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_blog_app/models/user.dart';
+import 'package:blog_app/models/user.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'user_provider.g.dart';
 

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_blog_app/constants/constants.dart';
-import 'package:flutter_blog_app/users/services/auth_services.dart';
-import 'package:flutter_blog_app/users/widgets/auth_widgets.dart';
-import 'package:flutter_blog_app/users/widgets/snackbar.dart';
+import 'package:blog_app/constants/constants.dart';
+import 'package:blog_app/users/services/auth_services.dart';
+import 'package:blog_app/users/widgets/auth_widgets.dart';
+import 'package:blog_app/users/widgets/snackbar.dart';
 import 'package:get_it/get_it.dart';
 
 class LoginScreen extends StatefulWidget {
