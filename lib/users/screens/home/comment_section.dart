@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_blog_app/users/services/database_services.dart';
 
 class CommentSection extends StatefulWidget {
   final String blogId;

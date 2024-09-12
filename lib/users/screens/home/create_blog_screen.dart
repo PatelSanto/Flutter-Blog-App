@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter_blog_app/models/user_provider.dart';
+import 'package:blog_app/models/user_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
-import 'package:flutter_blog_app/models/blog.dart';
+import 'package:blog_app/models/blog.dart';
 
 class CreateBlogScreen extends ConsumerStatefulWidget {
   const CreateBlogScreen({super.key});

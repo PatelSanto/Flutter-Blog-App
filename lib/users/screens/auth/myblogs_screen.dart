@@ -1,11 +1,11 @@
+import 'package:blog_app/users/screens/home/create_blog_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_blog_app/models/user_provider.dart';
-import 'package:flutter_blog_app/users/screens/home/blog_detail_screen.dart';
-import 'package:flutter_blog_app/users/screens/home/drawer_screen.dart';
-import 'package:flutter_blog_app/users/services/database_services.dart';
-import 'package:flutter_blog_app/users/widgets/appbar_widget.dart';
+import 'package:blog_app/models/user_provider.dart';
+import 'package:blog_app/users/screens/home/blog_detail_screen.dart';
+import 'package:blog_app/users/screens/home/drawer_screen.dart';
+import 'package:blog_app/users/services/database_services.dart';
+import 'package:blog_app/users/widgets/appbar_widget.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:http/http.dart';
 
 class MyBlogsScreen extends ConsumerStatefulWidget {
   const MyBlogsScreen({super.key});
@@ -22,6 +22,7 @@ class _MyBlogsScreenState extends ConsumerState<MyBlogsScreen> {
       drawer: const DrawerScreen(selectedIndex: 1),
       appBar: appBarWidget(context, userData, "My Blogs"),
       body: _body(),
+      floatingActionButton: _createBlogButton(),
     );
   }
 
@@ -70,7 +71,7 @@ class _MyBlogsScreenState extends ConsumerState<MyBlogsScreen> {
             return Dismissible(
               key: ValueKey(blogs[index]),
               confirmDismiss: (direction) {
-               return deleteBlog(context, blog.id);
+                return deleteBlog(context, blog.id);
               },
               background: slideRightBackground(),
               direction: DismissDirection.endToStart,
@@ -126,13 +127,31 @@ class _MyBlogsScreenState extends ConsumerState<MyBlogsScreen> {
       child: const Row(
         children: [
           SizedBox(width: 20),
-          Text("Delete this Blog... ", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold,),),
+          Text(
+            "Delete this Blog... ",
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
           Icon(
             Icons.delete_forever,
             color: Colors.white,
           ),
         ],
       ),
+    );
+  }
+
+  Widget _createBlogButton() {
+    return FloatingActionButton(
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const CreateBlogScreen()),
+        );
+      },
+      child: const Icon(Icons.add),
     );
   }
 }

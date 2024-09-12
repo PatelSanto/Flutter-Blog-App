@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_blog_app/models/user_provider.dart';
-import 'package:flutter_blog_app/users/screens/home/drawer_screen.dart';
-import 'package:flutter_blog_app/users/widgets/appbar_widget.dart';
+import 'package:blog_app/models/user_provider.dart';
+import 'package:blog_app/users/screens/home/drawer_screen.dart';
+import 'package:blog_app/users/widgets/appbar_widget.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class SettingsScreen extends ConsumerWidget {

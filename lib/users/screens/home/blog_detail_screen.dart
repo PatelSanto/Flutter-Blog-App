@@ -7,7 +7,7 @@ import 'package:pdf/widgets.dart' as pw;
 import 'dart:io';
 import 'comment_section.dart';
 import 'package:flutter/services.dart' show rootBundle;
-import 'package:flutter_blog_app/models/blog.dart';
+import 'package:blog_app/models/blog.dart';
 
 class BlogDetailScreen extends StatefulWidget {
   final Blog blog;
