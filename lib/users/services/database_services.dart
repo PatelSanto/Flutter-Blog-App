@@ -1,3 +1,4 @@
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:blog_app/models/blog.dart';
@@ -109,3 +110,70 @@ Future<bool> deleteBlog(BuildContext context, String id) async {
     return false;
   }
 }
+
+//  Future<void> uploadBlog({
+//   required BuildContext context,
+//   required String titleController,
+//   required String contentController,
+//   required String readingTimeController,
+//   required String authorController,
+//   required File selectedImage,
+//   required UserData userData,
+//   required dynamic ref,
+
+//  }) async {
+//     if (titleController.isEmpty ||
+//         contentController.isEmpty ||
+//         readingTimeController.isEmpty ||
+//         authorController.isEmpty) {
+//       ScaffoldMessenger.of(context).showSnackBar(
+//         const SnackBar(
+//             content: Text('Please fill all fields and select an image')),
+//       );
+//       return;
+//     }
+
+//     try {
+//       String fileName = DateTime.now().millisecondsSinceEpoch.toString();
+//       Reference storageRef =
+//           FirebaseStorage.instance.ref().child('blog_images/$fileName');
+//       UploadTask uploadTask = storageRef.putFile(selectedImage);
+
+//       TaskSnapshot taskSnapshot = await uploadTask;
+//       String downloadUrl = await taskSnapshot.ref.getDownloadURL();
+//       // final userData = ref.watch(userDataNotifierProvider);
+
+//       // Create Blog object
+//       Blog newBlog = Blog(
+//         id: '',
+//         title: titleController,
+//         content: contentController,
+//         author: authorController,
+//         authorUid: userData.uid.toString(),
+//         imageUrl: downloadUrl,
+//         views: 0,
+//         comments: 0,
+//         readingTime: int.parse(readingTimeController),
+//       );
+
+//       // Save blog details to Firestore
+//       DocumentReference docRef = await FirebaseFirestore.instance
+//           .collection('blogs')
+//           .add(newBlog.toMap());
+//       await docRef.update({'id': docRef.id});
+
+//       ref.read(userDataNotifierProvider.notifier).updateUserData(
+//         noOfBlogs: userData.noOfBlogs + 1,
+//         blogIds: [...userData.blogIds, docRef.id],
+//       );
+
+//       ScaffoldMessenger.of(context).showSnackBar(
+//         const SnackBar(content: Text('Blog created successfully!')),
+//       );
+//       Navigator.pop(context);
+//     } catch (e) {
+//       ScaffoldMessenger.of(context).showSnackBar(
+//         SnackBar(content: Text('Failed to upload blog: $e')),
+//       );
+//     }
+//   }

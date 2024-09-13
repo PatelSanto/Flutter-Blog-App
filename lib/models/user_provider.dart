@@ -59,21 +59,20 @@ class UserDataNotifier extends _$UserDataNotifier {
 
     try {
       await userRef.update(updatedData);
+      state = UserData(
+        uid: state.uid,
+        name: name ?? state.name,
+        email: email ?? state.email,
+        pfpURL: profilePicUrl ?? state.pfpURL,
+        totalViews: totalViews ?? state.totalViews,
+        totalComments: totalComments ?? state.totalComments,
+        totalLikes: totalLikes ?? state.totalLikes,
+        noOfBlogs: noOfBlogs ?? state.noOfBlogs,
+        blogIds: blogIds ?? state.blogIds,
+      );
       print('Document updated successfully!');
     } catch (e) {
       print('Error updating document: $e');
     }
-
-    state = UserData(
-      uid: state.uid,
-      name: name ?? state.name,
-      email: email ?? state.email,
-      pfpURL: profilePicUrl ?? state.pfpURL,
-      totalViews: totalViews ?? state.totalViews,
-      totalComments: totalComments ?? state.totalComments,
-      totalLikes: totalLikes ?? state.totalLikes,
-      noOfBlogs: noOfBlogs ?? state.noOfBlogs,
-      blogIds: blogIds ?? state.blogIds,
-    );
   }
 }

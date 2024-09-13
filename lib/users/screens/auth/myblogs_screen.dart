@@ -28,95 +28,112 @@ class _MyBlogsScreenState extends ConsumerState<MyBlogsScreen> {
 
   Widget _body() {
     final userData = ref.watch(userDataNotifierProvider);
-    return StreamBuilder(
-      stream: getUserBlogs(userData.uid),
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator.adaptive());
-        }
+    return Column(
+      children: [
+        Expanded(
+          child: StreamBuilder(
+            stream: getUserBlogs(userData.uid),
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(
+                    child: CircularProgressIndicator.adaptive());
+              }
 
-        if (snapshot.hasError) {
-          return const Center(child: Text("Error loading blogs."));
-        }
+              if (snapshot.hasError) {
+                return const Center(child: Text("Error loading blogs."));
+              }
 
-        if (!snapshot.hasData || snapshot.data!.isEmpty) {
-          return Opacity(
-            opacity: 0.6,
-            child: Center(
-              child: Column(
-                children: [
-                  const SizedBox(
-                    height: 50,
+              if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                return Opacity(
+                  opacity: 0.6,
+                  child: Center(
+                    child: Column(
+                      children: [
+                        const SizedBox(
+                          height: 50,
+                        ),
+                        Image.asset(
+                          "assets/images/3d-casual-life-question-mark-icon-1.png",
+                          width: 200,
+                          // color: ,
+                        ),
+                        const SizedBox(
+                          height: 50,
+                        ),
+                        const Text('No blogs found'),
+                      ],
+                    ),
                   ),
-                  Image.asset(
-                    "assets/images/3d-casual-life-question-mark-icon-1.png",
-                    width: 200,
-                    // color: ,
-                  ),
-                  const SizedBox(
-                    height: 50,
-                  ),
-                  const Text('No blogs found'),
-                ],
-              ),
-            ),
-          );
-        }
+                );
+              }
 
-        final blogs = snapshot.data;
-        return ListView.builder(
-          itemCount: blogs.length,
-          itemBuilder: (BuildContext context, int index) {
-            final blog = blogs[index];
-            return Dismissible(
-              key: ValueKey(blogs[index]),
-              confirmDismiss: (direction) {
-                return deleteBlog(context, blog.id);
-              },
-              background: slideRightBackground(),
-              direction: DismissDirection.endToStart,
-              child: Card(
-                margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                child: ListTile(
-                  leading: blog.imageUrl.isNotEmpty
-                      ? ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: Image.network(blog.imageUrl,
-                              width: 60, height: 100, fit: BoxFit.cover),
-                        )
-                      : const Icon(Icons.image, size: 50, color: Colors.grey),
-                  title: Text(
-                    blog.title,
-                    style: const TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  subtitle: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('By ${blog.author}'),
-                      Text('${blog.readingTime} Min Read'),
-                    ],
-                  ),
-                  trailing: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text('${blog.views} Views'),
-                      Text('${blog.comments} Comments'),
-                    ],
-                  ),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => BlogDetailScreen(blog: blog),
+              final blogs = snapshot.data;
+              return ListView.builder(
+                itemCount: blogs.length,
+                itemBuilder: (BuildContext context, int index) {
+                  final blog = blogs[index];
+                  return Dismissible(
+                    key: ValueKey(blogs[index]),
+                    confirmDismiss: (direction) {
+                      return deleteBlog(context, blog.id);
+                    },
+                    background: slideRightBackground(),
+                    direction: DismissDirection.endToStart,
+                    child: Card(
+                      margin: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 8),
+                      child: ListTile(
+                        leading: blog.imageUrl.isNotEmpty
+                            ? ClipRRect(
+                                borderRadius: BorderRadius.circular(10),
+                                child: Image.network(blog.imageUrl,
+                                    width: 60, height: 100, fit: BoxFit.cover),
+                              )
+                            : const Icon(Icons.image,
+                                size: 50, color: Colors.grey),
+                        title: Text(
+                          blog.title,
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        subtitle: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('By ${blog.author}'),
+                            Text('${blog.readingTime} Min Read'),
+                          ],
+                        ),
+                        trailing: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text('${blog.views} Views'),
+                            Text('${blog.comments} Comments'),
+                          ],
+                        ),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  BlogDetailScreen(blog: blog),
+                            ),
+                          );
+                        },
                       ),
-                    );
-                  },
-                ),
-              ),
-            );
-          },
-        );
-      },
+                    ),
+                  );
+                },
+              );
+            },
+          ),
+        ),
+        const Text(
+          "Swipe left to delete Blog",
+          style: TextStyle(color: Colors.grey),
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+      ],
     );
   }
 

@@ -1,11 +1,12 @@
+import 'package:blog_app/users/widgets/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:blog_app/models/user_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
-import 'dart:io';
 import 'package:blog_app/models/blog.dart';
+import 'dart:io';
 
 class CreateBlogScreen extends ConsumerStatefulWidget {
   const CreateBlogScreen({super.key});
@@ -20,7 +21,10 @@ class _CreateBlogScreenState extends ConsumerState<CreateBlogScreen> {
   final TextEditingController _readingTimeController = TextEditingController();
   final TextEditingController _authorController = TextEditingController();
   File? _selectedImage;
+  final List<String> _selectedCategories = [];
+  final List<String> categories = allCategories;
   final ImagePicker _picker = ImagePicker();
+  bool isLoading = false;
 
   Future<void> _pickImage() async {
     final XFile? pickedFile =
@@ -34,15 +38,26 @@ class _CreateBlogScreenState extends ConsumerState<CreateBlogScreen> {
   }
 
   Future<void> _uploadBlog() async {
+    setState(() {
+      isLoading = true;
+    });
     if (_titleController.text.isEmpty ||
         _contentController.text.isEmpty ||
         _readingTimeController.text.isEmpty ||
         _authorController.text.isEmpty ||
+        _selectedCategories.isEmpty ||
         _selectedImage == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-            content: Text('Please fill all fields and select an image')),
-      );
+      setState(() {
+        isLoading = false;
+      });
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //   const SnackBar(
+      //       content: Text('Please fill all fields and select an image')),
+      // );
+      snackbarToast(
+          context: context,
+          title: "Please fill all fields and select an image",
+          icon: Icons.error);
       return;
     }
 
@@ -67,6 +82,7 @@ class _CreateBlogScreenState extends ConsumerState<CreateBlogScreen> {
         views: 0,
         comments: 0,
         readingTime: int.parse(_readingTimeController.text),
+        categories: _selectedCategories,
       );
 
       // Save blog details to Firestore
@@ -80,14 +96,29 @@ class _CreateBlogScreenState extends ConsumerState<CreateBlogScreen> {
         blogIds: [...userData.blogIds, docRef.id],
       );
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Blog created successfully!')),
-      );
+      setState(() {
+        isLoading = false;
+      });
+
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //   const SnackBar(content: Text('Blog created successfully!')),
+      // );
+      snackbarToast(
+          context: context,
+          title: "Blog created successfully!",
+          icon: Icons.done_all_rounded);
       Navigator.pop(context);
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to upload blog: $e')),
-      );
+      setState(() {
+        isLoading = false;
+      });
+      snackbarToast(
+          context: context,
+          title: 'Failed to upload blog: $e',
+          icon: Icons.error);
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //   SnackBar(content: Text('Failed to upload blog: $e')),
+      // );
     }
   }
 
@@ -104,37 +135,53 @@ class _CreateBlogScreenState extends ConsumerState<CreateBlogScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              const SizedBox(
+                height: 10,
+              ),
               TextField(
                 controller: _titleController,
-                decoration: const InputDecoration(labelText: 'Title'),
+                decoration: const InputDecoration(
+                  labelText: 'Title',
+                  border: OutlineInputBorder(),
+                ),
               ),
               const SizedBox(height: 10),
               TextField(
                 controller: _authorController,
                 decoration: InputDecoration(
-                    labelText: 'Author',
-                    suffix: OutlinedButton(
-                      onPressed: () {
-                        setState(() {
-                          _authorController.text = userData.name.toString();
-                        });
-                      },
-                      child: const Text("Me"),
-                    )),
+                  labelText: 'Author',
+                  suffix: OutlinedButton(
+                    onPressed: () {
+                      setState(() {
+                        _authorController.text = userData.name.toString();
+                      });
+                    },
+                    child: const Text("Me"),
+                  ),
+                  border: const OutlineInputBorder(),
+                ),
               ),
               const SizedBox(height: 10),
               TextField(
                 controller: _contentController,
-                decoration: const InputDecoration(labelText: 'Content'),
+                decoration: const InputDecoration(
+                  labelText: 'Content',
+                  border: OutlineInputBorder(),
+                ),
                 maxLines: 6,
               ),
               const SizedBox(height: 10),
               TextField(
                 controller: _readingTimeController,
-                decoration:
-                    const InputDecoration(labelText: 'Reading Time (minutes)'),
+                decoration: const InputDecoration(
+                  labelText: 'Reading Time (minutes)',
+                  border: OutlineInputBorder(),
+                ),
                 keyboardType: TextInputType.number,
               ),
+              const SizedBox(height: 10),
+              const Text('Select Categories'),
+              buildMultiSelect(),
               const SizedBox(height: 10),
               _selectedImage == null
                   ? const Text('No image selected.')
@@ -145,14 +192,49 @@ class _CreateBlogScreenState extends ConsumerState<CreateBlogScreen> {
                 child: const Text('Select Image'),
               ),
               const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: _uploadBlog,
-                child: const Text('Create Blog'),
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: ElevatedButton(
+                  style: const ButtonStyle(
+                    minimumSize: WidgetStatePropertyAll(Size(300, 50)),
+                  ),
+                  onPressed: _uploadBlog,
+                  child: (isLoading)
+                      ? const CircularProgressIndicator.adaptive()
+                      : const Text(
+                          'Create Blog',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                ),
               ),
+              const SizedBox(height: 20),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  Widget buildMultiSelect() {
+    return Wrap(
+      spacing: 8.0,
+      children: categories.map((category) {
+        final isSelected = _selectedCategories.contains(category);
+        return FilterChip(
+          label: Text(category),
+          selected: isSelected,
+          onSelected: (bool selected) {
+            setState(() {
+              if (selected) {
+                _selectedCategories.add(category);
+              } else {
+                _selectedCategories
+                    .removeWhere((String name) => name == category);
+              }
+            });
+          },
+        );
+      }).toList(),
     );
   }
 }
