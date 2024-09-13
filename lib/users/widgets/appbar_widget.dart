@@ -27,7 +27,7 @@ PreferredSizeWidget appBarWidget(BuildContext context, UserData userData, String
           },
           child: ClipOval(
             child: Image.network(
-              "${userData.pfpURL}",
+              userData.pfpURL ?? "",
               height: 50,
               width: 50,
               fit: BoxFit.cover,

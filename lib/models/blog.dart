@@ -1,5 +1,30 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+List<String> allCategories = [
+  "All blogs",
+  "Food blogs",
+  "Travel blogs",
+  "Health and fitness blogs",
+  "Lifestyle blogs",
+  "Fashion and beauty blogs",
+  "Photography blogs",
+  "Personal blogs",
+  "DIY craft blogs",
+  "Parenting blogs",
+  "Music blogs",
+  "Business blogs",
+  "Art and design blogs",
+  "Book and writing blogs",
+  "Personal finance blogs",
+  "Interior design blogs",
+  "Sports blogs",
+  "News blogs",
+  "Movie blogs",
+  "Religion blogs",
+  "Political blogs",
+  "Other blogs",
+];
+
 class Blog {
   final String id;
   final String title;
@@ -7,7 +32,7 @@ class Blog {
   final String author;
   final String authorUid;
   final String imageUrl;
-  List<String> categories;
+  List<String> categories = [];
   int views;
   int comments;
   final int readingTime;
