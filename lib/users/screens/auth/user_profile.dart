@@ -49,22 +49,6 @@ class _UserProfileScreenState extends ConsumerState<UserProfileScreen> {
         child: Column(
           children: [
             Center(
-              // child: Container(
-              //   height: s.height * 0.15,
-              //   alignment: const Alignment(0.3, 0.9),
-              //   decoration: BoxDecoration(
-              //     image: DecorationImage(
-              //       image: NetworkImage(
-              //         "${userData.pfpURL}",
-              //       ),fit: BoxFit.cover,
-              //     ),
-              //     shape: BoxShape.circle,
-              //     border: Border.all(
-              //       color: Colors.black,
-              //       width: 2.0,
-              //     ),
-              //   ),
-              // ),
               child: ClipOval(
                 child: Image.network(
                   "${userData.pfpURL}",
@@ -79,7 +63,10 @@ class _UserProfileScreenState extends ConsumerState<UserProfileScreen> {
                     }
                   },
                   errorBuilder: (context, error, stackTrace) {
-                    return const Icon(Icons.person, color: Colors.black12,);
+                    return const Icon(
+                      Icons.person,
+                      color: Colors.black12,
+                    );
                   },
                 ),
               ),
@@ -87,19 +74,12 @@ class _UserProfileScreenState extends ConsumerState<UserProfileScreen> {
             SizedBox(
               height: s.height * 0.02,
             ),
-             Text(
+            Text(
               "${userData.name}",
               style: const TextStyle(
                 fontSize: 18,
                 color: Color.fromARGB(255, 46, 75, 150),
                 fontWeight: FontWeight.bold,
-              ),
-            ),
-            const Text(
-              '@Username',
-              style: TextStyle(
-                fontSize: 14,
-                color: Colors.grey,
               ),
             ),
             SizedBox(
@@ -134,7 +114,26 @@ class _UserProfileScreenState extends ConsumerState<UserProfileScreen> {
             ),
             const Divider(),
             ListTile(
-              onTap: () {},
+              onTap: () {
+                Navigator.pushReplacementNamed(context, '/myblogs');
+              },
+              title: const Text(
+                'My Blogs',
+                style: TextStyle(
+                  color: Colors.black,
+                ),
+              ),
+              leading: const Icon(Icons.my_library_books_outlined),
+              trailing: const Icon(
+                Icons.arrow_forward_ios,
+                size: 18,
+                color: Colors.black,
+              ),
+            ),
+            ListTile(
+              onTap: () {
+                Navigator.pushNamed(context, '/settings');
+              },
               title: const Text(
                 'Settings',
                 style: TextStyle(
@@ -142,36 +141,6 @@ class _UserProfileScreenState extends ConsumerState<UserProfileScreen> {
                 ),
               ),
               leading: const Icon(Icons.settings_outlined),
-              trailing: const Icon(
-                Icons.arrow_forward_ios,
-                size: 18,
-                color: Colors.black,
-              ),
-            ),
-            ListTile(
-              onTap: () {},
-              title: const Text(
-                'My Orders',
-                style: TextStyle(
-                  color: Colors.black,
-                ),
-              ),
-              leading: const Icon(Icons.local_mall_outlined),
-              trailing: const Icon(
-                Icons.arrow_forward_ios,
-                size: 18,
-                color: Colors.black,
-              ),
-            ),
-            ListTile(
-              onTap: () {},
-              title: const Text(
-                'Address',
-                style: TextStyle(
-                  color: Colors.black,
-                ),
-              ),
-              leading: const Icon(Icons.location_on_outlined),
               trailing: const Icon(
                 Icons.arrow_forward_ios,
                 size: 18,

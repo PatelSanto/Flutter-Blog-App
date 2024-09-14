@@ -1,4 +1,6 @@
 import 'package:blog_app/users/screens/home/create_blog_screen.dart';
+import 'package:blog_app/users/widgets/blog_tile.dart';
+import 'package:blog_app/users/widgets/other_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:blog_app/models/user_provider.dart';
 import 'package:blog_app/users/screens/home/blog_detail_screen.dart';
@@ -44,27 +46,7 @@ class _MyBlogsScreenState extends ConsumerState<MyBlogsScreen> {
               }
 
               if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                return Opacity(
-                  opacity: 0.6,
-                  child: Center(
-                    child: Column(
-                      children: [
-                        const SizedBox(
-                          height: 50,
-                        ),
-                        Image.asset(
-                          "assets/images/3d-casual-life-question-mark-icon-1.png",
-                          width: 200,
-                          // color: ,
-                        ),
-                        const SizedBox(
-                          height: 50,
-                        ),
-                        const Text('No blogs found'),
-                      ],
-                    ),
-                  ),
-                );
+                return noBlogFoundWidget();
               }
 
               final blogs = snapshot.data;
@@ -79,46 +61,21 @@ class _MyBlogsScreenState extends ConsumerState<MyBlogsScreen> {
                     },
                     background: slideRightBackground(),
                     direction: DismissDirection.endToStart,
-                    child: Card(
-                      margin: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 8),
-                      child: ListTile(
-                        leading: blog.imageUrl.isNotEmpty
-                            ? ClipRRect(
-                                borderRadius: BorderRadius.circular(10),
-                                child: Image.network(blog.imageUrl,
-                                    width: 60, height: 100, fit: BoxFit.cover),
-                              )
-                            : const Icon(Icons.image,
-                                size: 50, color: Colors.grey),
-                        title: Text(
-                          blog.title,
-                          style: const TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        subtitle: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text('By ${blog.author}'),
-                            Text('${blog.readingTime} Min Read'),
-                          ],
-                        ),
-                        trailing: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text('${blog.views} Views'),
-                            Text('${blog.comments} Comments'),
-                          ],
-                        ),
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  BlogDetailScreen(blog: blog),
-                            ),
-                          );
-                        },
-                      ),
+                    child: blogTile(
+                      leadingImage: blog.imageUrl,
+                      title: blog.title,
+                      author: blog.author,
+                      readingTime: blog.readingTime,
+                      views: blog.views,
+                      comments: blog.comments,
+                      ontap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => BlogDetailScreen(blog: blog),
+                          ),
+                        );
+                      },
                     ),
                   );
                 },
@@ -127,8 +84,8 @@ class _MyBlogsScreenState extends ConsumerState<MyBlogsScreen> {
           ),
         ),
         const Text(
-          "Swipe left to delete Blog",
-          style: TextStyle(color: Colors.grey),
+          "Swipe left to Delete Blog",
+          style: TextStyle(color: Colors.black87),
         ),
         const SizedBox(
           height: 10,
@@ -140,12 +97,21 @@ class _MyBlogsScreenState extends ConsumerState<MyBlogsScreen> {
   Widget slideRightBackground() {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      color: Colors.red[400],
+      // color: Colors.red[400],
+      decoration: const BoxDecoration(
+          gradient: LinearGradient(
+        colors: [
+          Colors.white,
+          Colors.redAccent,
+        ],
+        begin: Alignment.centerRight,
+        end: Alignment.centerLeft,
+      )),
       child: const Row(
         children: [
           SizedBox(width: 20),
           Text(
-            "Delete this Blog... ",
+            "Delete this Blog ",
             style: TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.bold,

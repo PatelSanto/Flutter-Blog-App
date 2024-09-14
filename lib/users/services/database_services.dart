@@ -43,6 +43,18 @@ Stream<List<Blog>> getUserBlogs(String? uid) {
   });
 }
 
+Stream<List<Blog>> getCategoryBlogs(String? category) {
+  CollectionReference blogsRef = FirebaseFirestore.instance.collection('blogs');
+  return blogsRef
+      .where('categories', arrayContains: category)
+      .snapshots()
+      .map((snapshot) {
+    return snapshot.docs.map((doc) {
+      return Blog.fromDocument(doc);
+    }).toList();
+  });
+}
+
 Future<UserData> getUserDetailsFromUid(String uid) async {
   try {
     final FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
