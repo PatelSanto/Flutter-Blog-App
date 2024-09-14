@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:blog_app/users/screens/auth/myblogs_screen.dart';
 import 'package:blog_app/users/screens/auth/settings_screen.dart';
-import 'package:blog_app/users/screens/home/category_screen.dart';
+import 'package:blog_app/users/screens/home/categories_screen.dart';
 import 'package:blog_app/users/screens/home/home_screen.dart';
 
 import '../../../constants/constants.dart';
@@ -65,19 +65,11 @@ class _DrawerScreenState extends State<DrawerScreen> {
               },
             ),
             drawerTile(
-              title: 'Setting',
-              icon: CupertinoIcons.settings,
-              isSelected: _selectedIndex == 3, // Highlight if selected
-              onTap: () {
-                _navigateToPage(context, 3, const SettingsScreen());
-              },
-            ),
-            drawerTile(
               title: 'Help',
               icon: Icons.help_outline,
-              isSelected: _selectedIndex == 4, // Highlight if selected
+              isSelected: _selectedIndex == 3, // Highlight if selected
               onTap: () {
-                _navigateToPage(context, 4, const SettingsScreen());
+                // _navigateToPage(context, 3, const SettingsScreen());
               },
             ),
           ],

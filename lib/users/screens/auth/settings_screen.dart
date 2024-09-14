@@ -9,10 +9,9 @@ class SettingsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final userData = ref.watch(userDataNotifierProvider);
+    // final userData = ref.watch(userDataNotifierProvider);
     return Scaffold(
-      drawer: const DrawerScreen(selectedIndex: 2),
-      appBar: appBarWidget(context, userData, "Settings"),
+      appBar: AppBar(),
       body: _body(),
     );
   }
