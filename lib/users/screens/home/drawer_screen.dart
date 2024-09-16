@@ -1,3 +1,4 @@
+import 'package:blog_app/admin/admin_login.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:blog_app/users/screens/auth/myblogs_screen.dart';
@@ -38,7 +39,10 @@ class _DrawerScreenState extends State<DrawerScreen> {
       child: SafeArea(
         child: ListView(
           children: [
-            Image.asset("assets/images/techny-blog-article-on-the-tablet.png",height: 200,),
+            Image.asset(
+              "assets/images/techny-blog-article-on-the-tablet.png",
+              height: 200,
+            ),
             const SizedBox(height: 20),
             drawerTile(
               title: 'Home',
@@ -70,6 +74,14 @@ class _DrawerScreenState extends State<DrawerScreen> {
               isSelected: _selectedIndex == 3, // Highlight if selected
               onTap: () {
                 // _navigateToPage(context, 3, const SettingsScreen());
+              },
+            ),
+            drawerTile(
+              title: 'Admin',
+              icon: Icons.admin_panel_settings,
+              isSelected: _selectedIndex == 4, // Highlight if selected
+              onTap: () {
+                _navigateToPage(context, 4, const LoginPage());
               },
             ),
           ],

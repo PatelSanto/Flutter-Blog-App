@@ -1,3 +1,4 @@
+import 'package:blog_app/admin/admin_login.dart';
 import 'package:blog_app/users/screens/auth/myblogs_screen.dart';
 import 'package:blog_app/users/screens/auth/settings_screen.dart';
 import 'package:blog_app/users/screens/home/categories_screen.dart';
@@ -44,6 +45,7 @@ class MyApp extends StatelessWidget {
     '/settings': (context) => const SettingsScreen(),
     '/categories': (context) => const CategoryScreen(),
     '/myblogs': (context) => const MyBlogsScreen(),
+    '/admin_login': (context) => const LoginPage(),
   };
 
   @override
