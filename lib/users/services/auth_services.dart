@@ -1,3 +1,4 @@
+import 'package:blog_app/models/user_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:blog_app/models/user.dart';
@@ -5,6 +6,7 @@ import 'package:blog_app/users/screens/auth/auth.dart';
 import 'package:blog_app/users/screens/home/home_screen.dart';
 import 'package:blog_app/users/services/database_services.dart';
 import 'package:blog_app/users/services/storage_services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -16,23 +18,30 @@ class AuthService {
 
   Widget checkLogin() {
     print("checkingLogin function called");
-
-    return StreamBuilder<User?>(
-      stream: _firebaseAuth.authStateChanges(),
-      builder: (BuildContext context, AsyncSnapshot<User?> snapshot) {
-        if (snapshot.hasData) {
-          // User is signed in
-          print("User is signed in: to home screen");
-          user = snapshot.data;
-        print('User Firebase: $user');
-          return const HomeScreen();
-        } else {
-          // User is not signed in
-          print("User is not signed in: to auth screen");
-          return const Auth();
-        }
-      },
-    );
+    return Consumer(builder: (context, ref, child) {
+      return StreamBuilder<User?>(
+        stream: _firebaseAuth.authStateChanges(),
+        builder: (BuildContext context, AsyncSnapshot<User?> snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            // Loader() splase screen
+          }
+          if (snapshot.hasData) {
+            // User is signed in
+            print("User is signed in: to home screen");
+            user = snapshot.data;
+            ref
+                .read(userDataNotifierProvider.notifier)
+                .fetchUserData(user?.uid);
+            print('User Firebase: ${user?.email}');
+            return const HomeScreen();
+          } else {
+            // User is not signed in
+            print("User is not signed in: to auth screen");
+            return const Auth();
+          }
+        },
+      );
+    });
   }
 
   Future<bool> login(String email, String password) async {

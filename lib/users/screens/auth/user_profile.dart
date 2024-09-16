@@ -115,7 +115,11 @@ class _UserProfileScreenState extends ConsumerState<UserProfileScreen> {
             const Divider(),
             ListTile(
               onTap: () {
-                Navigator.pushReplacementNamed(context, '/myblogs');
+                Navigator.pushNamedAndRemoveUntil(
+                  context,
+                  "/myblogs",
+                  (Route<dynamic> route) => false,
+                ); 
               },
               title: const Text(
                 'My Blogs',
@@ -124,6 +128,27 @@ class _UserProfileScreenState extends ConsumerState<UserProfileScreen> {
                 ),
               ),
               leading: const Icon(Icons.my_library_books_outlined),
+              trailing: const Icon(
+                Icons.arrow_forward_ios,
+                size: 18,
+                color: Colors.black,
+              ),
+            ),
+            ListTile(
+              onTap: () {
+                // Navigator.pushNamedAndRemoveUntil(
+                //   context,
+                //   "/myblogs",
+                //   (Route<dynamic> route) => false,
+                // ); 
+              },
+              title: const Text(
+                'Saved Blogs',
+                style: TextStyle(
+                  color: Colors.black,
+                ),
+              ),
+              leading: const Icon(Icons.save_as_rounded),
               trailing: const Icon(
                 Icons.arrow_forward_ios,
                 size: 18,
