@@ -18,7 +18,9 @@ import 'package:google_fonts/google_fonts.dart';
 
 void main() {
   setup().then((_) {
-    runApp(ProviderScope(child: MyApp()));
+    runApp(ProviderScope(
+      child: MyApp(),
+    ));
   });
 }
 

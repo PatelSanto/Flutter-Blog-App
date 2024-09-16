@@ -3,10 +3,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:blog_app/constants/constants.dart';
 import 'package:blog_app/models/user_provider.dart';
 import 'package:blog_app/users/screens/home/drawer_screen.dart';
-import 'package:blog_app/users/services/auth_services.dart';
 import 'package:blog_app/users/widgets/appbar_widget.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:get_it/get_it.dart';
 import 'create_blog_screen.dart';
 import 'blog_detail_screen.dart';
 import 'package:blog_app/models/blog.dart';
@@ -19,7 +17,6 @@ class HomeScreen extends ConsumerStatefulWidget {
 }
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
-  late AuthService _authService;
 
   final CollectionReference _blogs =
       FirebaseFirestore.instance.collection('blogs');
@@ -38,11 +35,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    _authService = GetIt.instance.get<AuthService>();
-
-    ref
-        .read(userDataNotifierProvider.notifier)
-        .fetchUserData(_authService.user?.uid);
   }
 
   @override
