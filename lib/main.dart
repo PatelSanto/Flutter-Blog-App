@@ -45,7 +45,7 @@ class MyApp extends StatelessWidget {
     '/profile': (context) => const UserProfileScreen(),
     '/profile_edit_page': (context) => const ProfileEditPage(),
     '/settings': (context) => const SettingsScreen(),
-    '/categories': (context) => const CategoryScreen(),
+    '/categories': (context) => CategoryScreen(),
     '/myblogs': (context) => const MyBlogsScreen(),
     '/admin_login': (context) => const LoginPage(),
   };
