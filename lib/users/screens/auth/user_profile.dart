@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:blog_app/models/user_provider.dart';
-import 'package:blog_app/users/services/auth_services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:get_it/get_it.dart';
 
 class UserProfileScreen extends ConsumerStatefulWidget {
   const UserProfileScreen({super.key});
@@ -12,14 +10,6 @@ class UserProfileScreen extends ConsumerStatefulWidget {
 }
 
 class _UserProfileScreenState extends ConsumerState<UserProfileScreen> {
-  late AuthService _authService;
-
-  @override
-  void initState() {
-    _authService = GetIt.instance.get<AuthService>();
-
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -166,54 +156,6 @@ class _UserProfileScreenState extends ConsumerState<UserProfileScreen> {
                 ),
               ),
               leading: const Icon(Icons.settings_outlined),
-              trailing: const Icon(
-                Icons.arrow_forward_ios,
-                size: 18,
-                color: Colors.black,
-              ),
-            ),
-            ListTile(
-              onTap: () {},
-              title: const Text(
-                'Change Password',
-                style: TextStyle(
-                  color: Colors.black,
-                ),
-              ),
-              leading: const Icon(Icons.lock_outline_rounded),
-              trailing: const Icon(
-                Icons.arrow_forward_ios,
-                size: 18,
-                color: Colors.black,
-              ),
-            ),
-            const Divider(),
-            ListTile(
-              onTap: () {},
-              title: const Text(
-                'Help & Support',
-                style: TextStyle(
-                  color: Colors.black,
-                ),
-              ),
-              leading: const Icon(Icons.help_outline),
-              trailing: const Icon(
-                Icons.arrow_forward_ios,
-                size: 18,
-                color: Colors.black,
-              ),
-            ),
-            ListTile(
-              onTap: () {
-                _authService.logoutDilog(context);
-              },
-              title: const Text(
-                'Logout',
-                style: TextStyle(
-                  color: Colors.black,
-                ),
-              ),
-              leading: const Icon(Icons.logout),
               trailing: const Icon(
                 Icons.arrow_forward_ios,
                 size: 18,

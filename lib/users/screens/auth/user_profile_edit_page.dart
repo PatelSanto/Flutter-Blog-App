@@ -1,20 +1,41 @@
 import 'dart:io';
+import 'package:blog_app/models/user.dart';
+import 'package:blog_app/models/user_provider.dart';
+import 'package:blog_app/users/services/database_services.dart';
+import 'package:blog_app/users/services/media_services.dart';
+import 'package:blog_app/users/services/storage_services.dart';
 import 'package:flutter/material.dart';
 import 'package:blog_app/users/widgets/snackbar.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:get_it/get_it.dart';
 
-class ProfileEditPage extends StatefulWidget {
+class ProfileEditPage extends ConsumerStatefulWidget {
   const ProfileEditPage({super.key});
 
   @override
-  State<ProfileEditPage> createState() => _ProfileEditPageState();
+  ConsumerState<ProfileEditPage> createState() => _ProfileEditPageState();
 }
 
-class _ProfileEditPageState extends State<ProfileEditPage> {
-  File? image;
+class _ProfileEditPageState extends ConsumerState<ProfileEditPage> {
+  late MediaServices _mediaServices;
+  late StorageService _storageServices;
+  late DatabaseService _databaseServices;
+  File? selectedImage;
+
+  @override
+  void initState() {
+    _mediaServices = GetIt.instance.get<MediaServices>();
+    _storageServices = GetIt.instance.get<StorageService>();
+    _databaseServices = GetIt.instance.get<DatabaseService>();
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     Size s = MediaQuery.sizeOf(context);
+    final userData = ref.watch(userDataNotifierProvider);
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -38,43 +59,14 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            // image
-            Container(
-              height: s.height * 0.15,
-              alignment: const Alignment(0.3, 0.9),
-              decoration: BoxDecoration(
-                image: const DecorationImage(
-                  image: AssetImage(
-                    "assets/images/blank-profile-picture.webp",
-                  ),
-                ),
-                shape: BoxShape.circle,
-                border: Border.all(
-                  width: 2,
-                ),
-              ),
-              child: Stack(
-                children: [
-                  // image
-                  FloatingActionButton.small(
-                    onPressed: () {},
-                    child: IconButton(
-                      onPressed: () {
-                        snackbarToast(
-                    context: context, title: "This Function is in Development!", icon: Icons.error_outline);
-                      },
-                      icon: const Icon(Icons.camera_alt_outlined),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            // image picker
+            _imagePicker(userData),
             SizedBox(
               height: s.height * 0.02,
             ),
-            const Text(
-              "Full Name",
-              style: TextStyle(
+            Text(
+              "${userData.name}",
+              style: const TextStyle(
                 color: Color.fromARGB(255, 46, 75, 150),
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
@@ -120,21 +112,6 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
             ),
             TextField(
               decoration: InputDecoration(
-                hintText: "Phone Number",
-                label: const Text("Phone Number"),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(20),
-                  borderSide: const BorderSide(
-                    color: Color.fromARGB(255, 46, 75, 150),
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(
-              height: s.height * 0.01,
-            ),
-            TextField(
-              decoration: InputDecoration(
                 hintText: "Email",
                 label: const Text("Email"),
                 border: OutlineInputBorder(
@@ -161,10 +138,12 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
               ),
             ),
             const Spacer(),
-            GestureDetector(
-              onTap: () {
+            TextButton(
+              onPressed: () {
                 snackbarToast(
-                    context: context, title: "This Function is in Development!", icon: Icons.error_outline);
+                    context: context,
+                    title: "This Function is in Development!",
+                    icon: Icons.error_outline);
               },
               child: Container(
                 height: s.height * 0.06,
@@ -181,12 +160,55 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                     style: TextStyle(
                       fontSize: 18,
                       color: Colors.white,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget _imagePicker(UserData userData) {
+    return GestureDetector(
+      onTap: () async {
+        File? file = await _mediaServices.getImageFromGallery();
+        if (file != null) {
+          setState(() {
+            selectedImage = file;
+          });
+        }
+      },
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 10),
+        // decoration: BoxDecoration(border: Border.all()),
+        child: CircleAvatar(
+          backgroundColor: Colors.blue[200],
+          radius: MediaQuery.of(context).size.width * 0.17,
+          child: CircleAvatar(
+            radius: MediaQuery.of(context).size.width * 0.16,
+            backgroundImage: (selectedImage != null)
+                ? FileImage(selectedImage!)
+                : NetworkImage("${userData.pfpURL}"),
+            child: Align(
+              alignment: Alignment.bottomRight,
+              child: FloatingActionButton.small(
+                backgroundColor: Colors.blue[200],
+                onPressed: () async {
+                  File? file = await _mediaServices.getImageFromGallery();
+                  if (file != null) {
+                    setState(() {
+                      selectedImage = file;
+                    });
+                  }
+                },
+                child: const Icon(Icons.camera_alt),
+              ),
+            ),
+          ),
         ),
       ),
     );

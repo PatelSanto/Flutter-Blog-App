@@ -68,7 +68,6 @@ class _SignupScreenState extends State<SignupScreen> {
     return Scaffold(
       appBar: AppBar(),
       body: _body(),
-      // resizeToAvoidBottomInset: false,
     );
   }
 
@@ -104,8 +103,6 @@ class _SignupScreenState extends State<SignupScreen> {
           _confirmPasswordField(),
           //submit button
           _signupButton(),
-          //already have an account?
-          //sign up with google button
         ],
       ),
     );

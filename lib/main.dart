@@ -2,6 +2,7 @@ import 'package:blog_app/admin/admin_login.dart';
 import 'package:blog_app/users/screens/auth/myblogs_screen.dart';
 import 'package:blog_app/users/screens/auth/settings_screen.dart';
 import 'package:blog_app/users/screens/home/categories_screen.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:blog_app/constants/constants.dart';
 import 'package:blog_app/users/screens/auth/auth.dart';
@@ -62,7 +63,10 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         textTheme: GoogleFonts.poppinsTextTheme(),
       ),
-      home: _authService.checkLogin(),
+      // home: _authService.checkLogin(),
+      home: kIsWeb
+        ? const LoginPage() // Show admin login page on web
+        : _authService.checkLogin(),
     );
   }
 }
