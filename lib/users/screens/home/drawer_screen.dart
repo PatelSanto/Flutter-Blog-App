@@ -65,7 +65,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
               icon: Icons.category_outlined,
               isSelected: _selectedIndex == 2,
               onTap: () {
-                _navigateToPage(context, 2, const CategoryScreen());
+                _navigateToPage(context, 2, CategoryScreen());
               },
             ),
             drawerTile(
