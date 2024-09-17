@@ -1,4 +1,4 @@
-import 'package:blog_app/users/screens/home/blog_detail_screen.dart';
+import 'package:blog_app/users/screens/home/blog%20screens/blog_detail_screen.dart';
 import 'package:blog_app/users/services/database_services.dart';
 import 'package:blog_app/users/widgets/blog_tile.dart';
 import 'package:blog_app/users/widgets/other_widgets.dart';

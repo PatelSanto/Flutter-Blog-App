@@ -2,7 +2,7 @@ import 'package:blog_app/models/user_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:blog_app/models/user.dart';
-import 'package:blog_app/users/screens/auth/auth.dart';
+import 'package:blog_app/users/screens/auth/auth%20screens/auth.dart';
 import 'package:blog_app/users/screens/home/home_screen.dart';
 import 'package:blog_app/users/services/database_services.dart';
 import 'package:blog_app/users/services/storage_services.dart';

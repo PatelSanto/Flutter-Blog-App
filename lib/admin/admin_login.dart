@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class LoginPage extends StatelessWidget {
-  const LoginPage({super.key});
+class AdminLoginPage extends StatelessWidget {
+  const AdminLoginPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -159,14 +159,14 @@ class BodyState extends State<Body> {
                 height: 30,
               ),
               Image.asset(
-                'images/illustration-2.png',
+                'assets/images/illustration-2.png',
                 width: 250,
               ),
             ],
           ),
         ),
         Image.asset(
-          'images/illustration-1.png',
+          'assets/images/illustration-1.png',
           width: 250,
           //height: 500,
         ),

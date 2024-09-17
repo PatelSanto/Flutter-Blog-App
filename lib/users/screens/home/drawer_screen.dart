@@ -1,9 +1,10 @@
+import 'dart:ui';
+
 import 'package:blog_app/admin/admin_login.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:blog_app/users/screens/auth/myblogs_screen.dart';
-import 'package:blog_app/users/screens/auth/settings_screen.dart';
-import 'package:blog_app/users/screens/home/categories_screen.dart';
+import 'package:blog_app/users/screens/auth/user%20profile%20screens/myblogs_screen.dart';
+import 'package:blog_app/users/screens/home/category%20screens/categories_screen.dart';
 import 'package:blog_app/users/screens/home/home_screen.dart';
 
 import '../../../constants/constants.dart';
@@ -28,63 +29,58 @@ class _DrawerScreenState extends State<DrawerScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Drawer(
-      backgroundColor: Constants.drawerBackground,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(
-          topRight: Radius.circular(50),
-          bottomRight: Radius.circular(50),
+    return BackdropFilter(
+      filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+      child: Drawer(
+        backgroundColor: Constants.drawerBackground,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            topRight: Radius.circular(50),
+            bottomRight: Radius.circular(50),
+          ),
         ),
-      ),
-      child: SafeArea(
-        child: ListView(
-          children: [
-            Image.asset(
-              "assets/images/techny-blog-article-on-the-tablet.png",
-              height: 200,
-            ),
-            const SizedBox(height: 20),
-            drawerTile(
-              title: 'Home',
-              icon: CupertinoIcons.home,
-              isSelected: _selectedIndex == 0, // Highlight if selected
-              onTap: () {
-                _navigateToPage(context, 0, const HomeScreen());
-              },
-            ),
-            drawerTile(
-              title: 'My Blogs',
-              icon: CupertinoIcons.news,
-              isSelected: _selectedIndex == 1, // Highlight if selected
-              onTap: () {
-                _navigateToPage(context, 1, const MyBlogsScreen());
-              },
-            ),
-            drawerTile(
-              title: 'Category',
-              icon: Icons.category_outlined,
-              isSelected: _selectedIndex == 2,
-              onTap: () {
-                _navigateToPage(context, 2, CategoryScreen());
-              },
-            ),
-            drawerTile(
-              title: 'Help',
-              icon: Icons.help_outline,
-              isSelected: _selectedIndex == 3, // Highlight if selected
-              onTap: () {
-                // _navigateToPage(context, 3, const SettingsScreen());
-              },
-            ),
-            drawerTile(
-              title: 'Admin',
-              icon: Icons.admin_panel_settings,
-              isSelected: _selectedIndex == 4, // Highlight if selected
-              onTap: () {
-                _navigateToPage(context, 4, const LoginPage());
-              },
-            ),
-          ],
+        child: SafeArea(
+          child: ListView(
+            children: [
+              Image.asset(
+                "assets/images/techny-blog-article-on-the-tablet.png",
+                height: 200,
+              ),
+              const SizedBox(height: 20),
+              drawerTile(
+                title: 'Home',
+                icon: CupertinoIcons.home,
+                isSelected: _selectedIndex == 0, // Highlight if selected
+                onTap: () {
+                  _navigateToPage(context, 0, const HomeScreen());
+                },
+              ),
+              drawerTile(
+                title: 'My Blogs',
+                icon: CupertinoIcons.news,
+                isSelected: _selectedIndex == 1, // Highlight if selected
+                onTap: () {
+                  _navigateToPage(context, 1, const MyBlogsScreen());
+                },
+              ),
+              drawerTile(
+                title: 'Blog Categories',
+                icon: Icons.category_outlined,
+                isSelected: _selectedIndex == 2,
+                onTap: () {
+                  _navigateToPage(context, 2, CategoryScreen());
+                },
+              ),
+              drawerTile(
+                title: 'Admin',
+                icon: Icons.admin_panel_settings,
+                isSelected: _selectedIndex == 4, // Highlight if selected
+                onTap: () {
+                  _navigateToPage(context, 4, const AdminLoginPage());
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -13,5 +13,5 @@ class Constants {
   static RegExp nameValidationRegex = RegExp(r"\b([A-ZÀ-ÿ][-,a-z. ']+[ ]*)+");
 
   static Color drawerTilesColor = const Color(0xFF414755);
-  static Color drawerBackground = const Color.fromARGB(255, 144, 202, 249);
+  static Color drawerBackground = const Color.fromARGB(226, 124, 192, 248);
 }

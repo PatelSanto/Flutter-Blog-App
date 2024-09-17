@@ -1,3 +1,4 @@
+import 'package:blog_app/users/widgets/blog_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:blog_app/constants/constants.dart';
@@ -5,19 +6,18 @@ import 'package:blog_app/models/user_provider.dart';
 import 'package:blog_app/users/screens/home/drawer_screen.dart';
 import 'package:blog_app/users/widgets/appbar_widget.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'create_blog_screen.dart';
-import 'blog_detail_screen.dart';
+import 'blog screens/create_blog_screen.dart';
+import 'blog screens/blog_detail_screen.dart';
 import 'package:blog_app/models/blog.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
 
   @override
-  _HomeScreenState createState() => _HomeScreenState();
+  HomeScreenState createState() => HomeScreenState();
 }
 
-class _HomeScreenState extends ConsumerState<HomeScreen> {
-
+class HomeScreenState extends ConsumerState<HomeScreen> {
   final CollectionReference _blogs =
       FirebaseFirestore.instance.collection('blogs');
   final TextEditingController _searchController = TextEditingController();
@@ -105,46 +105,22 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     itemBuilder: (context, index) {
                       final blog = filteredBlogs[index];
 
-                      return Card(
-                        margin: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 8),
-                        child: ListTile(
-                          leading: blog.imageUrl.isNotEmpty
-                              ? ClipRRect(
-                                borderRadius: BorderRadius.circular(10),
-                                child: Image.network(blog.imageUrl,
-                                    width: 60, height: 100, fit: BoxFit.cover),
-                              )
-                              : const Icon(Icons.image,
-                                  size: 50, color: Colors.grey),
-                          title: Text(
-                            blog.title,
-                            style: const TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          subtitle: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text('By ${blog.author}'),
-                              Text('${blog.readingTime} Min Read'),
-                            ],
-                          ),
-                          trailing: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text('${blog.views} Views'),
-                              Text('${blog.comments} Comments'),
-                            ],
-                          ),
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    BlogDetailScreen(blog: blog),
-                              ),
-                            );
-                          },
-                        ),
+                      return blogTile(
+                        leadingImage: blog.imageUrl,
+                        title: blog.title,
+                        author: blog.author,
+                        readingTime: blog.readingTime,
+                        views: blog.views,
+                        comments: blog.comments,
+                        ontap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  BlogDetailScreen(blog: blog),
+                            ),
+                          );
+                        },
                       );
                     },
                   );
@@ -154,13 +130,17 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     child: Center(
                       child: Column(
                         children: [
-                          const SizedBox(height: 50,),
+                          const SizedBox(
+                            height: 50,
+                          ),
                           Image.asset(
                             "assets/images/3d-casual-life-question-mark-icon-1.png",
                             width: 200,
                             // color: ,
                           ),
-                          const SizedBox(height: 50,),
+                          const SizedBox(
+                            height: 50,
+                          ),
                           const Text('No blogs found'),
                         ],
                       ),

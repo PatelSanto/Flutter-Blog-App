@@ -1,16 +1,16 @@
 import 'package:blog_app/admin/admin_login.dart';
-import 'package:blog_app/users/screens/auth/myblogs_screen.dart';
-import 'package:blog_app/users/screens/auth/settings_screen.dart';
-import 'package:blog_app/users/screens/home/categories_screen.dart';
+import 'package:blog_app/users/screens/auth/user%20profile%20screens/myblogs_screen.dart';
+import 'package:blog_app/users/screens/auth/user%20profile%20screens/settings_screen.dart';
+import 'package:blog_app/users/screens/home/category%20screens/categories_screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:blog_app/constants/constants.dart';
-import 'package:blog_app/users/screens/auth/auth.dart';
-import 'package:blog_app/users/screens/auth/login.dart';
-import 'package:blog_app/users/screens/auth/user_profile.dart';
-import 'package:blog_app/users/screens/auth/user_profile_edit_page.dart';
+import 'package:blog_app/users/screens/auth/auth%20screens/auth.dart';
+import 'package:blog_app/users/screens/auth/auth%20screens/login.dart';
+import 'package:blog_app/users/screens/auth/user%20profile%20screens/user_profile.dart';
+import 'package:blog_app/users/screens/auth/user%20profile%20screens/user_profile_edit_page.dart';
 import 'package:blog_app/users/screens/home/home_screen.dart';
-import 'package:blog_app/users/screens/auth/signup.dart';
+import 'package:blog_app/users/screens/auth/auth%20screens/signup.dart';
 import 'package:blog_app/users/services/auth_services.dart';
 import 'package:blog_app/utils.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -48,7 +48,7 @@ class MyApp extends StatelessWidget {
     '/settings': (context) => const SettingsScreen(),
     '/categories': (context) => CategoryScreen(),
     '/myblogs': (context) => const MyBlogsScreen(),
-    '/admin_login': (context) => const LoginPage(),
+    '/admin_login': (context) => const AdminLoginPage(),
   };
 
   @override
@@ -65,7 +65,7 @@ class MyApp extends StatelessWidget {
       ),
       // home: _authService.checkLogin(),
       home: kIsWeb
-        ? const LoginPage() // Show admin login page on web
+        ? const AdminLoginPage() // Show admin login page on web
         : _authService.checkLogin(),
     );
   }
