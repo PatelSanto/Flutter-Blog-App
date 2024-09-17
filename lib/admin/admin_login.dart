@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class LoginPage extends StatelessWidget {
-  const LoginPage({super.key});
+class AdminLoginPage extends StatelessWidget {
+  const AdminLoginPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -47,8 +47,11 @@ class Menu extends StatelessWidget {
     );
   }
 
-  Widget _menuItem(
-      {String title = 'Title Menu', bool isActive = false, Function()? onTap}) {
+  Widget _menuItem({
+    String title = 'Title Menu',
+    bool isActive = false,
+    Function()? onTap,
+  }) {
     return Padding(
       padding: const EdgeInsets.only(right: 75),
       child: MouseRegion(
@@ -89,10 +92,10 @@ class Body extends StatefulWidget {
   const Body({super.key});
 
   @override
-  _BodyState createState() => _BodyState();
+  BodyState createState() => BodyState();
 }
 
-class _BodyState extends State<Body> {
+class BodyState extends State<Body> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -156,14 +159,14 @@ class _BodyState extends State<Body> {
                 height: 30,
               ),
               Image.asset(
-                'images/illustration-2.png',
+                'assets/images/illustration-2.png',
                 width: 250,
               ),
             ],
           ),
         ),
         Image.asset(
-          'images/illustration-1.png',
+          'assets/images/illustration-1.png',
           width: 250,
           //height: 500,
         ),

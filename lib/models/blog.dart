@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 List<String> allCategories = [
-  "All blogs",
   "Food blogs",
   "Travel blogs",
   "Health and fitness blogs",

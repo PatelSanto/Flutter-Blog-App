@@ -50,10 +50,6 @@ class _CreateBlogScreenState extends ConsumerState<CreateBlogScreen> {
       setState(() {
         isLoading = false;
       });
-      // ScaffoldMessenger.of(context).showSnackBar(
-      //   const SnackBar(
-      //       content: Text('Please fill all fields and select an image')),
-      // );
       snackbarToast(
           context: context,
           title: "Please fill all fields and select an image",
@@ -99,10 +95,6 @@ class _CreateBlogScreenState extends ConsumerState<CreateBlogScreen> {
       setState(() {
         isLoading = false;
       });
-
-      // ScaffoldMessenger.of(context).showSnackBar(
-      //   const SnackBar(content: Text('Blog created successfully!')),
-      // );
       snackbarToast(
           context: context,
           title: "Blog created successfully!",
@@ -116,9 +108,6 @@ class _CreateBlogScreenState extends ConsumerState<CreateBlogScreen> {
           context: context,
           title: 'Failed to upload blog: $e',
           icon: Icons.error);
-      // ScaffoldMessenger.of(context).showSnackBar(
-      //   SnackBar(content: Text('Failed to upload blog: $e')),
-      // );
     }
   }
 
