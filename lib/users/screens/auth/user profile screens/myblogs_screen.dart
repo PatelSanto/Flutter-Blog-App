@@ -57,7 +57,17 @@ class _MyBlogsScreenState extends ConsumerState<MyBlogsScreen> {
                   return Dismissible(
                     key: ValueKey(blogs[index]),
                     confirmDismiss: (direction) {
-                      return deleteBlog(context, blog.id);
+                      return deleteBlog(context, blog.id).then((value) {
+                        ref
+                            .read(userDataNotifierProvider.notifier)
+                            .updateUserData(
+                              noOfBlogs: userData.noOfBlogs - 1,
+                              blogIds: userData.blogIds.remove(blog.id)
+                                  ? userData.blogIds
+                                  : userData.blogIds,
+                            );
+                        return null;
+                      });
                     },
                     background: slideRightBackground(),
                     direction: DismissDirection.endToStart,

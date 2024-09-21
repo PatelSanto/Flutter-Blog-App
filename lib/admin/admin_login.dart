@@ -1,4 +1,7 @@
+import 'package:blog_app/users/services/auth_services.dart';
+import 'package:blog_app/users/widgets/snackbar.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 
 class AdminLoginPage extends StatelessWidget {
   const AdminLoginPage({super.key});
@@ -29,9 +32,7 @@ class Menu extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              _menuItem(
-                  title: 'Home',
-                  onTap: () => Navigator.pushNamed(context, '/home')),
+              _menuItem(title: 'Home'),
               _menuItem(title: 'About us'),
               _menuItem(title: 'Contact us'),
               _menuItem(title: 'Help'),
@@ -100,8 +101,16 @@ class BodyState extends State<Body> {
   final TextEditingController passwordController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool isPasswordVisible = false;
-  List<String> passwordErrors = [];
+  late AuthService _authService;
+  bool isLoadingLogin = false;
 
+  @override
+  void initState() {
+    _authService = GetIt.instance.get<AuthService>();
+    super.initState();
+  }
+
+  List<String> passwordErrors = [];
   // Regular expressions for validation
   final RegExp emailRegExp =
       RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
@@ -205,14 +214,14 @@ class BodyState extends State<Body> {
               ),
             ),
             // Validate the email
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter your email';
-              } else if (!emailRegExp.hasMatch(value)) {
-                return 'Enter a valid email address';
-              }
-              return null;
-            },
+            // validator: (value) {
+            //   if (value == null || value.isEmpty) {
+            //     return 'Please enter your email';
+            //   } else if (!emailRegExp.hasMatch(value)) {
+            //     return 'Enter a valid email address';
+            //   }
+            //   return null;
+            // },
           ),
           const SizedBox(height: 30),
           TextFormField(
@@ -247,27 +256,27 @@ class BodyState extends State<Body> {
               ),
             ),
             // Validate password on input
-            onChanged: (value) {
-              setState(() {
-                validatePassword(value);
-              });
-            },
+            // onChanged: (value) {
+            //   setState(() {
+            //     validatePassword(value);
+            //   });
+            // },
           ),
           // Display password errors
-          if (passwordErrors.isNotEmpty)
-            Padding(
-              padding: const EdgeInsets.only(top: 10),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: passwordErrors
-                    .map((error) => Text(
-                          error,
-                          style:
-                              const TextStyle(color: Colors.red, fontSize: 12),
-                        ))
-                    .toList(),
-              ),
-            ),
+          // if (passwordErrors.isNotEmpty)
+          //   Padding(
+          //     padding: const EdgeInsets.only(top: 10),
+          //     child: Column(
+          //       crossAxisAlignment: CrossAxisAlignment.start,
+          //       children: passwordErrors
+          //           .map((error) => Text(
+          //                 error,
+          //                 style:
+          //                     const TextStyle(color: Colors.red, fontSize: 12),
+          //               ))
+          //           .toList(),
+          //     ),
+          //   ),
           const SizedBox(height: 40),
           Container(
             decoration: BoxDecoration(
@@ -283,11 +292,12 @@ class BodyState extends State<Body> {
             ),
             child: ElevatedButton(
               onPressed: () {
-                if (_formKey.currentState!.validate() &&
-                    passwordErrors.isEmpty) {
-                  // Navigate to HomePage on successful validation
-                  Navigator.pushNamed(context, '/home');
-                }
+                // if (_formKey.currentState!.validate() &&
+                //     passwordErrors.isEmpty) {
+                //   // Navigate to HomePage on successful validation
+
+                // }
+                _loginOnPressed(context);
               },
               style: ElevatedButton.styleFrom(
                 foregroundColor: Colors.white,
@@ -296,10 +306,17 @@ class BodyState extends State<Body> {
                   borderRadius: BorderRadius.circular(15),
                 ),
               ),
-              child: const SizedBox(
+              child: SizedBox(
                   width: double.infinity,
                   height: 50,
-                  child: Center(child: Text("Sign In"))),
+                  child: (isLoadingLogin)
+                      ? const SizedBox(
+                          height: 5,
+                          child: CircularProgressIndicator.adaptive(
+                            backgroundColor: Colors.white,
+                          ),
+                        )
+                      : const Center(child: Text("Sign In"))),
             ),
           ),
           const SizedBox(height: 20),
@@ -331,5 +348,63 @@ class BodyState extends State<Body> {
         ],
       ),
     );
+  }
+
+  Future<void> _loginOnPressed(BuildContext context) async {
+    print("login button clicked");
+    setState(() {
+      isLoadingLogin = true;
+    });
+    if (_formKey.currentState!.validate()) {
+      try {
+        final result = await _authService.login(
+            emailController.text, passwordController.text);
+
+        if (result) {
+          snackbarToast(
+            context: context,
+            title: "Login successfully",
+            icon: Icons.login,
+          );
+          Navigator.pushNamedAndRemoveUntil(
+            context,
+            "/admin_home",
+            (Route<dynamic> route) =>
+                false, // This removes all the previous routes
+          );
+          setState(() {
+            isLoadingLogin = false;
+          });
+        } else {
+          snackbarToast(
+            context: context,
+            title: "Invalid credentials!",
+            icon: Icons.error_outline,
+          );
+          setState(() {
+            isLoadingLogin = false;
+          });
+        }
+      } catch (e) {
+        snackbarToast(
+          context: context,
+          title: "Unable to Login User!",
+          icon: Icons.error_outline,
+        );
+        setState(() {
+          isLoadingLogin = false;
+        });
+        print("error: $e");
+      }
+    } else {
+      snackbarToast(
+        context: context,
+        title: "Please enter valid details...",
+        icon: Icons.error_outline,
+      );
+      setState(() {
+        isLoadingLogin = false;
+      });
+    }
   }
 }

@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:blog_app/models/user.dart';
 import 'package:blog_app/models/user_provider.dart';
-import 'package:blog_app/users/services/database_services.dart';
 import 'package:blog_app/users/services/media_services.dart';
 import 'package:blog_app/users/services/storage_services.dart';
 import 'package:flutter/material.dart';
@@ -19,15 +18,14 @@ class ProfileEditPage extends ConsumerStatefulWidget {
 class _ProfileEditPageState extends ConsumerState<ProfileEditPage> {
   late MediaServices _mediaServices;
   late StorageService _storageServices;
-  late DatabaseService _databaseServices;
+  var fullName = TextEditingController();
   File? selectedImage;
+  bool isLoading = false;
 
   @override
   void initState() {
     _mediaServices = GetIt.instance.get<MediaServices>();
     _storageServices = GetIt.instance.get<StorageService>();
-    _databaseServices = GetIt.instance.get<DatabaseService>();
-
     super.initState();
   }
 
@@ -81,9 +79,13 @@ class _ProfileEditPageState extends ConsumerState<ProfileEditPage> {
               height: s.height * 0.02,
             ),
             TextField(
+              controller: fullName,
               decoration: InputDecoration(
-                hintText: "Full Name",
-                label: const Text("Full Name"),
+                hintText: "${userData.name}",
+                suffixIcon: const Icon(
+                  Icons.edit_rounded,
+                  color: Color.fromARGB(255, 46, 75, 150),
+                ),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(20),
                   borderSide: const BorderSide(
@@ -94,56 +96,43 @@ class _ProfileEditPageState extends ConsumerState<ProfileEditPage> {
             ),
             SizedBox(
               height: s.height * 0.01,
-            ),
-            TextField(
-              decoration: InputDecoration(
-                hintText: "Gender ",
-                label: const Text("Gender"),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(20),
-                  borderSide: const BorderSide(
-                    color: Color.fromARGB(255, 46, 75, 150),
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(
-              height: s.height * 0.01,
-            ),
-            TextField(
-              decoration: InputDecoration(
-                hintText: "Email",
-                label: const Text("Email"),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(20),
-                  borderSide: const BorderSide(
-                    color: Color.fromARGB(255, 46, 75, 150),
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(
-              height: s.height * 0.01,
-            ),
-            TextField(
-              decoration: InputDecoration(
-                hintText: "User Name",
-                label: const Text("User Name"),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(20),
-                  borderSide: const BorderSide(
-                    color: Color.fromARGB(255, 46, 75, 150),
-                  ),
-                ),
-              ),
             ),
             const Spacer(),
             TextButton(
-              onPressed: () {
-                snackbarToast(
+              onPressed: () async {
+                setState(() {
+                  isLoading = true;
+                });
+                try {
+                  if (fullName.text.trim().isEmpty) {
+                    fullName = TextEditingController(text: userData.name);
+                  }
+                  final String? newPfPic =
+                      await _storageServices.uploadUserPfpic(
+                          file: selectedImage ?? File(""),
+                          uid: "${userData.uid}");
+                  ref.read(userDataNotifierProvider.notifier).updateUserData(
+                      name: fullName.text, profilePicUrl: newPfPic);
+                  Navigator.pop(context);
+                  snackbarToast(
                     context: context,
-                    title: "This Function is in Development!",
-                    icon: Icons.error_outline);
+                    title: "Data Updated Successfully!",
+                    icon: Icons.error_outline,
+                  );
+                  setState(() {
+                    isLoading = false;
+                  });
+                } catch (e) {
+                  setState(() {
+                    isLoading = false;
+                  });
+                  snackbarToast(
+                    context: context,
+                    title: "Error Updating Data!",
+                    icon: Icons.error_outline,
+                  );
+                  print("Error Updating Data");
+                }
               },
               child: Container(
                 height: s.height * 0.06,
@@ -154,15 +143,19 @@ class _ProfileEditPageState extends ConsumerState<ProfileEditPage> {
                     10,
                   ),
                 ),
-                child: const Center(
-                  child: Text(
-                    'Save',
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                child: Center(
+                  child: (isLoading)
+                      ? const CircularProgressIndicator.adaptive(
+                          backgroundColor: Colors.white,
+                        )
+                      : const Text(
+                          'Save',
+                          style: TextStyle(
+                            fontSize: 18,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                 ),
               ),
             ),
