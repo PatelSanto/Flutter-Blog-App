@@ -10,7 +10,6 @@ class UserProfileScreen extends ConsumerStatefulWidget {
 }
 
 class _UserProfileScreenState extends ConsumerState<UserProfileScreen> {
-
   @override
   Widget build(BuildContext context) {
     Size s = MediaQuery.sizeOf(context);
@@ -109,7 +108,7 @@ class _UserProfileScreenState extends ConsumerState<UserProfileScreen> {
                   context,
                   "/myblogs",
                   (Route<dynamic> route) => false,
-                ); 
+                );
               },
               title: const Text(
                 'My Blogs',
@@ -117,7 +116,10 @@ class _UserProfileScreenState extends ConsumerState<UserProfileScreen> {
                   color: Colors.black,
                 ),
               ),
-              leading: const Icon(Icons.my_library_books_outlined),
+              leading: const Icon(
+                Icons.my_library_books_outlined,
+                color: Color.fromARGB(255, 46, 75, 150),
+              ),
               trailing: const Icon(
                 Icons.arrow_forward_ios,
                 size: 18,
@@ -126,19 +128,21 @@ class _UserProfileScreenState extends ConsumerState<UserProfileScreen> {
             ),
             ListTile(
               onTap: () {
-                // Navigator.pushNamedAndRemoveUntil(
-                //   context,
-                //   "/myblogs",
-                //   (Route<dynamic> route) => false,
-                // ); 
+                Navigator.pushNamed(
+                  context,
+                  "/favoriteBlogs",
+                );
               },
               title: const Text(
-                'Saved Blogs',
+                'Favorite Blogs',
                 style: TextStyle(
                   color: Colors.black,
                 ),
               ),
-              leading: const Icon(Icons.save_as_rounded),
+              leading: Icon(
+                Icons.favorite_rounded,
+                color: Colors.red[400],
+              ),
               trailing: const Icon(
                 Icons.arrow_forward_ios,
                 size: 18,

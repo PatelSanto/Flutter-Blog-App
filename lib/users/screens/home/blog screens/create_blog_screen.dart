@@ -12,10 +12,10 @@ class CreateBlogScreen extends ConsumerStatefulWidget {
   const CreateBlogScreen({super.key});
 
   @override
-  _CreateBlogScreenState createState() => _CreateBlogScreenState();
+  CreateBlogScreenState createState() => CreateBlogScreenState();
 }
 
-class _CreateBlogScreenState extends ConsumerState<CreateBlogScreen> {
+class CreateBlogScreenState extends ConsumerState<CreateBlogScreen> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _contentController = TextEditingController();
   final TextEditingController _readingTimeController = TextEditingController();
@@ -89,7 +89,7 @@ class _CreateBlogScreenState extends ConsumerState<CreateBlogScreen> {
 
       ref.read(userDataNotifierProvider.notifier).updateUserData(
         noOfBlogs: userData.noOfBlogs + 1,
-        blogIds: [...userData.blogIds, docRef.id],
+        blogIds: {...userData.blogIds, docRef.id},
       );
 
       setState(() {

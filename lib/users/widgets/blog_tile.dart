@@ -15,10 +15,18 @@ Widget blogTile({
       leading: leadingImage.isNotEmpty
           ? ClipRRect(
               borderRadius: BorderRadius.circular(10),
-              child: Image.network(leadingImage,
-                  width: 60, height: 100, fit: BoxFit.cover),
+              child: Image.network(
+                leadingImage,
+                width: 100,
+                height: 100,
+                fit: BoxFit.cover,
+              ),
             )
-          : const Icon(Icons.image, size: 50, color: Colors.grey),
+          : const Icon(
+              Icons.image,
+              size: 50,
+              color: Colors.grey,
+            ),
       title: Text(
         title,
         style: const TextStyle(fontWeight: FontWeight.bold),
@@ -27,14 +35,25 @@ Widget blogTile({
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text('By $author'),
-          Text('$readingTime Min Read'),
-        ],
-      ),
-      trailing: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          Text('$views Views'),
-          Text('$comments Comments'),
+          const SizedBox(
+            height: 10,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              const Icon(
+                Icons.remove_red_eye_rounded,
+                color: Colors.blueGrey,
+              ),
+              Text(" $views"),
+              const SizedBox(width: 20),
+              const Icon(
+                Icons.insert_comment_rounded,
+                color: Colors.blueGrey,
+              ),
+              Text(" $comments"),
+            ],
+          )
         ],
       ),
       onTap: ontap,

@@ -72,6 +72,7 @@ class Blog {
   // Method to convert Blog object to a map for Firestore
   Map<String, dynamic> toMap() {
     return {
+      'id': id,
       'title': title,
       'content': content,
       'author': author,

@@ -41,7 +41,8 @@ class UserDataNotifier extends _$UserDataNotifier {
     int? totalComments,
     int? totalLikes,
     int? noOfBlogs,
-    List<String>? blogIds,
+    Set<String>? blogIds,
+    Set<String>? favoriteBlogs,
   }) async {
     final userRef =
         FirebaseFirestore.instance.collection('users').doc(state.uid);
@@ -55,6 +56,7 @@ class UserDataNotifier extends _$UserDataNotifier {
       'totalLikes': totalLikes ?? state.totalLikes,
       'noOfBlogs': noOfBlogs ?? state.noOfBlogs,
       'blogIds': blogIds ?? state.blogIds,
+      'favoriteBlogs': favoriteBlogs ?? state.favoriteBlogs,
     };
 
     try {
@@ -69,6 +71,7 @@ class UserDataNotifier extends _$UserDataNotifier {
         totalLikes: totalLikes ?? state.totalLikes,
         noOfBlogs: noOfBlogs ?? state.noOfBlogs,
         blogIds: blogIds ?? state.blogIds,
+        favoriteBlogs: favoriteBlogs ?? state.favoriteBlogs,
       );
       print('Document updated successfully!');
     } catch (e) {

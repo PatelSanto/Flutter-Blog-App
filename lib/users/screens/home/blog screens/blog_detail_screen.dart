@@ -1,6 +1,9 @@
+import 'package:blog_app/models/user.dart';
+import 'package:blog_app/models/user_provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/widgets.dart' as pw;
@@ -9,17 +12,18 @@ import 'comment_section.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:blog_app/models/blog.dart';
 
-class BlogDetailScreen extends StatefulWidget {
+class BlogDetailScreen extends ConsumerStatefulWidget {
   final Blog blog;
 
   const BlogDetailScreen({super.key, required this.blog});
 
   @override
-  State<BlogDetailScreen> createState() => _BlogDetailScreenState();
+  ConsumerState<BlogDetailScreen> createState() => _BlogDetailScreenState();
 }
 
-class _BlogDetailScreenState extends State<BlogDetailScreen> {
+class _BlogDetailScreenState extends ConsumerState<BlogDetailScreen> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  bool isFavorite = false;
 
   @override
   void initState() {
@@ -127,9 +131,53 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final userData = ref.watch(userDataNotifierProvider);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Blog Details'),
+        centerTitle: true,
+        actions: [
+          IconButton(
+            onPressed: () {
+              if (!userData.favoriteBlogs.contains(widget.blog.id)) {
+                ref.read(userDataNotifierProvider.notifier).updateUserData(
+                  favoriteBlogs: {...userData.favoriteBlogs, widget.blog.id},
+                );
+                setState(() {
+                  isFavorite = true;
+                });
+                print("added to favorite blogs");
+              } else {
+                ref.read(userDataNotifierProvider.notifier).updateUserData(
+                      favoriteBlogs:
+                          userData.favoriteBlogs.remove(widget.blog.id)
+                              ? userData.favoriteBlogs
+                              : userData.favoriteBlogs,
+                    );
+                if (userData.favoriteBlogs.isEmpty) {
+                  Navigator.pushNamedAndRemoveUntil(
+                    context,
+                    "/home",
+                    (Route<dynamic> route) => false,
+                  );
+                }
+
+                print("removed from favorite blogs");
+                setState(() {
+                  isFavorite = false;
+                });
+              }
+            },
+            icon: Icon(
+              (checkIfFavorite())
+                  ? Icons.favorite_rounded
+                  : Icons.favorite_outline_rounded,
+              size: 30,
+              color: Colors.red[300],
+            ),
+          ),
+          const SizedBox(width: 20),
+        ],
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
@@ -137,16 +185,24 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             widget.blog.imageUrl.isNotEmpty
-                ? Image.network(widget.blog.imageUrl)
+                ? ClipRRect(
+                    borderRadius: BorderRadius.circular(8.0),
+                    child: Image.network(widget.blog.imageUrl),
+                  )
                 : const Placeholder(fallbackHeight: 200),
             const SizedBox(height: 10),
             Text(
               widget.blog.title,
               style: Theme.of(context).textTheme.headlineMedium,
             ),
-            const SizedBox(height: 10),
-            Text('By ${widget.blog.author}',
-                style: Theme.of(context).textTheme.titleMedium),
+            // const SizedBox(height: 10),
+            Align(
+              alignment: Alignment.centerRight,
+              child: Text(
+                'By ${widget.blog.author}',
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+            ),
             const SizedBox(height: 20),
             Text(widget.blog.content,
                 style: Theme.of(context).textTheme.bodyLarge),
@@ -167,11 +223,19 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
             ),
             const SizedBox(height: 20),
 
-            // Comments Section
             CommentSection(blogId: widget.blog.id),
           ],
         ),
       ),
     );
+  }
+
+  checkIfFavorite() {
+    // Implement logic to check if the blog is a favorite
+    final userData = ref.watch(userDataNotifierProvider);
+    setState(() {
+      isFavorite = userData.favoriteBlogs.contains(widget.blog.id);
+    });
+    return isFavorite;
   }
 }

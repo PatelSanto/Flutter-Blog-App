@@ -1,4 +1,3 @@
-
 class UserData {
   String? uid;
   String? name;
@@ -8,7 +7,8 @@ class UserData {
   int totalComments;
   int totalLikes;
   int noOfBlogs;
-  List<String> blogIds;
+  Set<String> blogIds;
+  Set<String> favoriteBlogs;
 
   UserData({
     required this.uid,
@@ -19,7 +19,8 @@ class UserData {
     this.totalComments = 0,
     this.totalLikes = 0,
     this.noOfBlogs = 0,
-    this.blogIds = const [],
+    this.blogIds = const {},
+    this.favoriteBlogs = const {},
   });
 
   factory UserData.fromJson(Map<String, dynamic> json) {
@@ -32,8 +33,10 @@ class UserData {
       totalComments: json['totalComments'] as int? ?? 0,
       totalLikes: json['totalLikes'] as int? ?? 0,
       noOfBlogs: json['noOfBlogs'] as int? ?? 0,
-      blogIds: List<String>.from(json['blogIds'] ?? [])
-          ,
+      blogIds: Set<String>.from(json['blogIds'] ?? {}),
+      favoriteBlogs: Set<String>.from(json['favoriteBlogs'] ?? {}),
+      // blogIds: List<String>.from(json['blogIds'] ?? []),
+      // favoriteBlogs: List<String>.from(json['favoriteBlogs'] ?? []),
     );
   }
 
@@ -48,7 +51,7 @@ class UserData {
       'totalLikes': totalLikes,
       'noOfBlogs': noOfBlogs,
       'blogIds': blogIds,
+      'favoriteBlogs': favoriteBlogs,
     };
   }
 }
-
