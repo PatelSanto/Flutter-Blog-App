@@ -1,3 +1,4 @@
+import 'package:blog_app/admin/admin_home.dart';
 import 'package:blog_app/admin/admin_login.dart';
 import 'package:blog_app/users/screens/auth/user%20profile%20screens/favorite_blogs.dart';
 import 'package:blog_app/users/screens/auth/user%20profile%20screens/myblogs_screen.dart';
@@ -50,8 +51,9 @@ class MyApp extends StatelessWidget {
     '/settings': (context) => const SettingsScreen(),
     '/categories': (context) => CategoryScreen(),
     '/myblogs': (context) => const MyBlogsScreen(),
-    '/admin_login': (context) => const AdminLoginPage(),
     '/favoriteBlogs': (context) => const FavoriteBlogs(),
+    '/admin_login': (context) => const AdminLoginPage(),
+    '/admin_home':(context)=> const AdminHome(),
   };
 
   @override
@@ -66,7 +68,6 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         textTheme: GoogleFonts.poppinsTextTheme(),
       ),
-      // home: _authService.checkLogin(),
       home: kIsWeb
           ? const AdminLoginPage() // Show admin login page on web
           : _authService.checkLogin(),

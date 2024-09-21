@@ -9,17 +9,22 @@ class StorageService {
 
   Future<String?> uploadUserPfpic(
       {required File file, required String uid}) async {
-    Reference fileReference = firebaseStorage
-        .ref('users/pfpics')
-        .child("$uid${path.extension(file.path)}");
+    try {
+      Reference fileReference = firebaseStorage
+          .ref('users/pfpics')
+          .child("$uid${path.extension(file.path)}");
 
-    UploadTask uploadTask = fileReference.putFile(file);
+      UploadTask uploadTask = fileReference.putFile(file);
 
-    return uploadTask.then((p) {
-      if (p.state == TaskState.success) {
-        return fileReference.getDownloadURL();
-      }
+      return uploadTask.then((p) {
+        if (p.state == TaskState.success) {
+          return fileReference.getDownloadURL();
+        }
+        return null;
+      });
+    } catch (e) {
+      print("Error uploading user profile pic: $e");
       return null;
-    });
+    }
   }
 }
