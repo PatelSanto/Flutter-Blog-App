@@ -1,5 +1,6 @@
 import 'package:blog_app/users/services/auth_services.dart';
 import 'package:blog_app/users/widgets/snackbar.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
@@ -29,15 +30,15 @@ class Menu extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              _menuItem(title: 'Home'),
-              _menuItem(title: 'About us'),
-              _menuItem(title: 'Contact us'),
-              _menuItem(title: 'Help'),
-            ],
-          ),
+          // Row(
+          //   mainAxisAlignment: MainAxisAlignment.start,
+          //   children: [
+          //     _menuItem(title: 'Home'),
+          //     _menuItem(title: 'About us'),
+          //     _menuItem(title: 'Contact us'),
+          //     _menuItem(title: 'Help'),
+          //   ],
+          // ),
           Row(
             children: [
               _menuItem(title: 'Sign In', isActive: true),
@@ -149,45 +150,55 @@ class BodyState extends State<Body> {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        SizedBox(
-          width: 360,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                'Welcome to the \nAdmin Panel',
-                style: TextStyle(
-                  fontSize: 45,
-                  fontWeight: FontWeight.bold,
+    final size = MediaQuery.of(context).size;
+    return SizedBox(
+      height: size.height * .9,
+      // width: (size.width < 1300) ? 360 : size.width,
+      child: ListView(
+        scrollDirection: (size.width < 1300) ? Axis.vertical : Axis.horizontal,
+        children: [
+          SizedBox(
+            width: 360,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Welcome to the \nAdmin Panel',
+                  style: TextStyle(
+                    fontSize: 40,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
-              const SizedBox(
-                height: 30,
-              ),
-              Image.asset(
-                'assets/images/illustration-2.png',
-                width: 250,
-              ),
-            ],
+                const SizedBox(
+                  height: 30,
+                ),
+                Image.asset(
+                  'assets/images/illustration-2.png',
+                  width: 250,
+                ),
+              ],
+            ),
           ),
-        ),
-        Image.asset(
-          'assets/images/illustration-1.png',
-          width: 250,
-          //height: 500,
-        ),
-        Padding(
-          padding: EdgeInsets.symmetric(
-              vertical: MediaQuery.of(context).size.height / 6),
-          child: SizedBox(
-            width: 350,
-            child: _formLogin(context),
-          ),
-        )
-      ],
+          (size.width < 1300)
+              ? const SizedBox()
+              : Image.asset(
+                  'assets/images/illustration-1.png',
+                  width: 250,
+                ),
+                SizedBox(width: size.width * 0.05,),
+          SizedBox(
+            width: 360,
+            child: Padding(
+              padding: EdgeInsets.symmetric(
+                vertical: (size.width < 1300)
+                    ? 0
+                    : MediaQuery.of(context).size.height / 6,
+              ),
+              child: _formLogin(context),
+            ),
+          )
+        ],
+      ),
     );
   }
 
@@ -307,16 +318,16 @@ class BodyState extends State<Body> {
                 ),
               ),
               child: SizedBox(
-                  width: double.infinity,
-                  height: 50,
+                width: double.infinity,
+                height: 50,
+                child: Center(
                   child: (isLoadingLogin)
-                      ? const SizedBox(
-                          height: 5,
-                          child: CircularProgressIndicator.adaptive(
-                            backgroundColor: Colors.white,
-                          ),
+                      ? const CircularProgressIndicator.adaptive(
+                          backgroundColor: Colors.white,
                         )
-                      : const Center(child: Text("Sign In"))),
+                      : const Text("Sign In"),
+                ),
+              ),
             ),
           ),
           const SizedBox(height: 20),
@@ -335,16 +346,16 @@ class BodyState extends State<Body> {
             ],
           ),
           const SizedBox(height: 40),
-          Row(
-            children: [
-              Expanded(
-                child: Divider(
-                  color: Colors.grey[300],
-                  height: 50,
-                ),
-              ),
-            ],
-          ),
+          // Row(
+          //   children: [
+          //     Expanded(
+          //       child: Divider(
+          //         color: Colors.grey[300],
+          //         height: 50,
+          //       ),
+          //     ),
+          //   ],
+          // ),
         ],
       ),
     );
@@ -366,11 +377,9 @@ class BodyState extends State<Body> {
             title: "Login successfully",
             icon: Icons.login,
           );
-          Navigator.pushNamedAndRemoveUntil(
+          Navigator.pushReplacementNamed(
             context,
             "/admin_home",
-            (Route<dynamic> route) =>
-                false, // This removes all the previous routes
           );
           setState(() {
             isLoadingLogin = false;

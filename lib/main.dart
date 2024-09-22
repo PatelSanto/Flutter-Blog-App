@@ -4,7 +4,6 @@ import 'package:blog_app/users/screens/auth/user%20profile%20screens/favorite_bl
 import 'package:blog_app/users/screens/auth/user%20profile%20screens/myblogs_screen.dart';
 import 'package:blog_app/users/screens/auth/user%20profile%20screens/settings_screen.dart';
 import 'package:blog_app/users/screens/home/category%20screens/categories_screen.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:blog_app/constants/constants.dart';
 import 'package:blog_app/users/screens/auth/auth%20screens/auth.dart';
@@ -18,7 +17,6 @@ import 'package:blog_app/utils.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:path/path.dart';
 
 void main() {
   setup().then((_) {
@@ -28,7 +26,6 @@ void main() {
   });
 }
 
-// Define a global key for the navigator
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 Future<void> setup() async {
@@ -53,7 +50,7 @@ class MyApp extends StatelessWidget {
     '/myblogs': (context) => const MyBlogsScreen(),
     '/favoriteBlogs': (context) => const FavoriteBlogs(),
     '/admin_login': (context) => const AdminLoginPage(),
-    '/admin_home': (context) => AdminHome(),
+    '/admin_home': (context) => const AdminHome(),
   };
 
   @override
@@ -68,9 +65,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         textTheme: GoogleFonts.poppinsTextTheme(),
       ),
-      home: kIsWeb
-          ? const AdminLoginPage() // Show admin login page on web
-          : _authService.checkLogin(),
+      home: _authService.checkLogin(),
     );
   }
 }

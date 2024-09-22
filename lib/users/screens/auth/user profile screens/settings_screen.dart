@@ -16,7 +16,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   void initState() {
     _authService = GetIt.instance.get<AuthService>();
-
     super.initState();
   }
 
