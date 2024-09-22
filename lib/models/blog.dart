@@ -1,4 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:blog_app/header.dart';
 
 List<String> allCategories = [
   "Food blogs",

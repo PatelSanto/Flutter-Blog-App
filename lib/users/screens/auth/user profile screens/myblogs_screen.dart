@@ -1,13 +1,4 @@
-import 'package:blog_app/users/screens/home/blog%20screens/create_blog_screen.dart';
-import 'package:blog_app/users/widgets/blog_tile.dart';
-import 'package:blog_app/users/widgets/other_widgets.dart';
-import 'package:flutter/material.dart';
-import 'package:blog_app/models/user_provider.dart';
-import 'package:blog_app/users/screens/home/blog%20screens/blog_detail_screen.dart';
-import 'package:blog_app/users/screens/home/drawer_screen.dart';
-import 'package:blog_app/users/services/database_services.dart';
-import 'package:blog_app/users/widgets/appbar_widget.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:blog_app/header.dart';
 
 class MyBlogsScreen extends ConsumerStatefulWidget {
   const MyBlogsScreen({super.key});

@@ -1,13 +1,10 @@
 import 'dart:ui';
-
-import 'package:blog_app/admin/admin_login.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:blog_app/users/screens/auth/user%20profile%20screens/myblogs_screen.dart';
-import 'package:blog_app/users/screens/home/category%20screens/categories_screen.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:blog_app/admin/admin_login.dart';
 import 'package:blog_app/users/screens/home/home_screen.dart';
-
-import '../../../constants/constants.dart';
+import 'package:blog_app/users/screens/home/category%20screens/categories_screen.dart';
+import 'package:blog_app/users/screens/auth/user%20profile%20screens/myblogs_screen.dart';
 
 class DrawerScreen extends StatefulWidget {
   final int selectedIndex; // Accept a selected index
@@ -32,7 +29,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
     return BackdropFilter(
       filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
       child: Drawer(
-        backgroundColor: Constants.drawerBackground,
+        backgroundColor: const Color.fromARGB(255, 46, 75, 150),
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
             topRight: Radius.circular(50),
@@ -58,6 +55,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
               drawerTile(
                 title: 'My Blogs',
                 icon: CupertinoIcons.news,
+
                 isSelected: _selectedIndex == 1, // Highlight if selected
                 onTap: () {
                   _navigateToPage(context, 1, const MyBlogsScreen());
@@ -73,7 +71,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
               ),
               drawerTile(
                 title: 'Admin',
-                icon: Icons.admin_panel_settings,
+                icon: Icons.admin_panel_settings_outlined,
                 isSelected: _selectedIndex == 4, // Highlight if selected
                 onTap: () {
                   _navigateToPage(context, 4, const AdminLoginPage());
@@ -122,7 +120,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
         leading: Icon(
           icon,
           color: isSelected
-              ? Constants.primaryColor
+              ? const Color.fromARGB(255, 46, 75, 150)
               : Colors.white, // Change icon color based on selection
           size: 24,
         ),
@@ -130,7 +128,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
           title,
           style: TextStyle(
             color: isSelected
-                ? Constants.primaryColor
+                ? const Color.fromARGB(255, 46, 75, 150)
                 : Colors.white, // Change text color based on selection
             fontWeight: FontWeight.w600,
             fontSize: 18,

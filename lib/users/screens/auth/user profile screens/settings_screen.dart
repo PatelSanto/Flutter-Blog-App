@@ -1,7 +1,4 @@
-import 'package:blog_app/users/services/auth_services.dart';
-import 'package:blog_app/users/widgets/snackbar.dart';
-import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
+import 'package:blog_app/header.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -23,6 +20,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        backgroundColor: const Color.fromARGB(255, 46, 75, 150),
+        foregroundColor: Colors.white,
         title: const Text("Settings"),
       ),
       body: _body(context),

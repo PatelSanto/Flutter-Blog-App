@@ -1,8 +1,8 @@
-import 'package:blog_app/users/screens/home/blog%20screens/blog_detail_screen.dart';
-import 'package:blog_app/users/services/database_services.dart';
+import 'package:flutter/material.dart';
 import 'package:blog_app/users/widgets/blog_tile.dart';
 import 'package:blog_app/users/widgets/other_widgets.dart';
-import 'package:flutter/material.dart';
+import 'package:blog_app/users/services/database_services.dart';
+import 'package:blog_app/users/screens/home/blog%20screens/blog_detail_screen.dart';
 
 class CategoryBlogsScreen extends StatefulWidget {
   const CategoryBlogsScreen({super.key, required this.categoryName});
@@ -17,6 +17,8 @@ class _CategoryBlogsScreenState extends State<CategoryBlogsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: const Color.fromARGB(255, 46, 75, 150),
+        foregroundColor: Colors.white,
         title: Text(widget.categoryName),
         centerTitle: true,
       ),

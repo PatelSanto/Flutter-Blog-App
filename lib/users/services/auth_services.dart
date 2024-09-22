@@ -180,7 +180,7 @@ class AuthService {
                     logout();
                     Navigator.pushNamedAndRemoveUntil(
                       context,
-                      "/admin_login",
+                      kIsWeb ? "/admin_login" : "/auth",
                       (Route<dynamic> route) =>
                           false, // This removes all the previous routes
                     );

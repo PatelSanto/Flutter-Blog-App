@@ -1,15 +1,10 @@
-import 'package:blog_app/models/user_provider.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:pdf/widgets.dart' as pw;
-import 'dart:io';
 import 'comment_section.dart';
+import 'package:pdf/widgets.dart' as pw;
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:flutter/services.dart' show rootBundle;
-import 'package:blog_app/models/blog.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:blog_app/header.dart';
 
 class BlogDetailScreen extends ConsumerStatefulWidget {
   final Blog blog;

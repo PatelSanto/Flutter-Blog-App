@@ -1,9 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:blog_app/constants/constants.dart';
-import 'package:blog_app/users/services/auth_services.dart';
-import 'package:blog_app/users/widgets/auth_widgets.dart';
-import 'package:blog_app/users/widgets/snackbar.dart';
-import 'package:get_it/get_it.dart';
+import 'package:blog_app/header.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -166,10 +161,11 @@ class _LoginScreenState extends State<LoginScreen> {
             icon: Icons.login,
           );
           Navigator.pushNamedAndRemoveUntil(
-                  context,
-                  "/home",
-                  (Route<dynamic> route) => false, // This removes all the previous routes
-                ); 
+            context,
+            "/home",
+            (Route<dynamic> route) =>
+                false, // This removes all the previous routes
+          );
         } else {
           snackbarToast(
             context: context,

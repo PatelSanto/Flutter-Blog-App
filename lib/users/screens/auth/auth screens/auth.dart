@@ -1,7 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:blog_app/users/widgets/auth_widgets.dart';
-import 'package:auth_buttons/auth_buttons.dart';
-import 'package:blog_app/users/widgets/snackbar.dart';
+import 'package:blog_app/header.dart';
 
 class Auth extends StatelessWidget {
   const Auth({super.key});
@@ -51,7 +48,7 @@ class Auth extends StatelessWidget {
             style: TextStyle(fontSize: 18),
           ),
           TextSpan(
-            text: "Publish Your Passion in you own way...",
+            text: "Publish Your Passion in your own way...",
             style: TextStyle(
               fontSize: 30,
               fontWeight: FontWeight.bold,

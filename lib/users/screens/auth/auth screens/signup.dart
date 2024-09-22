@@ -1,14 +1,4 @@
-import 'dart:io';
-import 'package:flutter/material.dart';
-import 'package:blog_app/constants/constants.dart';
-import 'package:blog_app/models/user.dart';
-import 'package:blog_app/users/services/auth_services.dart';
-import 'package:blog_app/users/services/database_services.dart';
-import 'package:blog_app/users/services/media_services.dart';
-import 'package:blog_app/users/services/storage_services.dart';
-import 'package:blog_app/users/widgets/auth_widgets.dart';
-import 'package:blog_app/users/widgets/snackbar.dart';
-import 'package:get_it/get_it.dart';
+import 'package:blog_app/header.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});

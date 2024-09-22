@@ -1,12 +1,4 @@
-import 'dart:io';
-import 'package:blog_app/models/user.dart';
-import 'package:blog_app/models/user_provider.dart';
-import 'package:blog_app/users/services/media_services.dart';
-import 'package:blog_app/users/services/storage_services.dart';
-import 'package:flutter/material.dart';
-import 'package:blog_app/users/widgets/snackbar.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:get_it/get_it.dart';
+import 'package:blog_app/header.dart';
 
 class ProfileEditPage extends ConsumerStatefulWidget {
   const ProfileEditPage({super.key});

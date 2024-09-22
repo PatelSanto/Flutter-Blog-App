@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class CommentSection extends StatefulWidget {
   final String blogId;
@@ -118,7 +118,7 @@ class _CommentSectionState extends State<CommentSection> {
                   child: ListTile(
                     title: Text(data['comment'] ?? ''),
                     subtitle:
-                        Text('Posted by ${data['userId'] ?? "Anonymous"}' ),
+                        Text('Posted by ${data['userId'] ?? "Anonymous"}'),
                   ),
                 );
               }).toList(),
