@@ -51,7 +51,7 @@ class Auth extends StatelessWidget {
             style: TextStyle(fontSize: 18),
           ),
           TextSpan(
-            text: "Publish Your Passion in you own way...",
+            text: "Publish Your Passion in your own way...",
             style: TextStyle(
               fontSize: 30,
               fontWeight: FontWeight.bold,

@@ -1,3 +1,4 @@
+import 'package:blog_app/users/services/auth_services.dart';
 import 'package:blog_app/users/widgets/blog_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -6,6 +7,7 @@ import 'package:blog_app/models/user_provider.dart';
 import 'package:blog_app/users/screens/home/drawer_screen.dart';
 import 'package:blog_app/users/widgets/appbar_widget.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:get_it/get_it.dart';
 import 'blog screens/create_blog_screen.dart';
 import 'blog screens/blog_detail_screen.dart';
 import 'package:blog_app/models/blog.dart';
@@ -22,6 +24,7 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
       FirebaseFirestore.instance.collection('blogs');
   final TextEditingController _searchController = TextEditingController();
   String _searchQuery = '';
+  late AuthService _authServices;
 
   Stream<List<Blog>> getBlogs() {
     return FirebaseFirestore.instance
@@ -34,6 +37,10 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
 
   @override
   void initState() {
+    _authServices = GetIt.instance.get<AuthService>();
+    ref
+        .read(userDataNotifierProvider.notifier)
+        .fetchUserData(_authServices.user?.uid);
     super.initState();
   }
 
