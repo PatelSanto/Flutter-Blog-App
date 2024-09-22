@@ -1,5 +1,8 @@
+import 'package:blog_app/admin/admin_home.dart';
+import 'package:blog_app/admin/admin_login.dart';
 import 'package:blog_app/models/user_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:blog_app/models/user.dart';
 import 'package:blog_app/users/screens/auth/auth%20screens/auth.dart';
@@ -33,11 +36,12 @@ class AuthService {
                 .read(userDataNotifierProvider.notifier)
                 .fetchUserData(user?.uid);
             print('User Firebase: ${user?.email}');
-            return const HomeScreen();
+
+            return kIsWeb ? const AdminHome() : const HomeScreen();
           } else {
             // User is not signed in
             print("User is not signed in: to auth screen");
-            return const Auth();
+            return kIsWeb ? const AdminLoginPage() : const Auth();
           }
         },
       );
@@ -176,7 +180,7 @@ class AuthService {
                     logout();
                     Navigator.pushNamedAndRemoveUntil(
                       context,
-                      "/auth",
+                      "/admin_login",
                       (Route<dynamic> route) =>
                           false, // This removes all the previous routes
                     );

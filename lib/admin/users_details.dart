@@ -22,7 +22,7 @@ class UserDetailPage extends StatelessWidget {
       body: StreamBuilder<QuerySnapshot>(
         stream: _firestore
             .collection('blogs')
-            .where('userId', isEqualTo: userId)
+            .where('authorUid', isEqualTo: userId)
             .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
