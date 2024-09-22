@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:blog_app/models/user.dart';
 
-PreferredSizeWidget appBarWidget(BuildContext context, UserData userData, String screenName) {
+PreferredSizeWidget appBarWidget(
+    BuildContext context, UserData userData, String screenName) {
   return AppBar(
     title: Text(
       screenName,
@@ -27,7 +28,8 @@ PreferredSizeWidget appBarWidget(BuildContext context, UserData userData, String
           },
           child: ClipOval(
             child: Image.network(
-              userData.pfpURL ?? "",
+              userData.pfpURL ??
+                  "https://cdn.vectorstock.com/i/500p/08/19/gray-photo-placeholder-icon-design-ui-vector-35850819.jpg",
               height: 50,
               width: 50,
               fit: BoxFit.cover,
