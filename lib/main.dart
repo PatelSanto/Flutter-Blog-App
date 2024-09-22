@@ -33,7 +33,7 @@ Future<void> setup() async {
   await registerServices();
 }
 
-class MyApp extends ConsumerWidget {
+class MyApp extends StatelessWidget {
   MyApp({super.key});
 
   final AuthService _authService = GetIt.instance.get<AuthService>();
@@ -54,7 +54,7 @@ class MyApp extends ConsumerWidget {
   };
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     return MaterialApp(
       routes: routes,
       debugShowCheckedModeBanner: false,
