@@ -53,7 +53,7 @@ class MyApp extends StatelessWidget {
     '/myblogs': (context) => const MyBlogsScreen(),
     '/favoriteBlogs': (context) => const FavoriteBlogs(),
     '/admin_login': (context) => const AdminLoginPage(),
-    '/admin_home':(context)=> const AdminHome(),
+    '/admin_home': (context) => AdminHome(),
   };
 
   @override
