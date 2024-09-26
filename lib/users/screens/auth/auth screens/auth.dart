@@ -1,7 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:blog_app/users/widgets/auth_widgets.dart';
-import 'package:auth_buttons/auth_buttons.dart';
-import 'package:blog_app/users/widgets/snackbar.dart';
+import 'package:blog_app/header.dart';
 
 class Auth extends StatelessWidget {
   const Auth({super.key});

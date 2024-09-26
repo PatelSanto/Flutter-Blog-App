@@ -1,8 +1,4 @@
-import 'package:blog_app/users/services/auth_services.dart';
-import 'package:blog_app/users/widgets/snackbar.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
+import 'package:blog_app/header.dart';
 
 class AdminLoginPage extends StatelessWidget {
   const AdminLoginPage({super.key});
@@ -185,7 +181,9 @@ class BodyState extends State<Body> {
                   'assets/images/illustration-1.png',
                   width: 250,
                 ),
-                SizedBox(width: size.width * 0.05,),
+          SizedBox(
+            width: size.width * 0.05,
+          ),
           SizedBox(
             width: 360,
             child: Padding(

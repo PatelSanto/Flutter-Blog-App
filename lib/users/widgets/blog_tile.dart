@@ -43,15 +43,25 @@ Widget blogTile({
             children: [
               const Icon(
                 Icons.remove_red_eye_rounded,
-                color: Colors.blueGrey,
+                color: Color.fromARGB(255, 46, 75, 150),
               ),
-              Text(" $views"),
+              Text(
+                " $views",
+                style: const TextStyle(
+                  color: Color.fromARGB(255, 46, 75, 150),
+                ),
+              ),
               const SizedBox(width: 20),
               const Icon(
                 Icons.insert_comment_rounded,
-                color: Colors.blueGrey,
+                color: Color.fromARGB(255, 46, 75, 150),
               ),
-              Text(" $comments"),
+              Text(
+                " $comments",
+                style: const TextStyle(
+                  color: Color.fromARGB(255, 46, 75, 150),
+                ),
+              ),
             ],
           )
         ],

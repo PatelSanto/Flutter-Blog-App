@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:blog_app/header.dart';
 
 class Constants {
   static Color backgroundColor = const Color.fromARGB(255, 144, 202, 249);

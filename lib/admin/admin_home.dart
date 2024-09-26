@@ -1,8 +1,6 @@
-import 'package:blog_app/users/services/auth_services.dart';
-import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
-import 'manage_blogs.dart';
-import 'manage_users.dart';
+import 'package:blog_app/header.dart';
+export 'manage_blogs.dart';
+export 'manage_users.dart';
 
 class AdminHome extends StatefulWidget {
   const AdminHome({super.key});
@@ -19,7 +17,7 @@ class _AdminHomeState extends State<AdminHome> {
     _authService = GetIt.instance.get<AuthService>();
     super.initState();
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

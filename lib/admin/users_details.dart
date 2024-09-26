@@ -1,5 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:blog_app/header.dart';
 
 class UserDetailPage extends StatelessWidget {
   final String userId;

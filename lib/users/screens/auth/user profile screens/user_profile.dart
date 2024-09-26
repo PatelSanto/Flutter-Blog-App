@@ -1,6 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:blog_app/models/user_provider.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:blog_app/header.dart';
 
 class UserProfileScreen extends ConsumerStatefulWidget {
   const UserProfileScreen({super.key});
@@ -113,7 +111,7 @@ class _UserProfileScreenState extends ConsumerState<UserProfileScreen> {
               title: const Text(
                 'My Blogs',
                 style: TextStyle(
-                  color: Colors.black,
+                  color: Color.fromARGB(255, 46, 75, 150),
                 ),
               ),
               leading: const Icon(
@@ -123,7 +121,7 @@ class _UserProfileScreenState extends ConsumerState<UserProfileScreen> {
               trailing: const Icon(
                 Icons.arrow_forward_ios,
                 size: 18,
-                color: Colors.black,
+                color: Color.fromARGB(255, 46, 75, 150),
               ),
             ),
             ListTile(
@@ -136,17 +134,17 @@ class _UserProfileScreenState extends ConsumerState<UserProfileScreen> {
               title: const Text(
                 'Favorite Blogs',
                 style: TextStyle(
-                  color: Colors.black,
+                  color: Color.fromARGB(255, 46, 75, 150),
                 ),
               ),
-              leading: Icon(
-                Icons.favorite_rounded,
-                color: Colors.red[400],
+              leading: const Icon(
+                Icons.favorite_border,
+                color: Color.fromARGB(255, 46, 75, 150),
               ),
               trailing: const Icon(
                 Icons.arrow_forward_ios,
                 size: 18,
-                color: Colors.black,
+                color: Color.fromARGB(255, 46, 75, 150),
               ),
             ),
             ListTile(
@@ -156,14 +154,17 @@ class _UserProfileScreenState extends ConsumerState<UserProfileScreen> {
               title: const Text(
                 'Settings',
                 style: TextStyle(
-                  color: Colors.black,
+                  color: Color.fromARGB(255, 46, 75, 150),
                 ),
               ),
-              leading: const Icon(Icons.settings_outlined),
+              leading: const Icon(
+                Icons.settings_outlined,
+                color: Color.fromARGB(255, 46, 75, 150),
+              ),
               trailing: const Icon(
                 Icons.arrow_forward_ios,
                 size: 18,
-                color: Colors.black,
+                color: Color.fromARGB(255, 46, 75, 150),
               ),
             ),
           ],

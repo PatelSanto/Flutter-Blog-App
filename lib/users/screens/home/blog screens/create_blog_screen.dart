@@ -1,12 +1,12 @@
-import 'package:blog_app/users/widgets/snackbar.dart';
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:blog_app/models/blog.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:blog_app/models/user_provider.dart';
+import 'package:blog_app/users/widgets/snackbar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:blog_app/models/user_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:blog_app/models/blog.dart';
-import 'dart:io';
 
 class CreateBlogScreen extends ConsumerStatefulWidget {
   const CreateBlogScreen({super.key});
@@ -116,6 +116,14 @@ class CreateBlogScreenState extends ConsumerState<CreateBlogScreen> {
     final userData = ref.watch(userDataNotifierProvider);
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        backgroundColor: const Color.fromARGB(255, 46, 75, 150),
+        foregroundColor: Colors.white,
         title: const Text('Create New Blog'),
       ),
       body: Padding(
@@ -178,21 +186,37 @@ class CreateBlogScreenState extends ConsumerState<CreateBlogScreen> {
               const SizedBox(height: 10),
               ElevatedButton(
                 onPressed: _pickImage,
-                child: const Text('Select Image'),
+                style: const ButtonStyle(
+                  backgroundColor: WidgetStatePropertyAll(
+                    Color.fromARGB(255, 46, 75, 150),
+                  ),
+                ),
+                child: const Text(
+                  'Select Image',
+                  style: TextStyle(color: Colors.white),
+                ),
               ),
               const SizedBox(height: 20),
               Align(
                 alignment: Alignment.bottomCenter,
                 child: ElevatedButton(
                   style: const ButtonStyle(
-                    minimumSize: WidgetStatePropertyAll(Size(300, 50)),
+                    minimumSize: WidgetStatePropertyAll(
+                      Size(300, 50),
+                    ),
+                    backgroundColor: WidgetStatePropertyAll(
+                      Color.fromARGB(255, 46, 75, 150),
+                    ),
                   ),
                   onPressed: _uploadBlog,
                   child: (isLoading)
                       ? const CircularProgressIndicator.adaptive()
                       : const Text(
                           'Create Blog',
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
                         ),
                 ),
               ),

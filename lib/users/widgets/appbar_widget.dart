@@ -4,6 +4,8 @@ import 'package:blog_app/models/user.dart';
 PreferredSizeWidget appBarWidget(
     BuildContext context, UserData userData, String screenName) {
   return AppBar(
+    backgroundColor: const Color.fromARGB(255, 46, 75, 150),
+    foregroundColor: Colors.white,
     title: Text(
       screenName,
       style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
@@ -43,7 +45,7 @@ PreferredSizeWidget appBarWidget(
               errorBuilder: (context, error, stackTrace) {
                 return const Icon(
                   Icons.person,
-                  color: Colors.black12,
+                  color: Colors.white,
                 );
               },
             ),

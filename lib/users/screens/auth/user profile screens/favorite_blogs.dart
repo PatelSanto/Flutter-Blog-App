@@ -1,10 +1,4 @@
-import 'package:blog_app/models/user_provider.dart';
-import 'package:blog_app/users/screens/home/blog%20screens/blog_detail_screen.dart';
-import 'package:blog_app/users/services/database_services.dart';
-import 'package:blog_app/users/widgets/blog_tile.dart';
-import 'package:blog_app/users/widgets/other_widgets.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:blog_app/header.dart';
 
 class FavoriteBlogs extends ConsumerStatefulWidget {
   const FavoriteBlogs({super.key});
@@ -18,6 +12,14 @@ class _FavoriteBlogsState extends ConsumerState<FavoriteBlogs> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        backgroundColor: const Color.fromARGB(255, 46, 75, 150),
+        foregroundColor: Colors.white,
         title: const Text("Favorite Blogs"),
         centerTitle: true,
       ),

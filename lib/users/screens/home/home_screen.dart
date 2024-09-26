@@ -1,16 +1,16 @@
-import 'package:blog_app/users/services/auth_services.dart';
-import 'package:blog_app/users/widgets/blog_tile.dart';
-import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:blog_app/constants/constants.dart';
-import 'package:blog_app/models/user_provider.dart';
-import 'package:blog_app/users/screens/home/drawer_screen.dart';
-import 'package:blog_app/users/widgets/appbar_widget.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
+import 'package:flutter/material.dart';
+import 'package:blog_app/models/blog.dart';
 import 'blog screens/create_blog_screen.dart';
 import 'blog screens/blog_detail_screen.dart';
-import 'package:blog_app/models/blog.dart';
+import 'package:blog_app/constants/constants.dart';
+import 'package:blog_app/models/user_provider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:blog_app/users/widgets/blog_tile.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:blog_app/users/widgets/appbar_widget.dart';
+import 'package:blog_app/users/services/auth_services.dart';
+import 'package:blog_app/users/screens/home/drawer_screen.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -65,10 +65,19 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
                 });
               },
               decoration: InputDecoration(
-                prefixIcon: const Icon(Icons.search),
+                prefixIcon: const Icon(
+                  Icons.search,
+                  color: Color.fromARGB(255, 46, 75, 150),
+                ),
                 hintText: 'Search Blogs',
+                hintStyle: const TextStyle(
+                  color: Color.fromARGB(255, 46, 75, 150),
+                ),
                 suffixIcon: IconButton(
-                  icon: const Icon(Icons.tune_sharp),
+                  icon: const Icon(
+                    Icons.tune_sharp,
+                    color: Color.fromARGB(255, 46, 75, 150),
+                  ),
                   onPressed: () {
                     // Implement filter functionality
                   },
@@ -161,13 +170,14 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
       ),
       drawer: const DrawerScreen(selectedIndex: 0),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: const Color.fromARGB(255, 46, 75, 150),
         onPressed: () {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => const CreateBlogScreen()),
           );
         },
-        child: const Icon(Icons.add),
+        child: const Icon(Icons.add, color: Colors.white),
       ),
     );
   }

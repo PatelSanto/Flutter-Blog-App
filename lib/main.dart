@@ -1,22 +1,5 @@
-import 'package:blog_app/admin/admin_home.dart';
-import 'package:blog_app/admin/admin_login.dart';
-import 'package:blog_app/users/screens/auth/user%20profile%20screens/favorite_blogs.dart';
-import 'package:blog_app/users/screens/auth/user%20profile%20screens/myblogs_screen.dart';
-import 'package:blog_app/users/screens/auth/user%20profile%20screens/settings_screen.dart';
-import 'package:blog_app/users/screens/home/category%20screens/categories_screen.dart';
-import 'package:flutter/material.dart';
-import 'package:blog_app/constants/constants.dart';
-import 'package:blog_app/users/screens/auth/auth%20screens/auth.dart';
-import 'package:blog_app/users/screens/auth/auth%20screens/login.dart';
-import 'package:blog_app/users/screens/auth/user%20profile%20screens/user_profile.dart';
-import 'package:blog_app/users/screens/auth/user%20profile%20screens/user_profile_edit_page.dart';
-import 'package:blog_app/users/screens/home/home_screen.dart';
-import 'package:blog_app/users/screens/auth/auth%20screens/signup.dart';
-import 'package:blog_app/users/services/auth_services.dart';
-import 'package:blog_app/utils.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:get_it/get_it.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:blog_app/header.dart';
+import 'package:blog_app/users/screens/splash_screen/splash_screen.dart';
 
 void main() {
   setup().then((_) {
@@ -39,6 +22,7 @@ class MyApp extends StatelessWidget {
   final AuthService _authService = GetIt.instance.get<AuthService>();
 
   final Map<String, WidgetBuilder> routes = {
+    '/splash': (context) => const SplashScreen(),
     '/home': (context) => const HomeScreen(),
     '/auth': (context) => const Auth(),
     '/login': (context) => const LoginScreen(),
@@ -65,7 +49,8 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         textTheme: GoogleFonts.poppinsTextTheme(),
       ),
-      home: _authService.checkLogin(),
+      // home: _authService.checkLogin(),
+      home: const SplashScreen(),
     );
   }
 }

@@ -1,7 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import '../models/blog.dart';
-import '../users/screens/home/blog screens/blog_detail_screen.dart';
+import 'package:blog_app/header.dart';
 
 class ManageBlogsPage extends StatelessWidget {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
