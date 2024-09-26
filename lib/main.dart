@@ -1,4 +1,5 @@
 import 'package:blog_app/header.dart';
+import 'package:blog_app/users/screens/splash_screen/splash_screen.dart';
 
 void main() {
   setup().then((_) {
@@ -21,6 +22,7 @@ class MyApp extends StatelessWidget {
   final AuthService _authService = GetIt.instance.get<AuthService>();
 
   final Map<String, WidgetBuilder> routes = {
+    '/splash': (context) => const SplashScreen(),
     '/home': (context) => const HomeScreen(),
     '/auth': (context) => const Auth(),
     '/login': (context) => const LoginScreen(),
@@ -47,7 +49,8 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         textTheme: GoogleFonts.poppinsTextTheme(),
       ),
-      home: _authService.checkLogin(),
+      // home: _authService.checkLogin(),
+      home: const SplashScreen(),
     );
   }
 }
