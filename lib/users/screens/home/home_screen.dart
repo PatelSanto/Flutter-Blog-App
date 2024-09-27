@@ -174,7 +174,7 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const CreateBlogScreen()),
+            MaterialPageRoute(builder: (context) => const CreateBlogScreen(content: "Edit Content",)),
           );
         },
         child: const Icon(Icons.add, color: Colors.white),

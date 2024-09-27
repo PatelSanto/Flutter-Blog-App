@@ -1,15 +1,8 @@
-import 'dart:io';
-import 'package:flutter/material.dart';
-import 'package:blog_app/models/blog.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:blog_app/models/user_provider.dart';
-import 'package:blog_app/users/widgets/snackbar.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:blog_app/header.dart';
 
 class CreateBlogScreen extends ConsumerStatefulWidget {
-  const CreateBlogScreen({super.key});
+  const CreateBlogScreen({super.key, required this.content});
+  final dynamic content;
 
   @override
   CreateBlogScreenState createState() => CreateBlogScreenState();
@@ -17,14 +10,21 @@ class CreateBlogScreen extends ConsumerStatefulWidget {
 
 class CreateBlogScreenState extends ConsumerState<CreateBlogScreen> {
   final TextEditingController _titleController = TextEditingController();
-  final TextEditingController _contentController = TextEditingController();
+  // final TextEditingController _contentController = TextEditingController();
   final TextEditingController _readingTimeController = TextEditingController();
   final TextEditingController _authorController = TextEditingController();
+  final QuillController _controller = QuillController.basic();
   File? _selectedImage;
   final List<String> _selectedCategories = [];
   final List<String> categories = allCategories;
   final ImagePicker _picker = ImagePicker();
   bool isLoading = false;
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   Future<void> _pickImage() async {
     final XFile? pickedFile =
@@ -38,11 +38,12 @@ class CreateBlogScreenState extends ConsumerState<CreateBlogScreen> {
   }
 
   Future<void> _uploadBlog() async {
+    
     setState(() {
       isLoading = true;
     });
     if (_titleController.text.isEmpty ||
-        _contentController.text.isEmpty ||
+        // _contentController.text.isEmpty ||
         _readingTimeController.text.isEmpty ||
         _authorController.text.isEmpty ||
         _selectedCategories.isEmpty ||
@@ -71,7 +72,8 @@ class CreateBlogScreenState extends ConsumerState<CreateBlogScreen> {
       Blog newBlog = Blog(
         id: '',
         title: _titleController.text,
-        content: _contentController.text,
+        // content: _contentController.text,
+        content: widget.content,
         author: _authorController.text,
         authorUid: userData.uid.toString(),
         imageUrl: downloadUrl,
@@ -95,6 +97,8 @@ class CreateBlogScreenState extends ConsumerState<CreateBlogScreen> {
       setState(() {
         isLoading = false;
       });
+      
+      if (!mounted) return;
       snackbarToast(
           context: context,
           title: "Blog created successfully!",
@@ -159,13 +163,44 @@ class CreateBlogScreenState extends ConsumerState<CreateBlogScreen> {
                 ),
               ),
               const SizedBox(height: 10),
-              TextField(
-                controller: _contentController,
-                decoration: const InputDecoration(
-                  labelText: 'Content',
-                  border: OutlineInputBorder(),
+              // TextField(
+              //   controller: _contentController,
+              //   decoration: const InputDecoration(
+              //     labelText: 'Content',
+              //     border: OutlineInputBorder(),
+              //   ),
+              //   maxLines: 6,
+              // ),
+              Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.blueGrey),
+                  borderRadius: BorderRadius.circular(5),
                 ),
-                maxLines: 6,
+                child: Stack(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(widget.content),
+                    ),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: IconButton(
+                          onPressed: () {
+                            Navigator.of(context)
+                                .pushReplacement(MaterialPageRoute(
+                                    builder: (context) => TextEditor(
+                                          content: widget.content,
+                                        )));
+                          },
+                          icon: const Icon(Icons.edit),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
               const SizedBox(height: 10),
               TextField(

@@ -27,7 +27,7 @@ List<String> allCategories = [
 class Blog {
   final String id;
   final String title;
-  final String content;
+  final dynamic content;
   final String author;
   final String authorUid;
   final String imageUrl;

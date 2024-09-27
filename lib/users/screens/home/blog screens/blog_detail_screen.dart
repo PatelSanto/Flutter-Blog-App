@@ -69,7 +69,7 @@ class _BlogDetailScreenState extends ConsumerState<BlogDetailScreen> {
 
       final file = File(filePath);
       await file.writeAsBytes(await pdf.save());
-
+      
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Blog downloaded to $filePath')),
       );
@@ -117,7 +117,6 @@ class _BlogDetailScreenState extends ConsumerState<BlogDetailScreen> {
       'comments': commentCount,
     });
 
-    // Optionally, update the blog object in the widget
     setState(() {
       widget.blog.comments = commentCount;
     });
@@ -128,8 +127,6 @@ class _BlogDetailScreenState extends ConsumerState<BlogDetailScreen> {
     final userData = ref.watch(userDataNotifierProvider);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Blog Details'),
-        centerTitle: true,
         actions: [
           IconButton(
             onPressed: () {
@@ -169,6 +166,10 @@ class _BlogDetailScreenState extends ConsumerState<BlogDetailScreen> {
               size: 30,
               color: Colors.red[300],
             ),
+          ),
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(Icons.share),
           ),
           const SizedBox(width: 20),
         ],
