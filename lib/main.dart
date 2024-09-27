@@ -49,8 +49,8 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         textTheme: GoogleFonts.poppinsTextTheme(),
       ),
-      // home: _authService.checkLogin(),
-      home: const SplashScreen(),
+      home: _authService.checkLogin(),
+      // home: const SplashScreen(),
     );
   }
 }
