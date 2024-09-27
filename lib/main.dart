@@ -50,7 +50,6 @@ class MyApp extends StatelessWidget {
         textTheme: GoogleFonts.poppinsTextTheme(),
       ),
       home: _authService.checkLogin(),
-      // home: const SplashScreen(),
     );
   }
 }

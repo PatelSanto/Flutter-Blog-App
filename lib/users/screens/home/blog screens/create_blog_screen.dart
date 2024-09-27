@@ -38,6 +38,7 @@ class CreateBlogScreenState extends ConsumerState<CreateBlogScreen> {
   }
 
   Future<void> _uploadBlog() async {
+    
     setState(() {
       isLoading = true;
     });
@@ -96,6 +97,8 @@ class CreateBlogScreenState extends ConsumerState<CreateBlogScreen> {
       setState(() {
         isLoading = false;
       });
+      
+      if (!mounted) return;
       snackbarToast(
           context: context,
           title: "Blog created successfully!",

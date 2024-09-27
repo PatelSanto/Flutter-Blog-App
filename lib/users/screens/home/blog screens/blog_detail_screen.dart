@@ -69,7 +69,7 @@ class _BlogDetailScreenState extends ConsumerState<BlogDetailScreen> {
 
       final file = File(filePath);
       await file.writeAsBytes(await pdf.save());
-
+      
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Blog downloaded to $filePath')),
       );
