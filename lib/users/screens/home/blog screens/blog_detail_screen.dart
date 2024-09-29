@@ -1,6 +1,7 @@
+import 'package:intl/intl.dart';
+
 import 'comment_section.dart';
 import 'package:pdf/widgets.dart' as pw;
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:permission_handler/permission_handler.dart';
@@ -69,7 +70,7 @@ class _BlogDetailScreenState extends ConsumerState<BlogDetailScreen> {
 
       final file = File(filePath);
       await file.writeAsBytes(await pdf.save());
-      
+
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Blog downloaded to $filePath')),
       );
@@ -202,7 +203,13 @@ class _BlogDetailScreenState extends ConsumerState<BlogDetailScreen> {
             Text(widget.blog.content,
                 style: Theme.of(context).textTheme.bodyLarge),
             const SizedBox(height: 20),
-
+            Align(
+              alignment: Alignment.centerRight,
+              child: Text(
+                'At, ${formatTimestamp(widget.blog.timeStamp,format: "MMMM d, yyyy")}',
+                style: Theme.of(context).textTheme.labelLarge,
+              ),
+            ),
             // Download button for PDF
             ElevatedButton.icon(
               style: ButtonStyle(
@@ -232,5 +239,10 @@ class _BlogDetailScreenState extends ConsumerState<BlogDetailScreen> {
       isFavorite = userData.favoriteBlogs.contains(widget.blog.id);
     });
     return isFavorite;
+  }
+
+  String formatTimestamp(Timestamp timestamp, {String format = 'yyyy-MM-dd'}) {
+    DateTime dateTime = timestamp.toDate();
+    return DateFormat(format).format(dateTime);
   }
 }

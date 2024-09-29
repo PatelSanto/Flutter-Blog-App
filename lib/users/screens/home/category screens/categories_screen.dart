@@ -27,8 +27,10 @@ class CategoryScreen extends ConsumerWidget {
   ];
 
   final Map<String, IconData> allIcon = {
+    "All Blogs": Icons.all_inbox_rounded,
     "Food blogs": Icons.restaurant,
     "Travel blogs": Icons.airport_shuttle_rounded,
+    "Technology Blogs": Icons.computer_outlined,
     "Health and fitness blogs": Icons.fitness_center_rounded,
     "Lifestyle blogs": Icons.nightlife_rounded,
     "Fashion and beauty blogs": CupertinoIcons.heart_circle,

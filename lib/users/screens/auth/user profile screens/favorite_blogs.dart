@@ -57,7 +57,7 @@ class _FavoriteBlogsState extends ConsumerState<FavoriteBlogs> {
                     leadingImage: blog.imageUrl,
                     title: blog.title,
                     author: blog.author,
-                    readingTime: blog.readingTime,
+                    timeStamp: blog.timeStamp,
                     views: blog.views,
                     comments: blog.comments,
                     ontap: () {

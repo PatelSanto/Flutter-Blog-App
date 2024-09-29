@@ -43,6 +43,7 @@ class ManageBlogsPage extends StatelessWidget {
                 title: data['title'],
                 content: data['content'],
                 imageUrl: data['imageUrl'],
+                timeStamp: doc['timeStamp'],
                 author: data['author'],
                 comments: data['comments'] ?? 0,
                 authorUid: data['authorUid'] ?? "Unknown author",

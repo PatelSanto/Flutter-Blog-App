@@ -15,7 +15,7 @@ class CreateBlogScreenState extends ConsumerState<CreateBlogScreen> {
   final TextEditingController _authorController = TextEditingController();
   final QuillController _controller = QuillController.basic();
   File? _selectedImage;
-  final List<String> _selectedCategories = [];
+  final Set<String> _selectedCategories = {"All Blogs"};
   final List<String> categories = allCategories;
   final ImagePicker _picker = ImagePicker();
   bool isLoading = false;
@@ -38,7 +38,6 @@ class CreateBlogScreenState extends ConsumerState<CreateBlogScreen> {
   }
 
   Future<void> _uploadBlog() async {
-    
     setState(() {
       isLoading = true;
     });
@@ -72,15 +71,15 @@ class CreateBlogScreenState extends ConsumerState<CreateBlogScreen> {
       Blog newBlog = Blog(
         id: '',
         title: _titleController.text,
-        // content: _contentController.text,
-        content: widget.content,
+        content: widget.content ?? "Edit Content",
         author: _authorController.text,
         authorUid: userData.uid.toString(),
         imageUrl: downloadUrl,
+        timeStamp: FieldValue.serverTimestamp(),
         views: 0,
         comments: 0,
         readingTime: int.parse(_readingTimeController.text),
-        categories: _selectedCategories,
+        categories: _selectedCategories.toList(),
       );
 
       // Save blog details to Firestore
@@ -97,7 +96,7 @@ class CreateBlogScreenState extends ConsumerState<CreateBlogScreen> {
       setState(() {
         isLoading = false;
       });
-      
+
       if (!mounted) return;
       snackbarToast(
           context: context,
@@ -270,14 +269,15 @@ class CreateBlogScreenState extends ConsumerState<CreateBlogScreen> {
         final isSelected = _selectedCategories.contains(category);
         return FilterChip(
           label: Text(category),
-          selected: isSelected,
+          selected: (category == "All Blogs") ? true : isSelected,
           onSelected: (bool selected) {
             setState(() {
               if (selected) {
                 _selectedCategories.add(category);
               } else {
-                _selectedCategories
-                    .removeWhere((String name) => name == category);
+                (category != "All Blogs")
+                    ? _selectedCategories.add(category)
+                    : _selectedCategories.remove(category);
               }
             });
           },

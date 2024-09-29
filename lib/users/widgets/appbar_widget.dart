@@ -1,10 +1,11 @@
+import 'package:blog_app/constants/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:blog_app/models/user.dart';
 
 PreferredSizeWidget appBarWidget(
     BuildContext context, UserData userData, String screenName) {
   return AppBar(
-    backgroundColor: const Color.fromARGB(255, 46, 75, 150),
+    backgroundColor: Constants.backgroundColor2,
     foregroundColor: Colors.white,
     title: Text(
       screenName,
