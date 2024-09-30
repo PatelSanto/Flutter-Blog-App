@@ -62,7 +62,10 @@ class _TextEditorState extends State<TextEditor> {
             child: QuillSimpleToolbar(
               controller: _controller,
               configurations: const QuillSimpleToolbarConfigurations(
-                  multiRowsDisplay: true),
+                multiRowsDisplay: true,
+                showAlignmentButtons: true,
+                showBackgroundColorButton: true,
+              ),
             ),
           ),
           Expanded(

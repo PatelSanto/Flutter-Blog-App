@@ -143,41 +143,49 @@ class CreateBlogScreenState extends ConsumerState<CreateBlogScreen> {
               const SizedBox(
                 height: 10,
               ),
-              Container(
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.blueGrey),
-                  borderRadius: BorderRadius.circular(5),
-                ),
-                child: Stack(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: QuillEditor.basic(
-                        controller: _controller,
-                        configurations: const QuillEditorConfigurations(),
-                      ),
-                    ),
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: Padding(
+              SingleChildScrollView(
+                child: Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.blueGrey),
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  constraints: const BoxConstraints(
+                    maxHeight: 300,
+                  ),
+                  child: Stack(
+                    children: [
+                      Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: IconButton(
-                          onPressed: () {
-                            final String data = jsonEncode(
-                                _controller.document.toDelta().toJson());
-                            Navigator.of(context)
-                                .pushReplacement(MaterialPageRoute(
-                                    builder: (context) => TextEditor(
-                                          content: data,
-                                        )));
-                          },
-                          icon: const Icon(Icons.edit),
-                          color: Constants.backgroundColor2,
+                        child: QuillEditor.basic(
+                          controller: _controller,
+                          configurations: const QuillEditorConfigurations(),
                         ),
                       ),
-                    ),
-                  ],
+                      Align(
+                        alignment: Alignment.topRight,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: CircleAvatar(
+                            backgroundColor: Constants.backgroundColor2,
+                            child: IconButton(
+                              onPressed: () {
+                                final String data = jsonEncode(
+                                    _controller.document.toDelta().toJson());
+                                Navigator.of(context)
+                                    .pushReplacement(MaterialPageRoute(
+                                        builder: (context) => TextEditor(
+                                              content: data,
+                                            )));
+                              },
+                              icon: const Icon(Icons.edit),
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
               const SizedBox(height: 10),
@@ -223,7 +231,7 @@ class CreateBlogScreenState extends ConsumerState<CreateBlogScreen> {
               const SizedBox(height: 10),
               ElevatedButton(
                 onPressed: _pickImage,
-                style:  ButtonStyle(
+                style: ButtonStyle(
                   backgroundColor: WidgetStatePropertyAll(
                     Constants.backgroundColor2,
                   ),
@@ -237,7 +245,7 @@ class CreateBlogScreenState extends ConsumerState<CreateBlogScreen> {
               Align(
                 alignment: Alignment.bottomCenter,
                 child: ElevatedButton(
-                  style:  ButtonStyle(
+                  style: ButtonStyle(
                     minimumSize: const WidgetStatePropertyAll(
                       Size(300, 50),
                     ),
