@@ -1,5 +1,4 @@
 import 'package:blog_app/header.dart';
-import 'package:blog_app/users/screens/splash_screen/splash_screen.dart';
 
 void main() {
   setup().then((_) {

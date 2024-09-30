@@ -37,9 +37,9 @@ class _TextEditorState extends State<TextEditor> {
       appBar: AppBar(
         centerTitle: true,
         title: const Text("Text Editor"),
+        leadingWidth: 80,
         leading: CircleAvatar(
-          // backgroundColor: Colors.grey[200],
-          backgroundColor: Colors.white,
+          backgroundColor: Colors.grey[200],
           child: IconButton(
               color: Colors.black,
               onPressed: () {

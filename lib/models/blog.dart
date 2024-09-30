@@ -1,8 +1,10 @@
 import 'package:blog_app/header.dart';
 
 List<String> allCategories = [
+  "All Blogs",
   "Food blogs",
   "Travel blogs",
+  "Technology Blogs",
   "Health and fitness blogs",
   "Lifestyle blogs",
   "Fashion and beauty blogs",
@@ -31,6 +33,7 @@ class Blog {
   final String author;
   final String authorUid;
   final String imageUrl;
+  final dynamic timeStamp;
   List<String> categories = [];
   int views;
   int comments;
@@ -44,6 +47,7 @@ class Blog {
     required this.author,
     required this.authorUid,
     required this.imageUrl,
+    required this.timeStamp,
     this.categories = const [],
     this.views = 0,
     this.comments = 0,
@@ -64,6 +68,7 @@ class Blog {
       views: doc['views'] ?? 0,
       comments: doc['comments'] ?? 0,
       readingTime: doc['readingTime'] ?? 5,
+      timeStamp: doc['timeStamp'],
       viewedBy: List<String>.from(
           doc['viewedBy'] ?? []), // Convert Firestore array to List<String>
     );
@@ -78,6 +83,7 @@ class Blog {
       'author': author,
       'authorUid': authorUid,
       'imageUrl': imageUrl,
+      'timeStamp': timeStamp,
       'categories': categories,
       'views': views,
       'comments': comments,

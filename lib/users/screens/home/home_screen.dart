@@ -1,16 +1,4 @@
-import 'package:get_it/get_it.dart';
-import 'package:flutter/material.dart';
-import 'package:blog_app/models/blog.dart';
-import 'blog screens/create_blog_screen.dart';
-import 'blog screens/blog_detail_screen.dart';
-import 'package:blog_app/constants/constants.dart';
-import 'package:blog_app/models/user_provider.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:blog_app/users/widgets/blog_tile.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:blog_app/users/widgets/appbar_widget.dart';
-import 'package:blog_app/users/services/auth_services.dart';
-import 'package:blog_app/users/screens/home/drawer_screen.dart';
+import 'package:blog_app/header.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -25,15 +13,9 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
   final TextEditingController _searchController = TextEditingController();
   String _searchQuery = '';
   late AuthService _authServices;
-
-  Stream<List<Blog>> getBlogs() {
-    return FirebaseFirestore.instance
-        .collection('blogs')
-        .snapshots()
-        .map((snapshot) {
-      return snapshot.docs.map((doc) => Blog.fromDocument(doc)).toList();
-    });
-  }
+  Set<String> selectedCategory = {'All Blogs'}; // Default category filter
+  final List<String> _categories = allCategories;
+  String selectedSortOption = 'Newest'; // Default sort option
 
   @override
   void initState() {
@@ -41,6 +23,7 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
     ref
         .read(userDataNotifierProvider.notifier)
         .fetchUserData(_authServices.user?.uid);
+    print("selectedCategory: $selectedCategory");
     super.initState();
   }
 
@@ -79,7 +62,7 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
                     color: Color.fromARGB(255, 46, 75, 150),
                   ),
                   onPressed: () {
-                    // Implement filter functionality
+                    _showFilterModal();
                   },
                 ),
                 border: OutlineInputBorder(
@@ -105,15 +88,31 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
 
                 final blogs = snapshot.data?.docs ?? [];
 
-                // Filter blogs based on search query
                 final filteredBlogs = blogs
                     .where((blog) {
                       final title =
                           blog['title']?.toString().toLowerCase().trim() ?? '';
-                      return title.contains(_searchQuery.toLowerCase());
+                      final categories = blog['categories'] ?? ['All Blogs'];
+                      bool hasCommonItem = categories.any(
+                          (category) => selectedCategory.contains(category));
+                      bool condition =
+                          title.contains(_searchQuery.toLowerCase()) &&
+                              (hasCommonItem);
+                      return condition;
                     })
                     .map((doc) => Blog.fromDocument(doc))
                     .toList();
+
+                // sorting based on the selected filter
+                if (selectedSortOption == 'Most Viewed') {
+                  filteredBlogs.sort((a, b) => b.views.compareTo(a.views));
+                } else if (selectedSortOption == 'Newest') {
+                  filteredBlogs
+                      .sort((a, b) => b.timeStamp.compareTo(a.timeStamp));
+                } else if (selectedSortOption == 'Oldest') {
+                  filteredBlogs
+                      .sort((a, b) => a.timeStamp.compareTo(b.timeStamp));
+                }
 
                 if (filteredBlogs.isNotEmpty) {
                   return ListView.builder(
@@ -125,7 +124,7 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
                         leadingImage: blog.imageUrl,
                         title: blog.title,
                         author: blog.author,
-                        readingTime: blog.readingTime,
+                        timeStamp: blog.timeStamp,
                         views: blog.views,
                         comments: blog.comments,
                         ontap: () {
@@ -141,27 +140,7 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
                     },
                   );
                 } else {
-                  return Opacity(
-                    opacity: 0.6,
-                    child: Center(
-                      child: Column(
-                        children: [
-                          const SizedBox(
-                            height: 50,
-                          ),
-                          Image.asset(
-                            "assets/images/3d-casual-life-question-mark-icon-1.png",
-                            width: 200,
-                            // color: ,
-                          ),
-                          const SizedBox(
-                            height: 50,
-                          ),
-                          const Text('No blogs found'),
-                        ],
-                      ),
-                    ),
-                  );
+                  return noBlogFoundWidget();
                 }
               },
             ),
@@ -170,11 +149,14 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
       ),
       drawer: const DrawerScreen(selectedIndex: 0),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: const Color.fromARGB(255, 46, 75, 150),
+        backgroundColor: Constants.backgroundColor2,
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const CreateBlogScreen(content: "Edit Content",)),
+            MaterialPageRoute(
+                builder: (context) => const CreateBlogScreen(
+                      content: "Edit Content",
+                    )),
           );
         },
         child: const Icon(Icons.add, color: Colors.white),
@@ -182,24 +164,92 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
     );
   }
 
-  Widget listTile({required String title, required IconData icon}) {
-    return Container(
-      margin: const EdgeInsets.only(left: 20, bottom: 10),
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.horizontal(left: Radius.circular(50)),
-      ),
-      child: ListTile(
-        title: Text(
-          title,
-          style: TextStyle(
-              fontWeight: FontWeight.bold, color: Constants.drawerBackground),
-        ),
-        leading: Icon(
-          icon,
-          color: Constants.drawerBackground,
-        ),
-      ),
-    );
+  // filter modal
+  void _showFilterModal() {
+    showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return Container(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      'Select Category',
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                    TextButton(
+                        onPressed: () {
+                          setState(() {
+                            print("selectedCategory: $selectedCategory");
+                            Navigator.of(context).pop();
+                          });
+                        },
+                        child: const Text(
+                          "Done",
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        )),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        // Sort option section
+                        ListTile(
+                          title: const Text(
+                            'Sort by',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          trailing: DropdownButton<String>(
+                            value: selectedSortOption,
+                            onChanged: (String? newValue) {
+                              setState(() {
+                                selectedSortOption = newValue!;
+                              });
+                            },
+                            items: <String>['Newest', 'Oldest', 'Most Viewed']
+                                .map<DropdownMenuItem<String>>((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(value),
+                              );
+                            }).toList(),
+                          ),
+                        ),
+                        Wrap(
+                          spacing: 8.0,
+                          runSpacing: 4.0,
+                          children: _categories.map((category) {
+                            return FilterChip(
+                              label: Text(category),
+                              selected: selectedCategory.contains(category),
+                              onSelected: (bool isSelected) {
+                                setState(() {
+                                  if (isSelected) {
+                                    selectedCategory.add(category);
+                                  } else {
+                                    selectedCategory.remove(category);
+                                  }
+                                });
+                                print("selectedChips: $selectedCategory");
+                                Navigator.of(context).pop();
+                              },
+                            );
+                          }).toList(),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
+        });
   }
 }

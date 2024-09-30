@@ -1,6 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:blog_app/header.dart';
 
 class CommentSection extends StatefulWidget {
   final String blogId;
@@ -8,10 +6,10 @@ class CommentSection extends StatefulWidget {
   const CommentSection({super.key, required this.blogId});
 
   @override
-  _CommentSectionState createState() => _CommentSectionState();
+  CommentSectionState createState() => CommentSectionState();
 }
 
-class _CommentSectionState extends State<CommentSection> {
+class CommentSectionState extends State<CommentSection> {
   final TextEditingController _commentController = TextEditingController();
 
   // Function to add a comment and then update the comment count
@@ -36,8 +34,10 @@ class _CommentSectionState extends State<CommentSection> {
       // Call the parent widget to update the comment count
       await _updateCommentCount();
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to post comment: $e')),
+      snackbarToast(
+        context: context,
+        title: "Failed to post comment: $e",
+        icon: Icons.error,
       );
     }
   }
