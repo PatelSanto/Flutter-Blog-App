@@ -1,6 +1,7 @@
-import 'package:blog_app/users/screens/home/blog%20screens/create_blog_screen.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_quill/flutter_quill.dart';
+import 'dart:convert';
+
+import 'package:blog_app/header.dart';
+import 'package:flutter_quill/flutter_quill.dart' as quill;
 
 class TextEditor extends StatefulWidget {
   const TextEditor({super.key, required this.content});
@@ -11,24 +12,13 @@ class TextEditor extends StatefulWidget {
 }
 
 class _TextEditorState extends State<TextEditor> {
-  final QuillController _controller = QuillController.basic();
-  // final _editorFocusNode = FocusNode();
-  // final _editorScrollController = ScrollController();
-  // var _isReadOnly = false;
-  // var _isSpellcheckerActive = false;
+  final quill.QuillController _controller = quill.QuillController.basic();
 
   @override
   void initState() {
-    // final json = jsonDecode('{"Content":${widget.content}}');
-    // _controller.document = Document.fromJson(json);
-    // _controller.document = widget.content.document;
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
+    _controller.document = Document.fromJson(jsonDecode(widget.content));
+    _controller.readOnly = false;
   }
 
   @override
@@ -43,12 +33,12 @@ class _TextEditorState extends State<TextEditor> {
           child: IconButton(
               color: Colors.black,
               onPressed: () {
-                // final json = jsonEncode(_controller.document.toDelta().toJson());
-                // _controller.document = Document.fromJson(json);
+                final String data =
+                    jsonEncode(_controller.document.toDelta().toJson());
+                print("Data: $data");
                 Navigator.of(context).pushReplacement(
                   MaterialPageRoute(
-                    builder: (context) => CreateBlogScreen(
-                        content: _controller.document.toPlainText()),
+                    builder: (context) => CreateBlogScreen(content: data),
                   ),
                 );
               },

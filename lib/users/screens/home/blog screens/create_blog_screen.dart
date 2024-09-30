@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:blog_app/header.dart';
 
 class CreateBlogScreen extends ConsumerStatefulWidget {
@@ -9,11 +11,11 @@ class CreateBlogScreen extends ConsumerStatefulWidget {
 }
 
 class CreateBlogScreenState extends ConsumerState<CreateBlogScreen> {
+  final QuillController _controller = QuillController.basic();
+
   final TextEditingController _titleController = TextEditingController();
-  // final TextEditingController _contentController = TextEditingController();
   final TextEditingController _readingTimeController = TextEditingController();
   final TextEditingController _authorController = TextEditingController();
-  final QuillController _controller = QuillController.basic();
   File? _selectedImage;
   final Set<String> _selectedCategories = {"All Blogs"};
   final List<String> categories = allCategories;
@@ -21,9 +23,12 @@ class CreateBlogScreenState extends ConsumerState<CreateBlogScreen> {
   bool isLoading = false;
 
   @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
+  void initState() {
+    super.initState();
+    _controller.document = Document.fromJson(jsonDecode(widget.content));
+    _controller.readOnly = true;
+    final String data = jsonEncode(_controller.document.toDelta().toJson());
+    print("Data: $data");
   }
 
   Future<void> _pickImage() async {
@@ -125,7 +130,7 @@ class CreateBlogScreenState extends ConsumerState<CreateBlogScreen> {
             Navigator.pop(context);
           },
         ),
-        backgroundColor: const Color.fromARGB(255, 46, 75, 150),
+        backgroundColor: Constants.backgroundColor2,
         foregroundColor: Colors.white,
         title: const Text('Create New Blog'),
       ),
@@ -138,6 +143,44 @@ class CreateBlogScreenState extends ConsumerState<CreateBlogScreen> {
               const SizedBox(
                 height: 10,
               ),
+              Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.blueGrey),
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                child: Stack(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: QuillEditor.basic(
+                        controller: _controller,
+                        configurations: const QuillEditorConfigurations(),
+                      ),
+                    ),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: IconButton(
+                          onPressed: () {
+                            final String data = jsonEncode(
+                                _controller.document.toDelta().toJson());
+                            Navigator.of(context)
+                                .pushReplacement(MaterialPageRoute(
+                                    builder: (context) => TextEditor(
+                                          content: data,
+                                        )));
+                          },
+                          icon: const Icon(Icons.edit),
+                          color: Constants.backgroundColor2,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 10),
               TextField(
                 controller: _titleController,
                 decoration: const InputDecoration(
@@ -162,46 +205,6 @@ class CreateBlogScreenState extends ConsumerState<CreateBlogScreen> {
                 ),
               ),
               const SizedBox(height: 10),
-              // TextField(
-              //   controller: _contentController,
-              //   decoration: const InputDecoration(
-              //     labelText: 'Content',
-              //     border: OutlineInputBorder(),
-              //   ),
-              //   maxLines: 6,
-              // ),
-              Container(
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.blueGrey),
-                  borderRadius: BorderRadius.circular(5),
-                ),
-                child: Stack(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(widget.content),
-                    ),
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: IconButton(
-                          onPressed: () {
-                            Navigator.of(context)
-                                .pushReplacement(MaterialPageRoute(
-                                    builder: (context) => TextEditor(
-                                          content: widget.content,
-                                        )));
-                          },
-                          icon: const Icon(Icons.edit),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 10),
               TextField(
                 controller: _readingTimeController,
                 decoration: const InputDecoration(
@@ -220,13 +223,13 @@ class CreateBlogScreenState extends ConsumerState<CreateBlogScreen> {
               const SizedBox(height: 10),
               ElevatedButton(
                 onPressed: _pickImage,
-                style: const ButtonStyle(
+                style:  ButtonStyle(
                   backgroundColor: WidgetStatePropertyAll(
-                    Color.fromARGB(255, 46, 75, 150),
+                    Constants.backgroundColor2,
                   ),
                 ),
                 child: const Text(
-                  'Select Image',
+                  'Select Header Image',
                   style: TextStyle(color: Colors.white),
                 ),
               ),
@@ -234,12 +237,12 @@ class CreateBlogScreenState extends ConsumerState<CreateBlogScreen> {
               Align(
                 alignment: Alignment.bottomCenter,
                 child: ElevatedButton(
-                  style: const ButtonStyle(
-                    minimumSize: WidgetStatePropertyAll(
+                  style:  ButtonStyle(
+                    minimumSize: const WidgetStatePropertyAll(
                       Size(300, 50),
                     ),
                     backgroundColor: WidgetStatePropertyAll(
-                      Color.fromARGB(255, 46, 75, 150),
+                      Constants.backgroundColor2,
                     ),
                   ),
                   onPressed: _uploadBlog,

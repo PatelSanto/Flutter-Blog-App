@@ -154,8 +154,8 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => const CreateBlogScreen(
-                      content: "Edit Content",
+                builder: (context) => CreateBlogScreen(
+                      content: Constants.defaultText,
                     )),
           );
         },

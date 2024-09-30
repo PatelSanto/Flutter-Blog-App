@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:intl/intl.dart';
 
 import 'comment_section.dart';
@@ -17,6 +19,7 @@ class BlogDetailScreen extends ConsumerStatefulWidget {
 }
 
 class _BlogDetailScreenState extends ConsumerState<BlogDetailScreen> {
+  final QuillController _controller = QuillController.basic();
   final FirebaseAuth _auth = FirebaseAuth.instance;
   bool isFavorite = false;
 
@@ -25,6 +28,8 @@ class _BlogDetailScreenState extends ConsumerState<BlogDetailScreen> {
     super.initState();
     _incrementViews();
     _updateCommentCount();
+    _controller.document = Document.fromJson(jsonDecode(widget.blog.content));
+    _controller.readOnly = true;
   }
 
   // Function to generate and download PDF
@@ -181,9 +186,11 @@ class _BlogDetailScreenState extends ConsumerState<BlogDetailScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             widget.blog.imageUrl.isNotEmpty
-                ? ClipRRect(
-                    borderRadius: BorderRadius.circular(8.0),
-                    child: Image.network(widget.blog.imageUrl),
+                ? Align(
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(8.0),
+                      child: Image.network(widget.blog.imageUrl),
+                    ),
                   )
                 : const Placeholder(fallbackHeight: 200),
             const SizedBox(height: 10),
@@ -200,13 +207,18 @@ class _BlogDetailScreenState extends ConsumerState<BlogDetailScreen> {
               ),
             ),
             const SizedBox(height: 20),
-            Text(widget.blog.content,
-                style: Theme.of(context).textTheme.bodyLarge),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: QuillEditor.basic(
+                controller: _controller,
+                configurations: const QuillEditorConfigurations(),
+              ),
+            ),
             const SizedBox(height: 20),
             Align(
               alignment: Alignment.centerRight,
               child: Text(
-                'At, ${formatTimestamp(widget.blog.timeStamp,format: "MMMM d, yyyy")}',
+                'Uploaded At, ${formatTimestamp(widget.blog.timeStamp, format: "MMMM d, yyyy")}',
                 style: Theme.of(context).textTheme.labelLarge,
               ),
             ),
@@ -224,7 +236,7 @@ class _BlogDetailScreenState extends ConsumerState<BlogDetailScreen> {
               ),
             ),
             const SizedBox(height: 20),
-
+        
             CommentSection(blogId: widget.blog.id),
           ],
         ),
