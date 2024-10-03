@@ -4,7 +4,8 @@ class Constants {
   static Color backgroundColor = const Color.fromARGB(255, 144, 202, 249);
   static Color backgroundColor2 = const Color.fromARGB(255, 46, 75, 150);
   static Color primaryColor = const Color.fromARGB(255, 141, 107, 198);
-
+  static String defaultText =
+      r'[{"insert":"edit content...","attributes":{"color":"#FF757575"}},{"insert":"\n"}]';
 
   static RegExp emailValidationRegex =
       RegExp(r"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$");

@@ -15,9 +15,10 @@ Widget blogTile({
   return Card(
     margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
     child: ListTile(
+      
       leading: leadingImage.isNotEmpty
           ? ClipRRect(
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(5),
               child: Image.network(
                 leadingImage,
                 width: 100,
