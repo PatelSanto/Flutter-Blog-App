@@ -2,6 +2,10 @@
 
 This project is a portfolio showcase demonstrating my skills in mobile app development using the Flutter framework and Dart. It incorporates modern state management with Riverpod and Firebase integration for authentication, database, and storage. The app allows users to create, browse, and manage blogs with a rich feature set, simulating a full-fledged blogging platform.
 
+## Download APK
+
+[Download the latest release APK](https://anonymfile.com/jQ14l/app-release.apk)
+
 ## Project Highlights:
 
 - **User Authentication**: 
