@@ -30,6 +30,17 @@ class DatabaseService {
   }
 }
 
+Future<bool> checkExistingUser(String uid) {
+  CollectionReference blogsRef = FirebaseFirestore.instance.collection('users');
+  return blogsRef.doc(uid).get().then((doc) {
+    if (doc.exists) {
+      return true;
+    } else {
+      return false;
+    }
+  });
+}
+
 Stream<List<Blog>> getUserBlogs(String? uid) {
   CollectionReference blogsRef = FirebaseFirestore.instance.collection('blogs');
   return blogsRef
@@ -59,7 +70,7 @@ Stream<List<Blog>>? getFavoriteBlogs(UserData userData) {
   try {
     CollectionReference blogsRef =
         FirebaseFirestore.instance.collection('blogs');
-   blogs = blogsRef
+    blogs = blogsRef
         .where('id', whereIn: userData.favoriteBlogs)
         .snapshots()
         .map((snapshot) {

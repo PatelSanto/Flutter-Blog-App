@@ -44,9 +44,7 @@ class AuthService {
     try {
       final credential = await _firebaseAuth.signInWithEmailAndPassword(
           email: email, password: password);
-      final sp = await SharedPreferences.getInstance();
       if (credential.user != null) {
-        await sp.setBool("GoogleLogin", false);
         user = credential.user;
         return true;
       }
@@ -64,9 +62,7 @@ class AuthService {
     try {
       final credential = await _firebaseAuth.createUserWithEmailAndPassword(
           email: email, password: password);
-      final sp = await SharedPreferences.getInstance();
       if (credential.user != null) {
-        await sp.setBool("GoogleLogin", false);
         user = credential.user;
         // go to HomeScreen
         return true;
@@ -80,10 +76,10 @@ class AuthService {
   }
 
   Future<bool> handleGoogleSignIn(
-      StorageService storageServices, DatabaseService databaseServices) async {
+    DatabaseService databaseServices,
+  ) async {
     print("handleGoogleSignIn function called");
     try {
-      final sp = await SharedPreferences.getInstance();
       final userCredential = await signInWithGoogle();
       final user = userCredential?.user;
       final uid = user?.uid;
@@ -92,28 +88,23 @@ class AuthService {
       final name = user?.displayName;
       print("UID: $uid, \nemail: $email, \nname: $name, \npfpic: $pfpicUrl");
 
+      bool userExists = await checkExistingUser(uid!);
+
       if (user != null) {
-        if (await sp.setBool("GoogleLogin", true)) {
-          print("google login : ${sp.getBool("GoogleLogin")}");
-          print(sp.getKeys());
-
-          print("--------------Download Url: $pfpicUrl :--------------");
-          if (pfpicUrl != null) {
-            await databaseServices.createUserProfile(
+        if (!userExists) {
+          await databaseServices.createUserProfile(
               userProfile: UserData(
-                  uid: uid, name: name, pfpURL: pfpicUrl, email: email),
-            );
-          } else {
-            throw Exception("Unable to Upload user profile picture");
-          }
-
-          this.user = userCredential?.user;
-          // go to HomeScreen
-          print('Signed in as: ${user.displayName}');
-          return true;
-        } else {
-          return false;
+            uid: uid,
+            name: name,
+            pfpURL: pfpicUrl,
+            email: email,
+          ));
         }
+
+        this.user = userCredential?.user;
+        // go to HomeScreen
+        print('Signed in as: ${user.displayName}');
+        return true;
       } else {
         print("Gooogle signin failed");
         return false;
@@ -190,11 +181,8 @@ class AuthService {
   Future<void> googleSignOut() async {
     print("googleSignOut function called");
     try {
-      final sp = await SharedPreferences.getInstance();
-      sp.clear();
       await _googleSignIn.signOut();
       await _firebaseAuth.signOut();
-      await sp.setBool("GoogleLogin", false);
       print("Signed out of Google");
     } catch (e) {
       print("Error: $e");

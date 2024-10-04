@@ -23,10 +23,9 @@ class _SignupScreenState extends State<SignupScreen> {
   bool formvalidation = false;
   File? selectedImage;
 
-  bool isLoadingLogin = false;
   bool isLoadingSignup = false;
   bool viewPassword = false;
-  // bool isLoadingGoogle = false;
+  bool isLoadingGoogle = false;
 
   @override
   void initState() {
@@ -197,7 +196,7 @@ class _SignupScreenState extends State<SignupScreen> {
         decoration: InputDecoration(
           labelText: 'Password',
           hintText: "Enter your password",
-          border: OutlineInputBorder(),
+          border:const OutlineInputBorder(),
           suffixIcon: IconButton(
               onPressed: () {
                 setState(() {
@@ -284,7 +283,6 @@ class _SignupScreenState extends State<SignupScreen> {
               file: selectedImage!,
               uid: _authService.user!.uid,
             );
-            print("--------------Download Url: $pfpicUrl :--------------");
           }
           await _databaseServices
               .createUserProfile(
