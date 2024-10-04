@@ -1,15 +1,4 @@
-import 'package:blog_app/admin/admin_home.dart';
-import 'package:blog_app/admin/admin_login.dart';
-import 'package:blog_app/models/user_provider.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:blog_app/models/user.dart';
-import 'package:blog_app/users/screens/auth/auth%20screens/auth.dart';
-import 'package:blog_app/users/screens/home/home_screen.dart';
-import 'package:blog_app/users/services/database_services.dart';
-import 'package:blog_app/users/services/storage_services.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:blog_app/header.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -26,7 +15,7 @@ class AuthService {
         stream: _firebaseAuth.authStateChanges(),
         builder: (BuildContext context, AsyncSnapshot<User?> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            // Loader() splase screen
+            // return const SplashScreen();
           }
           if (snapshot.hasData) {
             // User is signed in
@@ -37,11 +26,13 @@ class AuthService {
                 .fetchUserData(user?.uid);
             print('User Firebase: ${user?.email}');
 
-            return kIsWeb ? const AdminHome() : const HomeScreen();
+            // return kIsWeb ? const AdminHome() : const HomeScreen();
+            return const HomeScreen();
           } else {
             // User is not signed in
             print("User is not signed in: to auth screen");
-            return kIsWeb ? const AdminLoginPage() : const Auth();
+            // return kIsWeb ? const AdminLoginPage() : const Auth();
+            return const Auth();
           }
         },
       );
@@ -180,7 +171,7 @@ class AuthService {
                     logout();
                     Navigator.pushNamedAndRemoveUntil(
                       context,
-                      kIsWeb ? "/admin_login" : "/auth",
+                      "/auth",
                       (Route<dynamic> route) =>
                           false, // This removes all the previous routes
                     );

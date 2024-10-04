@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+import 'package:blog_app/header.dart';
+import 'package:share_plus/share_plus.dart';
 
 Widget noBlogFoundWidget() {
   return SingleChildScrollView(
@@ -24,4 +25,16 @@ Widget noBlogFoundWidget() {
       ),
     ),
   );
+}
+
+Future shareFile(File filename) async {
+  try {
+    final File file = filename;
+    String path = file.path;
+    print("sharing file:$path, file exists: ${file.existsSync()}");
+    Share.shareXFiles([XFile(path)]);
+    print("done sharing");
+  } catch (error) {
+    print("error while sharing: $error");
+  }
 }

@@ -1,12 +1,12 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
 
 import 'comment_section.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter/services.dart' show rootBundle;
-import 'package:permission_handler/permission_handler.dart';
 import 'package:blog_app/header.dart';
 
 class BlogDetailScreen extends ConsumerStatefulWidget {
@@ -22,6 +22,7 @@ class _BlogDetailScreenState extends ConsumerState<BlogDetailScreen> {
   final QuillController _controller = QuillController.basic();
   final FirebaseAuth _auth = FirebaseAuth.instance;
   bool isFavorite = false;
+  bool isShareLoading = false;
 
   @override
   void initState() {
@@ -34,6 +35,9 @@ class _BlogDetailScreenState extends ConsumerState<BlogDetailScreen> {
 
   // Function to generate and download PDF
   Future<void> _downloadBlogAsPDF(BuildContext context) async {
+    setState(() {
+      isShareLoading = true;
+    });
     final pdf = pw.Document();
 
     // Load custom font
@@ -61,29 +65,25 @@ class _BlogDetailScreenState extends ConsumerState<BlogDetailScreen> {
       ),
     );
 
-    // Request storage permission
-    if (await Permission.storage.request().isGranted) {
-      // Get the Downloads directory
-      Directory? downloadsDirectory;
-      if (Platform.isAndroid) {
-        downloadsDirectory = Directory('/storage/emulated/0/Download');
-      } else {
-        downloadsDirectory = await getDownloadsDirectory();
-      }
-
-      final filePath = "${downloadsDirectory?.path}/${widget.blog.title}.pdf";
-
-      final file = File(filePath);
-      await file.writeAsBytes(await pdf.save());
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Blog downloaded to $filePath')),
-      );
+    Directory? downloadsDirectory;
+    if (Platform.isAndroid) {
+      downloadsDirectory = await getApplicationDocumentsDirectory();
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Storage permission not granted.')),
-      );
+      downloadsDirectory = await getDownloadsDirectory();
     }
+
+    final filePath = "${downloadsDirectory?.path}/${widget.blog.id}.pdf";
+
+    final file = File(filePath);
+    await file.writeAsBytes(await pdf.save());
+    snackbarToast(
+        context: context,
+        title: "Blog downloaded to $filePath",
+        icon: Icons.done_all_rounded);
+    await shareFile(file);
+    setState(() {
+      isShareLoading = false;
+    });
   }
 
   // Function to increment views only once per user
@@ -174,7 +174,15 @@ class _BlogDetailScreenState extends ConsumerState<BlogDetailScreen> {
             ),
           ),
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              kIsWeb
+                  ? snackbarToast(
+                      context: context,
+                      title:
+                          "This Function is Only available in Mobile Applications",
+                      icon: Icons.error_rounded)
+                  : _downloadBlogAsPDF(context);
+            },
             icon: const Icon(Icons.share),
           ),
           const SizedBox(width: 20),
@@ -190,6 +198,7 @@ class _BlogDetailScreenState extends ConsumerState<BlogDetailScreen> {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(8.0),
                       child: Image.network(widget.blog.imageUrl),
+                      // child: Image(image: NetworkImage(widget.blog.imageUrl),),
                     ),
                   )
                 : const Placeholder(fallbackHeight: 200),
@@ -223,20 +232,20 @@ class _BlogDetailScreenState extends ConsumerState<BlogDetailScreen> {
               ),
             ),
             // Download button for PDF
-            ElevatedButton.icon(
-              style: ButtonStyle(
-                  backgroundColor: WidgetStateProperty.all(Colors.lightBlue),
-                  iconColor: WidgetStateProperty.all(Colors.white)),
-              onPressed: () => _downloadBlogAsPDF(context),
-              icon: const Icon(Icons.download),
-              label: const Text(
-                'Download Blog as PDF',
-                style:
-                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-              ),
-            ),
+            // ElevatedButton.icon(
+            //   style: ButtonStyle(
+            //       backgroundColor: WidgetStateProperty.all(Colors.lightBlue),
+            //       iconColor: WidgetStateProperty.all(Colors.white)),
+            //   onPressed: () => _downloadBlogAsPDF(context),
+            //   icon: const Icon(Icons.download),
+            //   label: const Text(
+            //     'Download Blog as PDF',
+            //     style:
+            //         TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+            //   ),
+            // ),
             const SizedBox(height: 20),
-        
+
             CommentSection(blogId: widget.blog.id),
           ],
         ),

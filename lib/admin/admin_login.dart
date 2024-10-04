@@ -26,15 +26,6 @@ class Menu extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          // Row(
-          //   mainAxisAlignment: MainAxisAlignment.start,
-          //   children: [
-          //     _menuItem(title: 'Home'),
-          //     _menuItem(title: 'About us'),
-          //     _menuItem(title: 'Contact us'),
-          //     _menuItem(title: 'Help'),
-          //   ],
-          // ),
           Row(
             children: [
               _menuItem(title: 'Sign In', isActive: true),
@@ -149,7 +140,6 @@ class BodyState extends State<Body> {
     final size = MediaQuery.of(context).size;
     return SizedBox(
       height: size.height * .9,
-      // width: (size.width < 1300) ? 360 : size.width,
       child: ListView(
         scrollDirection: (size.width < 1300) ? Axis.vertical : Axis.horizontal,
         children: [
@@ -222,15 +212,6 @@ class BodyState extends State<Body> {
                 borderRadius: BorderRadius.circular(15),
               ),
             ),
-            // Validate the email
-            // validator: (value) {
-            //   if (value == null || value.isEmpty) {
-            //     return 'Please enter your email';
-            //   } else if (!emailRegExp.hasMatch(value)) {
-            //     return 'Enter a valid email address';
-            //   }
-            //   return null;
-            // },
           ),
           const SizedBox(height: 30),
           TextFormField(
@@ -264,28 +245,7 @@ class BodyState extends State<Body> {
                 borderRadius: BorderRadius.circular(15),
               ),
             ),
-            // Validate password on input
-            // onChanged: (value) {
-            //   setState(() {
-            //     validatePassword(value);
-            //   });
-            // },
           ),
-          // Display password errors
-          // if (passwordErrors.isNotEmpty)
-          //   Padding(
-          //     padding: const EdgeInsets.only(top: 10),
-          //     child: Column(
-          //       crossAxisAlignment: CrossAxisAlignment.start,
-          //       children: passwordErrors
-          //           .map((error) => Text(
-          //                 error,
-          //                 style:
-          //                     const TextStyle(color: Colors.red, fontSize: 12),
-          //               ))
-          //           .toList(),
-          //     ),
-          //   ),
           const SizedBox(height: 40),
           Container(
             decoration: BoxDecoration(
@@ -344,16 +304,6 @@ class BodyState extends State<Body> {
             ],
           ),
           const SizedBox(height: 40),
-          // Row(
-          //   children: [
-          //     Expanded(
-          //       child: Divider(
-          //         color: Colors.grey[300],
-          //         height: 50,
-          //       ),
-          //     ),
-          //   ],
-          // ),
         ],
       ),
     );
@@ -375,9 +325,11 @@ class BodyState extends State<Body> {
             title: "Login successfully",
             icon: Icons.login,
           );
-          Navigator.pushReplacementNamed(
-            context,
-            "/admin_home",
+          await _authService.logout();
+          Navigator.pushNamedAndRemoveUntil(
+            context, "/admin_home",
+            (Route<dynamic> route) =>
+                false, // This removes all the previous routes
           );
           setState(() {
             isLoadingLogin = false;

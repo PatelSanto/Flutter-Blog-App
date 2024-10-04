@@ -96,7 +96,7 @@ class Auth extends StatelessWidget {
           onPressed: () {
             snackbarToast(
                 context: context,
-                title: "This function is still in development!",
+                title: "This Functionality is not available!",
                 icon: Icons.error);
           },
           style: const AuthButtonStyle(

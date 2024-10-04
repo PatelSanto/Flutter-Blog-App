@@ -160,9 +160,10 @@ class _LoginScreenState extends State<LoginScreen> {
             title: "Login successfully",
             icon: Icons.login,
           );
+
           Navigator.pushNamedAndRemoveUntil(
             context,
-            "/home",
+            (email.text == "admin@gmail.com") ? "/admin_home" : "/home",
             (Route<dynamic> route) =>
                 false, // This removes all the previous routes
           );

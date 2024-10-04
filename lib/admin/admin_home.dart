@@ -33,7 +33,6 @@ class _AdminHomeState extends State<AdminHome> {
           IconButton(
             icon: const Icon(Icons.logout),
             onPressed: () {
-              // Implement logout functionality here
               _authService.logoutDilog(context);
             },
           ),
@@ -69,61 +68,6 @@ class _AdminHomeState extends State<AdminHome> {
     );
   }
 }
-
-// class AdminHome extends StatelessWidget {
-//   const AdminHome({super.key});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         centerTitle: true,
-//         title: const Text(
-//           'Admin Dashboard',
-//           style: TextStyle(
-//               fontWeight: FontWeight.bold, color: Colors.brown, fontSize: 25),
-//         ),
-//         backgroundColor: Colors.purple[100],
-//         actions: [
-//           IconButton(
-//             icon: const Icon(Icons.logout),
-//             onPressed: () {
-//               // Implement logout functionality here
-//               _authService.logoutDilog(context);
-//             },
-//           ),
-//         ],
-//       ),
-//       body: SingleChildScrollView(
-//         child: Padding(
-//           padding: const EdgeInsets.all(16.0),
-//           child: Column(
-//             children: [
-//               DashboardCard(
-//                 title: 'Manage Blogs',
-//                 icon: Icons.article,
-//                 color: Colors.orangeAccent,
-//                 onTap: () => Navigator.push(
-//                   context,
-//                   MaterialPageRoute(builder: (context) => ManageBlogsPage()),
-//                 ),
-//               ),
-//               DashboardCard(
-//                 title: 'Manage Users',
-//                 icon: Icons.people,
-//                 color: Colors.greenAccent,
-//                 onTap: () => Navigator.push(
-//                   context,
-//                   MaterialPageRoute(builder: (context) => ManageUsersPage()),
-//                 ),
-//               ),
-//             ],
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }
 
 class DashboardCard extends StatelessWidget {
   final String title;

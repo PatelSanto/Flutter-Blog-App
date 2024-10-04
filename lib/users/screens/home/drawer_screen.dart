@@ -1,10 +1,12 @@
 import 'dart:ui';
+import 'package:blog_app/users/services/auth_services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:blog_app/admin/admin_login.dart';
 import 'package:blog_app/users/screens/home/home_screen.dart';
 import 'package:blog_app/users/screens/home/category%20screens/categories_screen.dart';
 import 'package:blog_app/users/screens/auth/user%20profile%20screens/myblogs_screen.dart';
+import 'package:get_it/get_it.dart';
 
 class DrawerScreen extends StatefulWidget {
   final int selectedIndex; // Accept a selected index
@@ -16,11 +18,13 @@ class DrawerScreen extends StatefulWidget {
 }
 
 class _DrawerScreenState extends State<DrawerScreen> {
+  late AuthService _authService;
   late int _selectedIndex;
 
   @override
   void initState() {
     super.initState();
+    _authService = GetIt.instance.get<AuthService>();
     _selectedIndex = widget.selectedIndex; // Initialize the selected index
   }
 
@@ -74,6 +78,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
                 icon: Icons.admin_panel_settings_outlined,
                 isSelected: _selectedIndex == 4, // Highlight if selected
                 onTap: () {
+                  _authService.logoutDilog(context);
                   _navigateToPage(context, 4, const AdminLoginPage());
                 },
               ),
