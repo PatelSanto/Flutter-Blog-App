@@ -150,7 +150,7 @@ class CreateBlogScreenState extends ConsumerState<CreateBlogScreen> {
                     borderRadius: BorderRadius.circular(5),
                   ),
                   constraints: const BoxConstraints(
-                    maxHeight: 300,
+                    maxHeight: 250,
                   ),
                   child: Stack(
                     children: [

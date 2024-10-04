@@ -1,6 +1,6 @@
 import 'package:blog_app/header.dart';
 
-class CommentSection extends StatefulWidget {
+class CommentSection extends ConsumerStatefulWidget {
   final String blogId;
 
   const CommentSection({super.key, required this.blogId});
@@ -9,7 +9,7 @@ class CommentSection extends StatefulWidget {
   CommentSectionState createState() => CommentSectionState();
 }
 
-class CommentSectionState extends State<CommentSection> {
+class CommentSectionState extends ConsumerState<CommentSection> {
   final TextEditingController _commentController = TextEditingController();
 
   // Function to add a comment and then update the comment count
@@ -17,6 +17,8 @@ class CommentSectionState extends State<CommentSection> {
     if (commentText.isEmpty) return;
 
     try {
+      UserData userData = ref.watch(userDataNotifierProvider);
+
       // Add comment to the 'comments' sub-collection inside the blog document
       await FirebaseFirestore.instance
           .collection('blogs')
@@ -24,7 +26,9 @@ class CommentSectionState extends State<CommentSection> {
           .collection('comments')
           .add({
         'comment': commentText,
-        'userId': FirebaseAuth.instance.currentUser?.uid,
+        // 'userId': FirebaseAuth.instance.currentUser?.uid,
+        'userId': userData.uid,
+        'userName': userData.name,
         'timestamp': FieldValue.serverTimestamp(),
       });
 
@@ -118,7 +122,7 @@ class CommentSectionState extends State<CommentSection> {
                   child: ListTile(
                     title: Text(data['comment'] ?? ''),
                     subtitle:
-                        Text('Posted by ${data['userId'] ?? "Anonymous"}'),
+                        Text('Posted by ${data['userName'] ?? "Anonymous"}'),
                   ),
                 );
               }).toList(),

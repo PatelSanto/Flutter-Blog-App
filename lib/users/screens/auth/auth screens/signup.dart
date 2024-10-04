@@ -25,6 +25,7 @@ class _SignupScreenState extends State<SignupScreen> {
 
   bool isLoadingLogin = false;
   bool isLoadingSignup = false;
+  bool viewPassword = false;
   // bool isLoadingGoogle = false;
 
   @override
@@ -191,11 +192,24 @@ class _SignupScreenState extends State<SignupScreen> {
       margin: const EdgeInsets.symmetric(vertical: 10),
       child: TextFormField(
         controller: password,
-        obscureText: true,
-        decoration: const InputDecoration(
+        obscureText: !viewPassword,
+        
+        decoration: InputDecoration(
           labelText: 'Password',
           hintText: "Enter your password",
           border: OutlineInputBorder(),
+          suffixIcon: IconButton(
+              onPressed: () {
+                setState(() {
+                  viewPassword = !viewPassword;
+                });
+              },
+              icon: Icon(
+                (viewPassword)
+                    ? Icons.visibility
+                    : Icons.visibility_off_outlined,
+                color: Colors.grey,
+              )),
         ),
         onChanged: (value) {
           formValidation();

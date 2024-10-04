@@ -2,7 +2,9 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
-
+// ignore: unnecessary_import
+import 'package:flutter/material.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 import 'comment_section.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:path_provider/path_provider.dart';
@@ -183,7 +185,9 @@ class _BlogDetailScreenState extends ConsumerState<BlogDetailScreen> {
                       icon: Icons.error_rounded)
                   : _downloadBlogAsPDF(context);
             },
-            icon: const Icon(Icons.share),
+            icon: (isShareLoading)
+                ? const CircularProgressIndicator.adaptive()
+                : const Icon(Icons.share),
           ),
           const SizedBox(width: 20),
         ],
@@ -193,12 +197,12 @@ class _BlogDetailScreenState extends ConsumerState<BlogDetailScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            autherDetails(widget.blog.authorUid),
             widget.blog.imageUrl.isNotEmpty
                 ? Align(
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(8.0),
                       child: Image.network(widget.blog.imageUrl),
-                      // child: Image(image: NetworkImage(widget.blog.imageUrl),),
                     ),
                   )
                 : const Placeholder(fallbackHeight: 200),
@@ -207,7 +211,6 @@ class _BlogDetailScreenState extends ConsumerState<BlogDetailScreen> {
               widget.blog.title,
               style: Theme.of(context).textTheme.headlineMedium,
             ),
-            // const SizedBox(height: 10),
             Align(
               alignment: Alignment.centerRight,
               child: Text(
@@ -231,21 +234,7 @@ class _BlogDetailScreenState extends ConsumerState<BlogDetailScreen> {
                 style: Theme.of(context).textTheme.labelLarge,
               ),
             ),
-            // Download button for PDF
-            // ElevatedButton.icon(
-            //   style: ButtonStyle(
-            //       backgroundColor: WidgetStateProperty.all(Colors.lightBlue),
-            //       iconColor: WidgetStateProperty.all(Colors.white)),
-            //   onPressed: () => _downloadBlogAsPDF(context),
-            //   icon: const Icon(Icons.download),
-            //   label: const Text(
-            //     'Download Blog as PDF',
-            //     style:
-            //         TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-            //   ),
-            // ),
             const SizedBox(height: 20),
-
             CommentSection(blogId: widget.blog.id),
           ],
         ),
@@ -265,5 +254,84 @@ class _BlogDetailScreenState extends ConsumerState<BlogDetailScreen> {
   String formatTimestamp(Timestamp timestamp, {String format = 'yyyy-MM-dd'}) {
     DateTime dateTime = timestamp.toDate();
     return DateFormat(format).format(dateTime);
+  }
+
+  FutureBuilder autherDetails(String uid) {
+    bool waiting = false;
+    return FutureBuilder(
+      future: getUserDetailsFromUid(uid),
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          waiting = true;
+        } else {
+          waiting = false;
+        }
+
+        if (snapshot.hasError) {
+          return const SizedBox();
+        }
+
+        if (snapshot.hasData) {
+          final UserData data = snapshot.data;
+          return Skeletonizer(
+            enabled: waiting,
+            child: Container(
+              padding: const EdgeInsets.all(10),
+              margin: const EdgeInsets.only(bottom: 15),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(40),
+                color: Colors.grey[200],
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  SizedBox(
+                    child: Row(
+                      children: [
+                        CircleAvatar(
+                          radius: 30,
+                          backgroundColor:
+                              (!waiting) ? Colors.lightBlue[200] : null,
+                          child: CircleAvatar(
+                            radius: 27,
+                            backgroundImage: NetworkImage(
+                                data.pfpURL ?? "assets/images/profile.jpg"),
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        Text(
+                          data.name ?? "Anonymous",
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 18,
+                            color: Constants.backgroundColor2,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    child: OutlinedButton(
+                      onPressed: () {
+                        // Navigator.pop(context);
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => UserProfileScreen(
+                                      userId: data.uid ?? "",
+                                    )));
+                      },
+                      child: const Text("View Profile"),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        } else {
+          return const SizedBox();
+        }
+      },
+    );
   }
 }

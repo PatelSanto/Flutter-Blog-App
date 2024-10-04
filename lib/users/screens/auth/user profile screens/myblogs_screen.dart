@@ -132,9 +132,14 @@ class _MyBlogsScreenState extends ConsumerState<MyBlogsScreen> {
       onPressed: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => CreateBlogScreen(content: Constants.defaultText,)),
+          MaterialPageRoute(
+              builder: (context) => CreateBlogScreen(
+                    content: Constants.defaultText,
+                  )),
         );
       },
+      backgroundColor: Constants.backgroundColor2,
+      foregroundColor: Colors.white,
       child: const Icon(Icons.add),
     );
   }
