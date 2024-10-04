@@ -11,6 +11,7 @@ class _LoginScreenState extends State<LoginScreen> {
   late AuthService _authService;
   bool isLoadingLogin = false;
   bool formvalidation = false;
+  bool viewPassword = false;
 
   final email = TextEditingController();
   final password = TextEditingController();
@@ -109,11 +110,23 @@ class _LoginScreenState extends State<LoginScreen> {
       margin: const EdgeInsets.symmetric(vertical: 10),
       child: TextFormField(
         controller: password,
-        obscureText: true,
-        decoration: const InputDecoration(
+        obscureText: !viewPassword,
+        decoration: InputDecoration(
           labelText: 'Password',
           hintText: "Enter your password",
-          border: OutlineInputBorder(),
+          border: const OutlineInputBorder(),
+          suffixIcon: IconButton(
+              onPressed: () {
+                setState(() {
+                  viewPassword = !viewPassword;
+                });
+              },
+              icon: Icon(
+                (viewPassword)
+                    ? Icons.visibility
+                    : Icons.visibility_off_outlined,
+                color: Colors.grey,
+              )),
         ),
         onChanged: (value) {
           formValidation();
@@ -160,9 +173,10 @@ class _LoginScreenState extends State<LoginScreen> {
             title: "Login successfully",
             icon: Icons.login,
           );
+
           Navigator.pushNamedAndRemoveUntil(
             context,
-            "/home",
+            (email.text == "admin@gmail.com") ? "/admin_home" : "/home",
             (Route<dynamic> route) =>
                 false, // This removes all the previous routes
           );

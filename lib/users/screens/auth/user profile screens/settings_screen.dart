@@ -9,6 +9,7 @@ class SettingsScreen extends StatefulWidget {
 
 class _SettingsScreenState extends State<SettingsScreen> {
   late AuthService _authService;
+  Color forgroundColor = Constants.backgroundColor2;
 
   @override
   void initState() {
@@ -46,49 +47,58 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   title: "This function is not available yet.",
                   icon: Icons.error_outline);
             },
-            title: const Text(
+            title: Text(
               'Change Password',
               style: TextStyle(
-                color: Colors.black,
+                color: forgroundColor,
               ),
             ),
-            leading: const Icon(Icons.lock_outline_rounded),
-            trailing: const Icon(
+            leading: Icon(
+              Icons.lock_outline_rounded,
+              color: forgroundColor,
+            ),
+            trailing: Icon(
               Icons.arrow_forward_ios,
               size: 18,
-              color: Colors.black,
+              color: forgroundColor,
             ),
           ),
           ListTile(
             onTap: () {},
-            title: const Text(
+            title: Text(
               'Help & Support',
               style: TextStyle(
-                color: Colors.black,
+                color: forgroundColor,
               ),
             ),
-            leading: const Icon(Icons.help_outline),
-            trailing: const Icon(
+            leading: Icon(
+              Icons.help_outline,
+              color: forgroundColor,
+            ),
+            trailing: Icon(
               Icons.arrow_forward_ios,
               size: 18,
-              color: Colors.black,
+              color: forgroundColor,
             ),
           ),
           ListTile(
             onTap: () {
               _authService.logoutDilog(context);
             },
-            title: const Text(
+            title: Text(
               'Logout',
               style: TextStyle(
-                color: Colors.black,
+                color: forgroundColor,
               ),
             ),
-            leading: const Icon(Icons.logout),
-            trailing: const Icon(
+            leading: Icon(
+              Icons.logout,
+              color: forgroundColor,
+            ),
+            trailing: Icon(
               Icons.arrow_forward_ios,
               size: 18,
-              color: Colors.black,
+              color: forgroundColor,
             ),
           ),
         ],

@@ -102,7 +102,6 @@ class CreateBlogScreenState extends ConsumerState<CreateBlogScreen> {
         isLoading = false;
       });
 
-      if (!mounted) return;
       snackbarToast(
           context: context,
           title: "Blog created successfully!",
@@ -151,7 +150,7 @@ class CreateBlogScreenState extends ConsumerState<CreateBlogScreen> {
                     borderRadius: BorderRadius.circular(5),
                   ),
                   constraints: const BoxConstraints(
-                    maxHeight: 300,
+                    maxHeight: 250,
                   ),
                   child: Stack(
                     children: [
@@ -278,20 +277,21 @@ class CreateBlogScreenState extends ConsumerState<CreateBlogScreen> {
       spacing: 8.0,
       children: categories.map((category) {
         final isSelected = _selectedCategories.contains(category);
-        return FilterChip(
-          label: Text(category),
-          selected: (category == "All Blogs") ? true : isSelected,
-          onSelected: (bool selected) {
-            setState(() {
-              if (selected) {
-                _selectedCategories.add(category);
-              } else {
-                (category != "All Blogs")
-                    ? _selectedCategories.add(category)
-                    : _selectedCategories.remove(category);
-              }
-            });
-          },
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 5),
+          child: FilterChip(
+            label: Text(category),
+            selected: (category == "All Blogs") ? true : isSelected,
+            onSelected: (bool selected) {
+              setState(() {
+                if (selected || category == "All Blogs") {
+                  _selectedCategories.add(category);
+                } else {
+                  _selectedCategories.remove(category);
+                }
+              });
+            },
+          ),
         );
       }).toList(),
     );
