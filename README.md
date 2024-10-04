@@ -27,3 +27,15 @@ This project is a portfolio showcase demonstrating my skills in mobile app devel
 - **Flutter (Dart)**: For building the UI and handling the app's core functionality.
 - **Riverpod**: For efficient state management.
 - **Firebase**: Used for authentication, real-time database (Firestore), and storage.
+
+
+## Screenshots
+
+### Home Screen
+<img src="assets/ScreenShots/s1.png" alt="Home Screen" width="300"/>
+
+### Blog List Screen
+<img src="assets/screenshots/blog_list.png" alt="Blog List Screen" width="400"/>
+
+### Blog Editor Screen
+<img src="assets/screenshots/blog_editor.png" alt="Blog Editor Screen" width="500"/>
