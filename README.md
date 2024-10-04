@@ -30,12 +30,20 @@ This project is a portfolio showcase demonstrating my skills in mobile app devel
 
 
 ## Screenshots
+<div>
+  <img src="assets/ScreenShots/s13.jpg" alt="Blog app S.S." width="200"/>
+  <img src="assets/ScreenShots/s5.jpg" alt="Blog app S.S." width="200"/>
+  <img src="assets/ScreenShots/s4.jpg" alt="Blog app S.S." width="200"/>
+  <img src="assets/ScreenShots/s3.jpg" alt="Blog app S.S." width="200"/>
+  <img src="assets/ScreenShots/s2.jpg" alt="Blog app S.S." width="200"/>
+  <img src="assets/ScreenShots/s8.jpg" alt="Blog app S.S." width="200"/>
+  <img src="assets/ScreenShots/s7.jpg" alt="Blog app S.S." width="200"/>
+  <img src="assets/ScreenShots/s6.jpg" alt="Blog app S.S." width="200"/>
+  <img src="assets/ScreenShots/s12.jpg" alt="Blog app S.S." width="200"/>
+  <img src="assets/ScreenShots/s11.jpg" alt="Blog app S.S." width="200"/>
+  <img src="assets/ScreenShots/s10.jpg" alt="Blog app S.S." width="200"/>
+  <img src="assets/ScreenShots/s9.jpg" alt="Blog app S.S." width="200"/>
+  <img src="assets/ScreenShots/s1.jpg" alt="Blog app S.S." width="200"/>
+</div>
 
-### Home Screen
-<img src="assets/ScreenShots/s1.png" alt="Home Screen" width="300"/>
 
-### Blog List Screen
-<img src="assets/screenshots/blog_list.png" alt="Blog List Screen" width="400"/>
-
-### Blog Editor Screen
-<img src="assets/screenshots/blog_editor.png" alt="Blog Editor Screen" width="500"/>
