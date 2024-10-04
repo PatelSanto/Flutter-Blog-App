@@ -1,7 +1,20 @@
 import 'package:blog_app/header.dart';
 
-class Auth extends StatelessWidget {
+class Auth extends StatefulWidget {
   const Auth({super.key});
+  @override
+  State<Auth> createState() => _AuthState();
+}
+
+class _AuthState extends State<Auth> {
+  late DatabaseService _databaseServices;
+  late AuthService _authService;
+  @override
+  void initState() {
+    _databaseServices = GetIt.instance.get<DatabaseService>();
+    _authService = GetIt.instance.get<AuthService>();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -93,11 +106,26 @@ class Auth extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         GoogleAuthButton(
-          onPressed: () {
-            snackbarToast(
-                context: context,
-                title: "This Functionality is not available!",
-                icon: Icons.error);
+          onPressed: () async {
+            bool result =
+                await _authService.handleGoogleSignIn(_databaseServices);
+            if (result) {
+              snackbarToast(
+                  context: context,
+                  title: "Login Successfull",
+                  icon: Icons.login);
+              Navigator.pushNamedAndRemoveUntil(
+                context,
+                "/home",
+                (Route<dynamic> route) =>
+                    false, // This removes all the previous routes
+              );
+            } else {
+              snackbarToast(
+                  context: context,
+                  title: "Error login with Google",
+                  icon: Icons.error);
+            }
           },
           style: const AuthButtonStyle(
             shadowColor: Colors.blue,

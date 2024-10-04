@@ -318,7 +318,7 @@ class _BlogDetailScreenState extends ConsumerState<BlogDetailScreen> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) => UserProfileScreen(
-                                      userId: data.uid ?? "",
+                                      userData: data,
                                     )));
                       },
                       child: const Text("View Profile"),

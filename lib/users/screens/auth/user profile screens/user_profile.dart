@@ -4,9 +4,9 @@ import 'package:blog_app/users/widgets/show_blogs.dart';
 class UserProfileScreen extends ConsumerStatefulWidget {
   const UserProfileScreen({
     super.key,
-    this.userId = "",
+   this.userData,
   });
-  final String userId;
+  final dynamic userData ;
 
   @override
   ConsumerState<UserProfileScreen> createState() => _UserProfileScreenState();
@@ -46,7 +46,8 @@ class _UserProfileScreenState extends ConsumerState<UserProfileScreen> {
                 backgroundColor: Colors.lightBlue[200],
                 child: ClipOval(
                   child: Image.network(
-                    "${userData.pfpURL}",
+                    (widget.userData == null)?
+                    "${userData.pfpURL}":"${widget.userData.pfpURL}",
                     height: 120,
                     width: 120,
                     fit: BoxFit.cover,
@@ -71,7 +72,8 @@ class _UserProfileScreenState extends ConsumerState<UserProfileScreen> {
               height: s.height * 0.02,
             ),
             Text(
-              "${userData.name}",
+              (widget.userData == null)?
+              "${userData.name}":"${widget.userData.name}",
               style: const TextStyle(
                 fontSize: 18,
                 color: Color.fromARGB(255, 46, 75, 150),
@@ -81,7 +83,7 @@ class _UserProfileScreenState extends ConsumerState<UserProfileScreen> {
             SizedBox(
               height: s.height * 0.03,
             ),
-            (widget.userId == "")
+            (widget.userData == null)
                 ? GestureDetector(
                     onTap: () {
                       Navigator.pushNamed(context, '/profile_edit_page');
@@ -107,13 +109,13 @@ class _UserProfileScreenState extends ConsumerState<UserProfileScreen> {
                     ),
                   )
                 : const SizedBox(),
-            (widget.userId == "")
+            (widget.userData == null)
                 ? SizedBox(
                     height: s.height * 0.03,
                   )
                 : const SizedBox(),
             const Divider(),
-            (widget.userId == "")
+            (widget.userData == null)
                 ? ListTile(
                     onTap: () {
                       Navigator.pushNamedAndRemoveUntil(
@@ -138,8 +140,8 @@ class _UserProfileScreenState extends ConsumerState<UserProfileScreen> {
                       color: Color.fromARGB(255, 46, 75, 150),
                     ),
                   )
-                : showUserBlogs(context, widget.userId),
-            (widget.userId == "")
+                : showUserBlogs(context, widget.userData.uid),
+            (widget.userData == null)
                 ? Column(
                     children: [
                       ListTile(
