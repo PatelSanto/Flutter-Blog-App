@@ -4,7 +4,7 @@ This project is a portfolio showcase demonstrating my skills in mobile app devel
 
 ## Download APK
 
-[Download the latest release APK](https://anonymfile.com/jQ14l/app-release.apk)
+[Download the latest release APK](https://drive.google.com/drive/folders/1TL6eFN9yY9MuoKBhHQD0Sxp2fAQLxlT4?usp=sharing)
 
 ## Project Highlights:
 
